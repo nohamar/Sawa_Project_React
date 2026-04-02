@@ -1,11 +1,11 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 
-export const saveEvent = async (userId, eventId) => {
+export const saveEvent = async (userId: string, eventId: string) => {
   const { data, error } = await supabase
     .from("Saved_event")
     .insert([
       {
-        volunteer_id: userId, 
+        volunteer_id: userId,
         event_id: eventId,
       },
     ])
@@ -16,7 +16,7 @@ export const saveEvent = async (userId, eventId) => {
   return data;
 };
 
-export const removeSavedEvent = async (userId, eventId) => {
+export const removeSavedEvent = async (userId: string, eventId: string) => {
   const { error } = await supabase
     .from("Saved_event")
     .delete()
@@ -26,7 +26,8 @@ export const removeSavedEvent = async (userId, eventId) => {
   if (error) throw error;
   return true;
 };
-export const getSavedEvents = async (userId) => {
+
+export const getSavedEvents = async (userId: string) => {
   const { data, error } = await supabase
     .from("Saved_event")
     .select(`
@@ -40,8 +41,7 @@ export const getSavedEvents = async (userId) => {
   return data;
 };
 
-
-export const isEventSaved = async (userId, eventId) => {
+export const isEventSaved = async (userId: string, eventId: string) => {
   const { data, error } = await supabase
     .from("Saved_event")
     .select("id")

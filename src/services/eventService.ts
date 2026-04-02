@@ -1,6 +1,6 @@
-import { supabase } from "../supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 
-export const createEvent = async (eventData) => {
+export const createEvent = async (eventData: any) => {
   const { data, error } = await supabase
     .from("Events")
     .insert([eventData])
@@ -10,7 +10,6 @@ export const createEvent = async (eventData) => {
   if (error) throw error;
   return data;
 };
-
 
 export const getAllEvents = async () => {
   const { data, error } = await supabase
@@ -22,8 +21,7 @@ export const getAllEvents = async () => {
   return data;
 };
 
-
-export const getEventById = async (id) => {
+export const getEventById = async (id: string) => {
   const { data, error } = await supabase
     .from("Events")
     .select("*")
@@ -34,7 +32,7 @@ export const getEventById = async (id) => {
   return data;
 };
 
-export const getEventsByOrganizer = async (organizerId) => {
+export const getEventsByOrganizer = async (organizerId: string) => {
   const { data, error } = await supabase
     .from("Events")
     .select("*")
@@ -45,7 +43,7 @@ export const getEventsByOrganizer = async (organizerId) => {
   return data;
 };
 
-export const updateEvent = async (id, updatedData) => {
+export const updateEvent = async (id: string, updatedData: any) => {
   const { data, error } = await supabase
     .from("Events")
     .update(updatedData)
@@ -57,7 +55,7 @@ export const updateEvent = async (id, updatedData) => {
   return data;
 };
 
-export const deleteEvent = async (id) => {
+export const deleteEvent = async (id: string) => {
   const { error } = await supabase
     .from("Events")
     .delete()
@@ -67,7 +65,7 @@ export const deleteEvent = async (id) => {
   return true;
 };
 
-export const updateEventStatus = async (id, status) => {
+export const updateEventStatus = async (id: string, status: string) => {
   const { data, error } = await supabase
     .from("Events")
     .update({ status })
