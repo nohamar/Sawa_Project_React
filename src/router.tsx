@@ -28,6 +28,7 @@ import MyFeedbacksPage from "./pages/MyFeedbacksPage";
 import EditFeedbackPage from "./pages/EditFeedbackPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import MyRegistrationsPage from "./pages/MyRegistrationsPage";
 
 type AppRouterProps = {
   authUser: User | null;
@@ -63,7 +64,7 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "user-registrations",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <UserRegistrationsPage />
+              <MyRegistrationsPage />
             </RoleProtectedRoute>
           ),
         },
