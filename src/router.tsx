@@ -48,8 +48,8 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
         { path: "aboutus", element: <AboutUsPage /> },
 
         // public event routes
-        { path: "events", element: <EventsPage /> },
-        { path: "events/:id", element: <EventDetailsPage /> },
+        { path: "events", element: <EventsPage profile={profile} /> },
+        { path: "events/:id", element: <EventDetailsPage profile={profile} /> },
 
         // volunteer routes
         {
@@ -116,7 +116,7 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "organizer-dashboard/create-event",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <CreateEventPage />
+              <CreateEventPage userId={profile?.id  }/>
             </RoleProtectedRoute>
           ),
         },
@@ -124,7 +124,7 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "organizer-dashboard/edit-event/:id",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <EditEventPage />
+              <EditEventPage  />
             </RoleProtectedRoute>
           ),
         },
