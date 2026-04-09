@@ -1,27 +1,18 @@
-import { useState, useEffect } from "react";
-import type { Event, CreateEvent, UpdateEvent } from "../../types/events";
+import { useState, useEffect, useRef } from "react";
+import type { Event, CreateEvent, UpdateEvent, EventFormData, EventTypes } from "../../types/events";
 import { getEventStatus } from "../../utils/eventStatus";
+import { uploadImage } from "../../services/storageService";
 
 type EventFormProps = {
-  initialData?: Event;
+  initialData: Event | null;
   onSubmit: (data: CreateEvent | UpdateEvent) => Promise<boolean>;
   isEdit?: boolean;
   error?: string;
   successMessage?: string;
-  userId?: number;
+  userId: number;
 };
 
-type EventFormData = {
-  title: string;
-  description: string;
-  location: string;
-  event_date: string;
-  start_time: string;
-  end_time: string;
-  duration: string;
-  capacity: string;
-  type: string;
-};
+
 
 const initialForm: EventFormData = {
   title: "",
@@ -33,6 +24,7 @@ const initialForm: EventFormData = {
   duration: "",
   capacity: "",
   type: "",
+  image:""
 };
 
 export default function EventForm({
@@ -45,10 +37,12 @@ export default function EventForm({
 }: EventFormProps) {
   const [form, setForm] = useState<EventFormData>(initialForm);
   const [localError, setLocalError] = useState("");
+  const initialized = useRef(false);
 
   // Fill form in edit mode
   useEffect(() => {
-    if (initialData) {
+    if (initialData && !initialized.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         title: initialData.title || "",
         description: initialData.description || "",
@@ -59,10 +53,13 @@ export default function EventForm({
         duration: initialData.duration?.toString() || "",
         capacity: initialData.capacity?.toString() || "",
         type: initialData.type || "",
+        image: initialData.image || "",
       });
+      initialized.current = true;
       setLocalError("");
-    } else {
+    } else if (!initialData) {
       setForm(initialForm);
+      initialized.current = false;
     }
   }, [initialData]);
 
@@ -83,7 +80,8 @@ export default function EventForm({
       !form.end_time ||
       !form.capacity ||
       Number(form.capacity) <= 0 ||
-      !form.type.trim()
+      !form.type.trim() ||
+      !form.image.trim()
     ) {
       setLocalError("Please fill all required fields correctly.");
       return false;
@@ -102,33 +100,58 @@ export default function EventForm({
       return;
     }
 
-    // ✅ auto-calculate status
+    //  auto-calculate status
     const status = getEventStatus(
       form.event_date,
       form.end_time,
       Number(form.capacity)
     );
 
-    const data: any = {
-      ...form,
-      status,
-      capacity: Number(form.capacity),
-      duration: form.duration ? Number(form.duration) : null,
-    };
-
-    if (!isEdit && userId) {
-      data.organizer_id = userId;
-    }
-
     try {
-      const success = await onSubmit(data);
-      if (!success) {
-        setLocalError("Failed to submit event.");
+      if (isEdit) {
+        const updateData: UpdateEvent = {
+          title: form.title,
+          description: form.description,
+          location: form.location,
+          event_date: form.event_date,
+          start_time: form.start_time,
+          end_time: form.end_time,
+          capacity: Number(form.capacity),
+          status,
+          duration:  Number(form.duration),
+          type: form.type as any, // Assuming type is valid
+          image: form.image,
+        };
+        const success = await onSubmit(updateData);
+        if (!success) {
+          setLocalError("Failed to submit event.");
+        } else {
+          setForm(initialForm);
+        }
       } else {
-        setForm(initialForm);
+        const createData: CreateEvent = {
+          organizer_id: userId,
+          title: form.title,
+          description: form.description,
+          location: form.location,
+          event_date: form.event_date,
+          start_time: form.start_time,
+          end_time: form.end_time,
+          capacity: Number(form.capacity),
+          status,
+          duration:  Number(form.duration),
+          type: form.type as any, 
+          image: form.image,
+        };
+        const success = await onSubmit(createData);
+        if (!success) {
+          setLocalError("Failed to submit event.");
+        } else {
+          setForm(initialForm);
+        }
       }
-    } catch (err: any) {
-      setLocalError(err?.message || "Something went wrong.");
+    } catch (err: unknown) {
+      setLocalError(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
@@ -137,6 +160,20 @@ export default function EventForm({
     form.end_time,
     Number(form.capacity)
   );
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const result = await uploadImage(userId, file);
+
+  if (!result.success) {
+    console.error(result.error);
+    return;
+  }
+
+  updateField("image", result.publicUrl); 
+}
 
   return (
     <div className="form-card">
@@ -152,6 +189,11 @@ export default function EventForm({
             value={form.title}
             onChange={(e) => updateField("title", e.target.value)}
           />
+        </div>
+
+         <div className="form-group">
+          <label>Upload image</label>
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
 
         <div className="form-group">

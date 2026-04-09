@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import EventForm from "../components/events/EventForm";
 import { useEvents } from "../hooks/useEvents";
+import type { CreateEvent, UpdateEvent } from "../types/events";
 
 
 type CreateEventPageProps = {
@@ -17,10 +18,15 @@ const CreateEventPage = ({ userId }: CreateEventPageProps) => {
 
   if (!userId) return <p className="error-msg">{localError || "Checking authentication..."}</p>;
 
+  const handleSubmit = (data: CreateEvent | UpdateEvent) => {
+    return addEvent(data as CreateEvent);
+  };
+
   return (
     <EventForm
+    initialData={null}
       userId={userId}
-      onSubmit={addEvent}
+      onSubmit={handleSubmit}
       error={error}
       successMessage={successMessage}
     />

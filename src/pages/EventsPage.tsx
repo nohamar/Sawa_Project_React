@@ -1,25 +1,72 @@
 import { useEvents } from "../hooks/useEvents";
-import { useRegister } from "../hooks/useRegister.ts";
+import { useRegister } from "../hooks/useRegister";
 import EventList from "../components/events/EventList";
+import SearchBar from "../components/shared/SearchBar";
+import FilterBar from "../components/shared/FilterBar";
 import type { Profile } from "../types/profile";
-import heroImage from "../images/events-hero.jpg";
-import styles from "../css/EventList.module.css";
-import SearchBar from "../components/shared/SearchBar.tsx";
-import FilterBar from "../components/shared/FilterBar.tsx";
 import { useState } from "react";
+import styles from "../css/EventList.module.css";
+import type { Event } from "../types/events";
+import type { CardAction } from "../components/events/EventCard";
 
 type EventsPageProps = { profile: Profile | null };
 
 export default function EventsPage({ profile }: EventsPageProps) {
   const { events, loading: eventsLoading, error: eventsError } = useEvents();
-  const { registeredEventIds, loading: regLoading, toggleRegistration } = useRegister(profile?.id ?? null);
+  const { registeredEventIds, loading: regLoading, toggleRegistration } =
+    useRegister(profile?.id ?? null);
+
   const [keyword, setKeyword] = useState("");
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
 
   const eventTypes = ["Workshop", "Seminar", "Volunteer", "Social", "Charity"];
-  if (eventsLoading || regLoading) return <p className={styles.noEvents}>Loading events...</p>;
-  if (eventsError) return <p className={styles.noEvents} style={{ color: "red" }}>{eventsError}</p>;
+
+  if (eventsLoading || regLoading)
+    return <p className={styles.noEvents}>Loading events...</p>;
+  if (eventsError)
+    return (
+      <p className={styles.noEvents} style={{ color: "red" }}>
+        {eventsError}
+      </p>
+    );
+
+ 
+  const getActions = (event: Event): CardAction[] => {
+    const isOwner = profile?.id === event.organizer_id;
+    const isRegistered = registeredEventIds.includes(event.id);
+
+    const actions: CardAction[] = [];
+
+    if (isOwner) {
+      actions.push({
+        label: "Edit",
+        onClick: () => console.log("edit", event),
+        className: `${styles.btn} ${styles.btnEdit}`,
+      });
+
+      actions.push({
+        label: "Delete",
+        onClick: () => console.log("delete", event.id),
+        className: `${styles.btn} ${styles.btnDelete}`,
+      });
+    } else if (profile?.role === "volunteer") {
+      actions.push({
+        label: isRegistered ? "Registered" : "Register",
+        onClick: () => toggleRegistration(event.id, isRegistered),
+        className: isRegistered
+          ? `${styles.btn} ${styles.btnRegistered}`
+          : `${styles.btn} ${styles.btnRegister}`,
+      });
+      actions.push({
+        label: "Saved",
+        onClick: () => console.log("saved", event.id),
+        className: `${styles.btn} ${styles.btnSaved}`,
+      });
+    }
+
+    return actions;
+  };
 
   const filteredEvents = events.filter((event) => {
     const matchesStatus = !status || event.status === status;
@@ -32,20 +79,22 @@ export default function EventsPage({ profile }: EventsPageProps) {
 
   return (
     <div className={styles.eventsPage}>
-      {/* Hero Section */}
+      {/* Hero */}
       <div
         className={styles.hero}
-        style={{ backgroundImage: `url(${heroImage})` }}
+        style={{ backgroundImage: `url("/images/events-hero.jpg")` }}
       >
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Discover Our Events</h1>
-          <p className={styles.heroSubtitle}>Join us in exciting activities and volunteer opportunities that make a difference.</p>
+          <p className={styles.heroSubtitle}>
+            Join us in exciting activities and volunteer opportunities that make
+            a difference.
+          </p>
         </div>
       </div>
 
-
-      {/* Events Section */}
+      {/* Filters */}
       <div className={styles.eventsContainer}>
         <div className="upper-part">
           <h2 className={styles.eventsHeading}>Explore Events</h2>
@@ -60,18 +109,12 @@ export default function EventsPage({ profile }: EventsPageProps) {
             />
           </div>
         </div>
-        {filteredEvents.length === 0 ? (
-          <p className={styles.noEvents}>No events match your search.</p>
-        ) : (
-          <EventList
-            events={events}
-            currentUserId={profile?.id ?? null}
-            currentUserRole={profile?.role ?? null}
-            registeredEventIds={registeredEventIds}
-            onRegister={toggleRegistration}
-          />
-        )}
+
+        <EventList
+          events={filteredEvents}
+          getActions={getActions}
+        />
       </div>
-    </div >
+    </div>
   );
 }

@@ -1,95 +1,66 @@
-import type { Event } from "../../types/events";
-import styles from "../../css/EventCard.module.css";
+import type { Event } from "../../types/events"; 
+import styles from "../../css/EventCard.module.css"; 
 
-type EventCardProps = {
+export type CardAction = { 
+  label: string; 
+  onClick: ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void); 
+  className?: string; 
+}; 
+  
+  type EventCardProps = { 
   event: Event;
-  currentUserId: number | null;
-  currentUserRole?: "organizer" | "volunteer" | null;
-  isRegistered?: boolean;
-  onEdit?: (event: Event) => void;
-  onDelete?: (eventId: number) => void;
-  onRegister?: (eventId: number, isRegistered: boolean) => void;
+  
+  actions?: CardAction[];
   onClick?: () => void;
-};
+  };
 
 export const EventCard = ({
   event,
-  currentUserId,
-  currentUserRole,
-  isRegistered = false,
-  onEdit,
-  onDelete,
-  onRegister,
+
+  actions = [],
   onClick,
 }: EventCardProps) => {
-  const isOwner =
-    currentUserId !== null && Number(event.organizer_id) === currentUserId;
+
 
   return (
     <div className={styles.card} onClick={onClick}>
-      {/* Event Info */}
-      <div className={styles.info}>
-        <h3 className={styles.title}>{event.title}</h3>
-
-        <div className={styles.meta}>
-          <span className={styles.metaRow}>
-            <i className={styles.icon}>📅</i>
-            {new Date(event.event_date).toLocaleDateString()}
-          </span>
-
-          <span className={styles.metaRow}>
-            <i className={styles.icon}>📍</i>
-            {event.location}
-          </span>
-
-          <span className={styles.metaRow}>
-            <i className={styles.icon}>👥</i>
-            Capacity:{" "}
-            <strong>{event.capacity ?? "N/A"}</strong>
-          </span>
-        </div>
+      {/* Image */}
+      <div className={styles.imageWrapper}>
+        <img src={event.image} alt={event.title} />
       </div>
 
-      {/* Actions */}
-      <div className={styles.divider} />
-      <div className={styles.actions}>
-        {isOwner && onEdit && (
-          <button
-            className={`${styles.btn} ${styles.btnEdit}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(event);
-            }}
-          >
-            Edit
-          </button>
-        )}
+      {/* Content */}
+      <div className={styles.content}>
+        {/* Top row */}
+        <div className={styles.topRow}>
+          <h3 className={styles.title}>{event.title}</h3>
+          <span className={`${styles.statusBadge} ${styles[event.status]}`}> {event.status} </span>
+        </div>
 
-        {isOwner && onDelete && (
-          <button
-            className={`${styles.btn} ${styles.btnDelete}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(event.id);
-            }}
-          >
-            Delete
-          </button>
-        )}
+        <span> {event.description}</span>
+        {/* Meta (NO icons) */}
+        <div className={styles.meta}>
+          <span>{new Date(event.event_date).toLocaleDateString()}</span>
+          <span>{event.location}</span>
 
-        {!isOwner && currentUserRole === "volunteer" && onRegister && (
-          <button
-            className={`${styles.btn} ${
-              isRegistered ? styles.btnRegistered : styles.btnRegister
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              onRegister(event.id, isRegistered);
-            }}
-          >
-            {isRegistered ? "✓ Registered" : "Register"}
-          </button>
-        )}
+        </div>
+
+           <div className={styles.bottomRow}>
+          <div className={styles.actions}>
+            {actions.map((action, i) => (
+              <button
+                key={i}
+                className={action.className || styles.btn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  action.onClick(e);
+                }}
+              >
+                {action.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

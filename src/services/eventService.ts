@@ -1,7 +1,10 @@
 import { supabase } from "../lib/supabaseClient";
+import type { NewRegistration } from "../types/registration";
+import { getEventStatus } from "../utils/eventStatus";
 
 // CREATE
 export const createEvent = async (eventData: any) => {
+   console.log("creating event", eventData);
   const { data, error } = await supabase
     .from("Events")
     .insert([eventData])
@@ -55,6 +58,17 @@ export const updateEvent = async (id: string, updatedData: any) => {
   return { data, error };
 };
 
+export const updateEventStatus = async (id: number, status: string) => {
+  const { data, error } = await supabase
+    .from("Events")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  return { data, error };
+};
+
 // DELETE
 export const deleteEvent = async (id: string) => {
   const { error } = await supabase
@@ -65,14 +79,7 @@ export const deleteEvent = async (id: string) => {
   return { error };
 };
 
-// UPDATE STATUS
-export const updateEventStatus = async (id: string, status: string) => {
-  const { data, error } = await supabase
-    .from("Events")
-    .update({ status })
-    .eq("id", id)
-    .select()
-    .single();
 
-  return { data, error };
-};
+export async function createRegistration(registration: NewRegistration) {
+  return await supabase.from("Registration").insert([registration]);
+}

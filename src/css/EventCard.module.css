@@ -1,149 +1,144 @@
+/* ───────── CARD LAYOUT (HORIZONTAL) ───────── */
 .card {
+  display: flex;
+  gap: 1rem;
   background: var(--card-bg);
   border-radius: 16px;
   border: 1.5px solid var(--border-soft);
-  padding: 1.4rem 1.5rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  position: relative;
   overflow: hidden;
-  transition: box-shadow 0.25s ease, transform 0.22s ease;
+  cursor: pointer;
+  transition: 0.25s ease;
   box-shadow: var(--shadow-soft);
-}
-
-/* Warm left-border accent */
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-  border-radius: 16px 0 0 16px;
-  opacity: 0;
-  transition: opacity 0.22s ease;
+  width: 100%;
 }
 
 .card:hover {
-  box-shadow: 0 10px 28px rgba(60, 37, 23, 0.13);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(60, 37, 23, 0.12);
 }
 
-.card:hover::before {
-  opacity: 1;
+/* ───────── IMAGE ───────── */
+.imageWrapper {
+  width: 220px;
+  min-width: 220px;
+  height: 170px;
+  overflow: hidden;
 }
 
-/* ── Info ── */
-.info {
-  margin-bottom: 1.1rem;
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.title {
-  font-family: "Georgia", serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--accent-primary);
-  margin: 0 0 0.75rem;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.meta {
+/* ───────── CONTENT ───────── */
+.content {
+  flex: 1;
+  padding: 0.9rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  justify-content: space-between;
 }
 
-.metaRow {
-  font-size: 0.82rem;
+/* Title */
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  margin: 0;
+}
+
+/* ───────── META (TEXT ONLY) ───────── */
+.meta {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* dot separators like Booking */
+.meta span:not(:last-child)::after {
+  content: "•";
+  margin-left: 0.5rem;
+  color: var(--border-soft);
+}
+
+/* ───────── BOTTOM ───────── */
+.bottomRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.6rem;
+}
+
+/* ───────── ACTIONS ───────── */
+.actions {
+  display: flex;
   gap: 0.4rem;
 }
 
-.metaRow strong {
-  color: var(--text-main);
-  font-weight: 600;
-}
-
-.icon {
-  font-style: normal;
-  font-size: 0.88rem;
-  line-height: 1;
-}
-
-/* Divider between info and actions */
-.divider {
-  height: 1px;
-  background: var(--border-soft);
-  margin: 1rem 0 0.85rem;
-}
-
-/* ── Actions ── */
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
+/* keep your buttons (slightly refined) */
 .btn {
-  padding: 0.42rem 1rem;
-  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  transition: background 0.18s ease, transform 0.14s ease;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.btn:active {
-  transform: scale(0.96);
 }
 
 .btnEdit {
   background: var(--bg-section);
   color: var(--accent-secondary);
-  border: 1.5px solid var(--accent-primary);
-}
-
-.btnEdit:hover {
-  background: var(--accent-primary);
-  color: var(--card-bg);
+  border: 1px solid var(--accent-primary);
 }
 
 .btnDelete {
   background: #fff1f0;
   color: #c0392b;
-  border: 1.5px solid #f5c6c2;
-}
-
-.btnDelete:hover {
-  background: #fde0de;
 }
 
 .btnRegister {
-  background: var(--bg-soft);
-  color: var(--text-main);
-  border: 1.5px solid var(--border-soft);
-}
-
-.btnRegister:hover {
-  background: var(--border-soft);
+  background: var(--accent-primary);
+  color: white;
 }
 
 .btnRegistered {
-  background: #eaf4ee;
-  color: #2d6a4f;
-  border: 1.5px solid var(--accent-green);
+  background: var(--accent-green);
+  color: white;
+}
+/* Top row layout */
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
-.btnRegistered:hover {
+/* Status badge (Booking-style) */
+.statusBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.upcoming {
   background: var(--accent-green);
-  color: var(--card-bg);
+  color: white;
+  
+}
+
+.completed {
+  background:  #E24B4A;
+  color: white;
+  
+}
+
+.closed {
+  background: #555;
+  color: white
 }

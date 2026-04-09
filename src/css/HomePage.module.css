@@ -1,179 +1,228 @@
-
-
 .homePage {
-  font-family: sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-main);
 }
 
 /* Hero Section */
 .hero {
-  margin-top: 0px;
   position: relative;
   width: 100%;
-  min-height:680px;
-  height: 90%; 
+  min-height: 680px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   background-size: cover;
-  
+  background-position: center;
 }
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4); /* dark overlay */
+  z-index: 1;
+}
+
 .herocontent {
   position: relative;
-  z-index: 10;
-  text-align: center;
-
+  z-index: 2;
+  max-width: 700px;
+  padding: 0 20px;
 }
+
 .hero h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
   color: var(--accent-primary);
 }
+
 .hero p {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 20px;
-  color:var(--accent-green);
-  font-weight: 700;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: var(--accent-green);
+  font-weight: 600;
 }
+
 .hero button {
   background-color: var(--accent-secondary);
   color: var(--card-bg);
   border: none;
-  padding: 12px 30px;
-  border-radius: 12px;
-  font-weight: bold;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: 0.3s;
 }
+
 .hero button:hover {
   background-color: var(--hover-button);
 }
 
 /* Intro Section */
 .intro {
-  background-color: var(--bg-soft);
-  color: var(--text-main);
   text-align: center;
-  padding: 60px 20px;
+  padding: 4rem 1rem;
+  background-color: var(--bg-main);
 }
+
 .intro h2 {
-  font-size: 2rem;
-  margin-bottom: 15px;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
   color: var(--accent-primary);
 }
+
 .intro p {
-  max-width: 700px;
-  margin: 0 auto;
-  color: var(--text-muted);
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
+
 .userdo {
   display: flex;
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
-  padding-top: 20px;
 }
 
 .card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  padding: 20px;
-  border-radius: 15px;
-  flex: 1 1 250px; /* min width 250px, flexible */
+  flex: 1 1 250px;
   max-width: 300px;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background: var(--accent-green);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: transform 0.3s, box-shadow 0.3s;
-  color: var(--accent-green);
-  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(60, 37, 23, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--accent-secondary);
+  margin-bottom: 1rem;
 }
 
 .card p {
-  margin: 0;
+  text-align: center;
   font-size: 1rem;
-  color: var(--text-muted);
 }
 
 /* Featured Events */
 .featuredEvents {
-  background-color: var(--bg-main);
   padding: 60px 20px;
+  background-color: var(--bg-soft);
   text-align: center;
 }
+
 .featuredEvents h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
   color: var(--accent-primary);
 }
+
 .eventList {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 25px;
   justify-content: center;
 }
+
 .eventCard {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-soft);
-  border-radius: 15px;
   width: 300px;
+  border-radius: 15px;
   overflow: hidden;
-  transition: box-shadow 0.3s;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
+
 .eventCard:hover {
-  box-shadow: 0 6px 18px rgba(60, 37, 23, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.eventContent img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
 }
 
 .eventContent {
   padding: 15px;
   text-align: left;
 }
+
 .eventContent h3 {
-  color: var(--accent-secondary);
+  font-size: 1.4rem;
   margin-bottom: 5px;
-  font-size: 1.2rem;
-}
-.eventContent .eventDate {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin-bottom: 10px;
+  color: var(--accent-secondary);
 }
 
-/* Call To Action Section */
+.eventContent .eventDate {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+
+/* CTA Section */
 .cta {
-  background-color: var(--bg-section);
-  text-align: center;
   padding: 80px 20px;
-  border-radius: 8px;
+  background: var(--accent-secondary);
+  color: var(--card-bg);
+  text-align: center;
+  border-radius: 10px 10px 0 0;
   
 }
+
 .cta h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 20px;
-  color: var(--accent-primary);
-  
 }
+
 .cta p {
+  font-size: 1.2rem;
   margin-bottom: 30px;
-  font-size: 1.1rem;
-  color: var(--text-main);
 }
+
 .cta button {
   background-color: var(--card-bg);
   color: var(--accent-primary);
   border: none;
-  padding: 12px 30px;
-  border-radius: 12px;
-  font-weight: bold;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: 0.3s;
 }
+
 .cta button:hover {
   background-color: var(--hover-button);
   color: var(--card-bg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .userdo {
+    gap: 15px;
+  }
+  .eventList {
+    gap: 15px;
+  }
+  .eventCard {
+    width: 90%;
+  }
 }
