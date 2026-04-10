@@ -19,7 +19,7 @@ export default function EventDetailsPage({ profile }: Props) {
   const navigate = useNavigate();
 
   const { events, loading: eventsLoading, error: eventsError } = useEvents();
-  const { registeredEventIds, toggleRegistration } = useRegister(profile?.id || null);
+  const { registeredEventIds , toggleRegistration } = useRegister(profile?.id ?? null);
 
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [registeredCount, setRegisteredCount] = useState(0);
