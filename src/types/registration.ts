@@ -7,7 +7,7 @@ export type Registration = {
   attendance_status: AttendanceStatus;
   registered_at?: string;
   event_id: string;
-  volunteer_id: string;
+  volunteer_id: number;
   waitlist_position?: number | null;
 };
 
@@ -15,6 +15,6 @@ export type NewRegistration = {
   registration_status: RegistrationStatus;
   attendance_status: AttendanceStatus;
   event_id: string;
-  volunteer_id: string;
+  volunteer_id: number;
   waitlist_position?: number | null;
 };

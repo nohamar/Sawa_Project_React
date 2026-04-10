@@ -10,7 +10,7 @@
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 40px;
   min-height: 78px;
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@
 .navbar-center {
   flex: 1;
   justify-content: center;
-  gap: 30px;
+  gap: 50px;
 }
 
 .navbar-right {
@@ -65,7 +65,12 @@
   width: auto;
   object-fit: contain;
 }
-
+.navbar-profile-image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
 .mobile-logo {
   height: 95px;
   width: auto;
@@ -76,10 +81,11 @@
   position: relative;
   text-decoration: none;
   color: #3c2517;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   transition: color 0.3s ease;
   padding: 8px 0;
+  white-space: nowrap;
 }
 
 .navbar-link:hover {
@@ -156,6 +162,62 @@
   background: #f9ad3f;
   color: #3c2517;
 }
+.navbar-profile-circle{
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #a3bf8f;
+  color: #3c2517;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.navbar-profile-circle:hover{
+  background: #f9ad3f;
+  color: #3c2517;
+}
+
+.navbar-logout-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  text-decoration: none;
+  background: #a3bf8f;
+  color: #3c2517;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.navbar-logout-btn:hover{
+  background: #f9ad3f;
+  color: #3c2517;
+}
+
+.navbar-profile-icon-btn{
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.mobile-logout-btn{
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
 
 .menu-toggle {
   display: none;
@@ -168,7 +230,6 @@
   line-height: 1;
 }
 
-/* Side mobile menu overlay */
 .mobile-menu-overlay {
   position: fixed;
   inset: 0;
@@ -246,7 +307,6 @@
   color: #f47457;
 }
 
-/* Tablet */
 @media (max-width: 992px) {
   .desktop-only {
     display: none;
@@ -276,9 +336,17 @@
   .navbar-logo {
     height: 62px;
   }
+  .navbar-profile-circle{
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+  .navbar-logout-btn{
+    padding: 12px 18px;
+    font-size: 14px;
+  }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .navbar {
     min-height: 70px;
@@ -316,6 +384,11 @@
 
   .mobile-menu-link {
     font-size: 20px;
+  }
+   .navbar-profile-circle{
+    width: 42px;
+    height: 42px;
+    font-size: 15px;
   }
 }
 

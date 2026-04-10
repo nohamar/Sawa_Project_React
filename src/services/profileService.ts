@@ -6,7 +6,6 @@ import type {
   ProfileResponse,
 } from "../types/profile";
 
-
 export const createProfile = async (
   input: CreateProfileInput
 ): Promise<ProfileResponse> => {
@@ -30,13 +29,15 @@ export const getProfileByUserId = async (
     .from("Profile")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
   if (error) {
     return { profile: null, error: error.message };
   }
 
-  return { profile: data as Profile, error: null };
+  return { profile: (data as Profile | null) ?? null, error: null };
 };
 
 export const getProfileById = async (
@@ -56,13 +57,13 @@ export const getProfileById = async (
 };
 
 export const updateProfile = async (
-  userId: string,             
+  profileId: number,
   updates: UpdateProfileInput
 ): Promise<ProfileResponse> => {
   const { data, error } = await supabase
     .from("Profile")
     .update(updates)
-    .eq("user_id", userId)
+    .eq("id", profileId)
     .select()
     .single();
 
@@ -80,7 +81,7 @@ export const getAllVolunteers = async (): Promise<{
   const { data, error } = await supabase
     .from("Profile")
     .select("*")
-    .eq("role", "volunteer"); 
+    .eq("role", "volunteer");
 
   if (error) {
     return { profiles: [], error: error.message };
