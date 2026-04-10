@@ -12,4 +12,8 @@
 .layout-content {
   flex: 1;
    
+   padding-top: 110px;
+}
+.layout-content-profile{
+  padding-top: 0;
 }

@@ -1,17 +1,23 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import "../MainLayout.css"
-export default function MainLayout() {
+import "../MainLayout.css";
+
+function MainLayout() {
+  const location = useLocation();
+  const hideLayoutChrome = location.pathname === "/profile";
+
   return (
     <div className="layout-container">
-      <Navbar />
+      {!hideLayoutChrome && <Navbar />}
 
-      <main className="layout-content">
+      <main className={`layout-content ${hideLayoutChrome ? "layout-content-profile" : ""}`}>
         <Outlet />
       </main>
 
-      <Footer />
+      {!hideLayoutChrome && <Footer />}
     </div>
   );
 }
+
+export default MainLayout;

@@ -11,11 +11,11 @@ import MainLayout from "./layouts/MainLayout";
 // pages
 import ErrorPage from "./pages/ErrorPage";
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage"
-import SignupPage from "./pages/SignupPage"
-import AboutUsPage from "./pages/AboutUsPage"
-import EventsPage from "./pages/EventsPage"
-import EventDetailsPage from "./pages/EventDetailsPage"
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import EventsPage from "./pages/EventsPage";
+import EventDetailsPage from "./pages/EventDetailsPage";
 import SavedEventsPage from "./pages/SavedEventsPage";
 import SingleRegistrationPage from "./pages/SingleRegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -29,6 +29,9 @@ import EditFeedbackPage from "./pages/EditFeedbackPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import MyRegistrationsPage from "./pages/MyRegistrationsPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 type AppRouterProps = {
   authUser: User | null;
@@ -38,13 +41,39 @@ type AppRouterProps = {
 export default function AppRouter({ authUser, profile }: AppRouterProps) {
   const router = createBrowserRouter([
     {
+      path: "/login",
+      element: <LoginPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/forgot-password",
+      element: <ForgotPasswordPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/reset-password",
+      element: <ResetPasswordPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "change-password",
+      element: (
+        <ProtectedRoute user={authUser}>
+          <ChangePasswordPage />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/signup",
+      element: <SignupPage />,
+      errorElement: <ErrorPage />,
+    },
+    {
       path: "/",
       element: <MainLayout />,
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <HomePage /> },
-        { path: "login", element: <LoginPage /> },
-        { path: "signup", element: <SignupPage /> },
         { path: "aboutus", element: <AboutUsPage /> },
 
         // public event routes
