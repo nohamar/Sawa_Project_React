@@ -1,12 +1,25 @@
 import { useEvents } from "../hooks/useEvents";
 import styles from "../css/HomePage.module.css";
 import { useNavigate } from "react-router-dom";
+
+import { useMemo, useState } from "react";
 import { FaCalendarCheck, FaPlusCircle, FaSearch } from "react-icons/fa";
 
 
 export default function HomePage() {
   const { events, loading, error } = useEvents();
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+   const today = useMemo(() => {
+      const d = new Date();
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }, []);
+ const upcomingEvents = events.filter((e) => {
+    const d = new Date(e.event_date);
+    d.setHours(0, 0, 0, 0);
+    return d >= today;
+  });
 
 
 
@@ -59,11 +72,15 @@ const navigate = useNavigate();
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         <div className={styles.eventList}>
-          {events.slice(0, 3).map((event) => (
+          {upcomingEvents.slice(0, 3).map((event) => (
             <div key={event.id} className={styles.eventCard}>
               
               <div className={styles.eventContent}>
-                <img src={event.image} alt="" />
+                <img 
+                  src={event.image || ""}
+                  alt={event.title}
+                 
+                />
                 <h3>{event.title}</h3>
                 <p className={styles.eventDate}>{event.event_date}</p>
                 <p> {event.location}</p>

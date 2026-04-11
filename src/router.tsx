@@ -32,6 +32,7 @@ import MyRegistrationsPage from "./pages/MyRegistrationsPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import OrganizerEventsPage from "./pages/OrganizerEventsPage";
 
 type AppRouterProps = {
   authUser: User | null;
@@ -137,7 +138,15 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "organizer-dashboard",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <OrganizerDashboardPage />
+              <OrganizerDashboardPage currentUserId={profile?.id} />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: "organizer-dashboard/events",
+          element: (
+            <RoleProtectedRoute user={profile} allowedRole="organizer">
+              <OrganizerEventsPage profile={profile} />
             </RoleProtectedRoute>
           ),
         },

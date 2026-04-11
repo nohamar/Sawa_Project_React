@@ -73,17 +73,25 @@ export function useEvents() {
     return true;
   };
 
-  const removeEvent = async (id: string) => {
-    clearMessages();
-    const { error } = await deleteEvent(id);
-    if (error) {
-      setError(error?.message || "Failed to delete event");
-      return false;
-    }
-    setSuccessMessage("Event deleted successfully.");
-    await loadEvents();
-    return true;
-  };
+  const removeEvent = async (event: Event) => {
+  clearMessages();
+
+  const { error } = await deleteEvent(
+    String(event.id),
+    event.image
+  );
+
+  if (error) {
+    setError(error?.message || "Failed to delete event");
+    return false;
+  }
+
+  
+  setEvents((prev) => prev.filter((e) => e.id !== event.id));
+
+  setSuccessMessage("Event deleted successfully.");
+  return true;
+};
 
   useEffect(() => {
     loadEvents();

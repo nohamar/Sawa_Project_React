@@ -2,6 +2,8 @@
 import styles from "../../css/EventDetails.module.css";
 import type { Event } from "../../types/events";
 import type { Registration } from "../../types/registration";
+import { getImageUrl } from "../../services/storageService";
+import { useState } from "react";
 
 
 export type CardAction = {
@@ -24,6 +26,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
   actions = [],
   registeredCount,
 }) => {
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const formattedDate = new Date(event.event_date).toLocaleDateString(undefined, {
     weekday: "long",
     year: "numeric",
@@ -46,18 +49,21 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
         {/* Left column */}
         <div className={styles.left}>
           <div className={styles.imageWrapper}>
-            {event.image ? (
-              <img src={event.image} alt={event.title} className={styles.image} />
+            {event.image && !failedImages.has(String(event.id)) ? (
+              <img 
+                src={getImageUrl(event.image)} 
+                alt={event.title} 
+                className={styles.image}
+                onError={() => {
+                  setFailedImages((prev) => new Set(prev).add(String(event.id)));
+                }}
+              />
             ) : (
-              <svg
-                className={styles.heroIcon}
-                width="80" height="80" viewBox="0 0 80 80"
-                fill="none" stroke="#fff" strokeWidth="2"
-                strokeLinecap="round" strokeLinejoin="round"
-              >
-                <circle cx="40" cy="30" r="14" />
-                <path d="M16 70c0-13.3 10.7-24 24-24s24 10.7 24 24" />
-              </svg>
+              <img 
+                src="/images/event_hero.jpg" 
+                alt={event.title} 
+                className={styles.image}
+              />
             )}
             {event.type && <span className={styles.heroTag}>{event.type}</span>}
           </div>
@@ -113,11 +119,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
             </div>
           </div>
         </div>
-        {actions.map((action, i) => (
-          <button key={i} onClick={action.onClick}>
-            {action.label}
-          </button>
-        ))}
+       
         {/* Right column */}
         <div className={styles.right}>
           {/* Capacity bar */}
@@ -136,8 +138,13 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
               </div>
             </div>
           )}
-
-
+<div className={styles.actions}>
+ {actions.map((action, i) => (
+          <button key={i} onClick={action.onClick} className={ styles.actionBtn}>
+            {action.label}
+          </button>
+        ))}
+        </div>
         </div>
       </div>
     </div>

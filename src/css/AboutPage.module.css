@@ -1,3 +1,7 @@
+:root {
+  /* Import variables from your theme - ensure these match app.css */
+}
+
 .aboutPage {
   background-color: var(--bg-main);
   color: var(--text-main);

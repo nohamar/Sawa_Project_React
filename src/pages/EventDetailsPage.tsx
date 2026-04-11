@@ -18,8 +18,8 @@ export default function EventDetailsPage({ profile }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { events, loading: eventsLoading, error: eventsError } = useEvents();
-  const { registeredEventIds , toggleRegistration } = useRegister(profile?.id ?? null);
+  const { events, loading: eventsLoading, error: eventsError, removeEvent } = useEvents();
+  const { registeredEventIds, toggleRegistration } = useRegister(profile?.id ?? null);
 
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [registeredCount, setRegisteredCount] = useState(0);
@@ -28,12 +28,20 @@ export default function EventDetailsPage({ profile }: Props) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");
 
+ 
+
   const event = events.find(e => Number(e.id) === Number(id));
   const isOwner = profile?.id === event?.organizer_id;
   const isVolunteer = profile?.role === "volunteer";
   const isLoggedIn = !!profile;
   const isRegistered = event ? registeredEventIds.includes(event.id) : false;
 
+ const handleDelete = async (event: any) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this event?");
+    if (!confirmDelete) return;
+
+    await removeEvent(event);
+  };
 
   useEffect(() => {
     async function fetchRegistrations() {
@@ -62,18 +70,18 @@ export default function EventDetailsPage({ profile }: Props) {
 
   const actions: CardAction[] = [];
 
-  if (event && !isOwner && isLoggedIn  && isVolunteer) {
+  if (event && !isOwner && isLoggedIn && isVolunteer) {
     actions.push({
       label: isRegistered ? "✓ Registered" : "Register for this event",
       onClick: () => toggleRegistration(event.id, isRegistered),
       className: isRegistered ? styles.btnDone : styles.btnReg,
     });
-     actions.push({
-        label: "Saved",
-        onClick: () => console.log("saved", event.id),
-        className: `${styles.btn} ${styles.btnSaved}`,
-      });
-      actions.push({
+    actions.push({
+      label: "Saved",
+      onClick: () => console.log("saved", event.id),
+      className: `${styles.btn} ${styles.btnSaved}`,
+    });
+    actions.push({
       label: "Give Feedback",
       onClick: () => setShowFeedback(true),
       className: `${styles.btn}`,
@@ -88,7 +96,7 @@ export default function EventDetailsPage({ profile }: Props) {
     });
     actions.push({
       label: "Delete",
-      onClick: () => console.log("Delete event", event.id),
+      onClick: () => handleDelete(event),
       className: `${styles.btn} ${styles.btnDelete}`,
     });
   }
@@ -107,7 +115,7 @@ export default function EventDetailsPage({ profile }: Props) {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <div className={styles.hero} style={{ backgroundImage: `url(${event.image})` }}>
+      <div className={styles.hero} style={{ backgroundImage: `url(/images/event_hero.jpg)` }}>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Join the {event.title}</h1>
@@ -125,7 +133,7 @@ export default function EventDetailsPage({ profile }: Props) {
         actions={actions}
       />
 
-          {showFeedback && (
+      {showFeedback && (
         <div className={styles.card} style={{ marginTop: "1rem" }}>
           <h3>Leave Feedback</h3>
 
@@ -142,6 +150,6 @@ export default function EventDetailsPage({ profile }: Props) {
         </div>
       )}
     </div>
-    
+
   );
 }

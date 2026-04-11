@@ -1,7 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import type { Event, CreateEvent, UpdateEvent, EventFormData, EventTypes } from "../../types/events";
+import type {
+  Event,
+  CreateEvent,
+  UpdateEvent,
+  EventFormData,
+} from "../../types/events";
 import { getEventStatus } from "../../utils/eventStatus";
 import { uploadImage } from "../../services/storageService";
+import styles from "../../css/EventForm.module.css";
+import { useNavigate } from "react-router-dom";
 
 type EventFormProps = {
   initialData: Event | null;
@@ -11,8 +18,6 @@ type EventFormProps = {
   successMessage?: string;
   userId: number;
 };
-
-
 
 const initialForm: EventFormData = {
   title: "",
@@ -24,7 +29,7 @@ const initialForm: EventFormData = {
   duration: "",
   capacity: "",
   type: "",
-  image:""
+  image: "",
 };
 
 export default function EventForm({
@@ -39,10 +44,9 @@ export default function EventForm({
   const [localError, setLocalError] = useState("");
   const initialized = useRef(false);
 
-  // Fill form in edit mode
+  // 🔹 Load edit data
   useEffect(() => {
     if (initialData && !initialized.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         title: initialData.title || "",
         description: initialData.description || "",
@@ -55,9 +59,11 @@ export default function EventForm({
         type: initialData.type || "",
         image: initialData.image || "",
       });
+
       initialized.current = true;
-      setLocalError("");
-    } else if (!initialData) {
+    }
+
+    if (!initialData) {
       setForm(initialForm);
       initialized.current = false;
     }
@@ -70,6 +76,24 @@ export default function EventForm({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
+  // 🔹 Upload image
+  async function handleImageUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const result = await uploadImage(userId, file);
+
+    if (result.success && result.publicUrl) {
+      updateField("image", result.publicUrl); 
+      setLocalError("");
+    } else {
+      setLocalError("Failed to upload image");
+    }
+  }
+
+  // 🔹 Validation
   function validate() {
     if (
       !form.title.trim() ||
@@ -79,214 +103,221 @@ export default function EventForm({
       !form.start_time ||
       !form.end_time ||
       !form.capacity ||
-      Number(form.capacity) <= 0 ||
-      !form.type.trim() ||
-      !form.image.trim()
+      !form.type ||
+      !form.image
     ) {
-      setLocalError("Please fill all required fields correctly.");
+      setLocalError("Please fill all required fields including image.");
       return false;
     }
 
-    setLocalError("");
     return true;
   }
 
+  // 🔹 Submit
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     if (!validate()) return;
 
-    if (!isEdit && !userId) {
-      setLocalError("User not authenticated.");
-      return;
-    }
-
-    //  auto-calculate status
     const status = getEventStatus(
       form.event_date,
       form.end_time,
       Number(form.capacity)
     );
 
-    try {
-      if (isEdit) {
-        const updateData: UpdateEvent = {
-          title: form.title,
-          description: form.description,
-          location: form.location,
-          event_date: form.event_date,
-          start_time: form.start_time,
-          end_time: form.end_time,
-          capacity: Number(form.capacity),
-          status,
-          duration:  Number(form.duration),
-          type: form.type as any, // Assuming type is valid
-          image: form.image,
-        };
-        const success = await onSubmit(updateData);
-        if (!success) {
-          setLocalError("Failed to submit event.");
-        } else {
-          setForm(initialForm);
-        }
-      } else {
-        const createData: CreateEvent = {
-          organizer_id: userId,
-          title: form.title,
-          description: form.description,
-          location: form.location,
-          event_date: form.event_date,
-          start_time: form.start_time,
-          end_time: form.end_time,
-          capacity: Number(form.capacity),
-          status,
-          duration:  Number(form.duration),
-          type: form.type as any, 
-          image: form.image,
-        };
-        const success = await onSubmit(createData);
-        if (!success) {
-          setLocalError("Failed to submit event.");
-        } else {
-          setForm(initialForm);
-        }
-      }
-    } catch (err: unknown) {
-      setLocalError(err instanceof Error ? err.message : "Something went wrong.");
+    const baseData = {
+      title: form.title,
+      description: form.description,
+      location: form.location,
+      event_date: form.event_date,
+      start_time: form.start_time,
+      end_time: form.end_time,
+      capacity: Number(form.capacity),
+      status,
+      duration: Number(form.duration),
+      type: form.type as any,
+      image: form.image, 
+    };
+
+    const payload = isEdit
+      ? (baseData as UpdateEvent)
+      : ({ ...baseData, organizer_id: userId } as CreateEvent);
+
+    const success = await onSubmit(payload);
+
+    if (!success) {
+      setLocalError("Failed to submit event.");
+    } else {
+      setForm(initialForm);
     }
   }
-
-  const previewStatus = getEventStatus(
-    form.event_date,
-    form.end_time,
-    Number(form.capacity)
-  );
-
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  const result = await uploadImage(userId, file);
-
-  if (!result.success) {
-    console.error(result.error);
-    return;
-  }
-
-  updateField("image", result.publicUrl); 
-}
+  const navigate = useNavigate();
 
   return (
-    <div className="form-card">
-      <h2 style={{ marginBottom: "1rem" }}>
+    <div className={styles.formCard}>
+      <h2 className={styles.formTitle}>
         {isEdit ? "Edit Event" : "Create Event"}
       </h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        
+        <div className={styles.formGroup}>
           <label>Event Title</label>
           <input
-            type="text"
+            className={styles.input}
             value={form.title}
             onChange={(e) => updateField("title", e.target.value)}
           />
         </div>
 
-         <div className="form-group">
-          <label>Upload image</label>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-        </div>
+        
+        <div className={styles.formGroup}>
+          <label>Upload Image *</label>
+          <div
+    className={styles.uploadBox}
+    onClick={() => document.getElementById("fileInput")?.click()}
+  >
+    {form.image ? (
+      <img
+        src={form.image}
+        alt="preview"
+        className={styles.previewImage}
+      />
+    ) : (
+      <p>Click to upload image</p>
+    )}
+  </div>
 
-        <div className="form-group">
+  <input
+    id="fileInput"
+    type="file"
+    accept="image/*"
+    style={{ display: "none" }}
+    onChange={handleImageUpload}
+  />
+</div>
+
+        {/* DESCRIPTION */}
+        <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
+            className={styles.textarea}
             value={form.description}
-            onChange={(e) => updateField("description", e.target.value)}
+            onChange={(e) =>
+              updateField("description", e.target.value)
+            }
           />
         </div>
 
-        <div className="form-group">
+        {/* LOCATION */}
+        <div className={styles.formGroup}>
           <label>Location</label>
           <input
-            type="text"
+            className={styles.input}
             value={form.location}
             onChange={(e) => updateField("location", e.target.value)}
           />
         </div>
 
-        <div className="form-group">
+        {/* DATE */}
+        <div className={styles.formGroup}>
           <label>Date</label>
           <input
             type="date"
+            className={styles.input}
             value={form.event_date}
-            onChange={(e) => updateField("event_date", e.target.value)}
+            onChange={(e) =>
+              updateField("event_date", e.target.value)
+            }
           />
         </div>
 
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <div className="form-group" style={{ flex: 1 }}>
-            <label>Start Time</label>
-            <input
-              type="time"
-              value={form.start_time}
-              onChange={(e) => updateField("start_time", e.target.value)}
-            />
-          </div>
-
-          <div className="form-group" style={{ flex: 1 }}>
-            <label>End Time</label>
-            <input
-              type="time"
-              value={form.end_time}
-              onChange={(e) => updateField("end_time", e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <div className="form-group" style={{ flex: 1 }}>
-            <label>Capacity</label>
-            <input
-              type="number"
-              min="1"
-              value={form.capacity}
-              onChange={(e) => updateField("capacity", e.target.value)}
-            />
-          </div>
-
-          <div className="form-group" style={{ flex: 1 }}>
-            <label>Duration (minutes)</label>
-            <input
-              type="number"
-              min="0"
-              value={form.duration}
-              onChange={(e) => updateField("duration", e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Type</label>
+        {/* TIME */}
+        <div className={styles.formRow}>
           <input
-            type="text"
+            type="time"
+            className={styles.input}
+            value={form.start_time}
+            onChange={(e) =>
+              updateField("start_time", e.target.value)
+            }
+          />
+          <input
+            type="time"
+            className={styles.input}
+            value={form.end_time}
+            onChange={(e) =>
+              updateField("end_time", e.target.value)
+            }
+          />
+        </div>
+
+        {/* CAPACITY */}
+        <div className={styles.formGroup}>
+          <label>Capacity</label>
+          <input
+            type="number"
+            className={styles.input}
+            value={form.capacity}
+            onChange={(e) =>
+              updateField("capacity", e.target.value)
+            }
+          />
+        </div>
+
+        {/* DURATION */}
+        <div className={styles.formGroup}>
+          <label>Duration</label>
+          <input
+            type="number"
+            className={styles.input}
+            value={form.duration}
+            onChange={(e) =>
+              updateField("duration", e.target.value)
+            }
+          />
+        </div>
+
+        {/* TYPE */}
+        <div className={styles.formGroup}>
+          <label>Type</label>
+          <select
+            className={styles.select}
             value={form.type}
             onChange={(e) => updateField("type", e.target.value)}
-          />
+          >
+            <option value="">Select type</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Volunteer">Volunteer</option>
+            <option value="Social">Social</option>
+            <option value="Charity">Charity</option>
+          </select>
         </div>
 
-        
-        <p style={{ marginTop: "10px", fontWeight: "bold" }}>
-          Status: {previewStatus}
-        </p>
-
-        {localError && <p className="error-msg">{localError}</p>}
-        {error && <p className="error-msg">{error}</p>}
-        {successMessage && <p className="success-msg">{successMessage}</p>}
-
-        <div style={{ marginTop: "1rem" }}>
-          <button type="submit">
-            {isEdit ? "Save Changes" : "Create Event"}
-          </button>
+        {/* STATUS */}
+        <div className={styles.statusRow}>
+          Status:{" "}
+          <span className={styles.statusBadge}>
+            {getEventStatus(
+              form.event_date,
+              form.end_time,
+              Number(form.capacity)
+            )}
+          </span>
         </div>
+
+        {/* ERRORS */}
+        {localError && <p className={styles.errorMsg}>{localError}</p>}
+        {error && <p className={styles.errorMsg}>{error}</p>}
+        {successMessage && (
+          <p className={styles.successMsg}>{successMessage}</p>
+        )}
+
+        {/* SUBMIT */}
+        <button type="submit" className={styles.submitBtn} onClick={()=>navigate("/organizer-dashboard/events")}>
+          {isEdit ? "Save Changes" : "Create Event"}
+        </button>
       </form>
     </div>
   );

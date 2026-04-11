@@ -1,4 +1,4 @@
-import "./Loader.css";
+import "../../Loader.css";
 
 type LoaderProps = {
   text?: string;

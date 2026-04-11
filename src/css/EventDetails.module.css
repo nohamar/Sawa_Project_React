@@ -68,31 +68,32 @@
   font-size: 11px;
   font-weight: 500;
   padding: 4px 14px;
-  border-radius: 999px;
+  border-radius: 50px;
+  color: var(--bg-soft);
 }
 
 .upcoming {
   background: var(--accent-green);
-  color: white;
+
 
 }
 
 .completed {
   background:  #E24B4A;
-  color: white;
+  
   
 }
 
 .closed {
   background: #555;
-  color: white;
+  
   
 }
 
 /* ── Two-column layout ── */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 350px;
   gap: 2rem;
   align-items: start;
 }
@@ -157,6 +158,7 @@
   color: var(--text-main);
   line-height: 1.7;
   margin-bottom: 1.5rem;
+  
 }
 
 /* ── Info list ── */
@@ -252,88 +254,26 @@
 }
 
 
-
-/* ── Buttons ── */
-.btnReg {
-  width: 100%;
-  padding: 0.8rem;
-  background: var(--accent-primary);
-  color: #fff;
+.actions {
+  display: flex;
+  gap: 0.4rem;
+ justify-content: center;
+ margin-top: 30px;
+ flex-direction: column;
+}
+.actions button {
+  padding: 0.7rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+   border-radius: 50px;
   border: none;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
+  background-color: var(--accent-primary);
+  color: var(--bg-soft);
 }
-
-.btnReg:hover {
-  background: var(--accent-secondary);
+.actions button:hover {
+  background-color: var(--accent-secondary);
 }
-
-.btnDone {
-  width: 100%;
-  padding: 0.8rem;
-  background: #E1F5EE;
-  color: #085041;
-  border: 0.5px solid #1D9E75;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-
-.btnDone:hover {
-  background: #9FE1CB;
-}
-
-.btnOut {
-  width: 100%;
-  padding: 0.8rem;
-  background: transparent;
-  color: var(--accent-primary);
-  border: 0.5px solid var(--border-soft);
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-
-.btnOut:hover {
-  background: var(--accent-secondary);
-}
-
-.btnDel {
-  width: 100%;
-  padding: 0.8rem;
-  background: transparent;
-  color: #A32D2D;
-  border: 0.5px solid #E24B4A;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s, color 0.15s;
-}
-
-.btnDel:hover {
-  background: #FCEBEB;
-}
-
 /* ── Lock notice ── */
 .lockNotice {
   display: flex;

@@ -8,17 +8,19 @@ import { useState } from "react";
 import styles from "../css/EventList.module.css";
 import type { Event } from "../types/events";
 import type { CardAction } from "../components/events/EventCard";
+import { useNavigate } from "react-router-dom";
 
 type EventsPageProps = { profile: Profile | null };
 
 export default function EventsPage({ profile }: EventsPageProps) {
-  const { events, loading: eventsLoading, error: eventsError } = useEvents();
+  const { events, loading: eventsLoading, error: eventsError, removeEvent } = useEvents();
   const { registeredEventIds, loading: regLoading, toggleRegistration } =
     useRegister(profile?.id ?? null);
 
   const [keyword, setKeyword] = useState("");
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
+  const navigate = useNavigate();
 
   const eventTypes = ["Workshop", "Seminar", "Volunteer", "Social", "Charity"];
 
@@ -31,23 +33,32 @@ export default function EventsPage({ profile }: EventsPageProps) {
       </p>
     );
 
- 
+
   const getActions = (event: Event): CardAction[] => {
     const isOwner = profile?.id === event.organizer_id;
     const isRegistered = registeredEventIds.includes(event.id);
 
     const actions: CardAction[] = [];
 
+
+
+    const handleDelete = async (event: Event) => {
+      const confirmDelete = window.confirm("Are you sure you want to delete this event?");
+      if (!confirmDelete) return;
+
+      await removeEvent(event);
+    };
+
     if (isOwner) {
       actions.push({
         label: "Edit",
-        onClick: () => console.log("edit", event),
+        onClick: () => navigate(`/organizer-dashboard/edit-event/${event.id}`),
         className: `${styles.btn} ${styles.btnEdit}`,
       });
 
       actions.push({
         label: "Delete",
-        onClick: () => console.log("delete", event.id),
+        onClick: () => handleDelete(event),
         className: `${styles.btn} ${styles.btnDelete}`,
       });
     } else if (profile?.role === "volunteer") {
