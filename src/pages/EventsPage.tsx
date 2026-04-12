@@ -4,7 +4,7 @@ import EventList from "../components/events/EventList";
 import SearchBar from "../components/shared/SearchBar";
 import FilterBar from "../components/shared/FilterBar";
 import type { Profile } from "../types/profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../css/EventList.module.css";
 import type { Event } from "../types/events";
 import type { CardAction } from "../components/events/EventCard";
@@ -13,10 +13,12 @@ import { useNavigate } from "react-router-dom";
 type EventsPageProps = { profile: Profile | null };
 
 export default function EventsPage({ profile }: EventsPageProps) {
-  const { events, loading: eventsLoading, error: eventsError, removeEvent } = useEvents();
+  const { events, loading: eventsLoading, error: eventsError, removeEvent, loadEvents } = useEvents();
   const { registeredEventIds, loading: regLoading, toggleRegistration } =
     useRegister(profile?.id ?? null);
-
+useEffect(() => {
+  loadEvents();
+}, []);
   const [keyword, setKeyword] = useState("");
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
@@ -102,11 +104,16 @@ export default function EventsPage({ profile }: EventsPageProps) {
             Join us in exciting activities and volunteer opportunities that make
             a difference.
           </p>
+          <button onClick={() =>
+            document
+              .getElementById("eventsContainer")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }>Explore Events</button>
         </div>
       </div>
 
       {/* Filters */}
-      <div className={styles.eventsContainer}>
+      <div className={styles.eventsContainer} id="eventsContainer">
         <div className="upper-part">
           <h2 className={styles.eventsHeading}>Explore Events</h2>
           <div className={styles.filter}>

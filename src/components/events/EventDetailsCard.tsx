@@ -99,7 +99,7 @@ export const EventDetails: React.FC<EventDetailsProps> = ({
                 <div className={styles.infoLabel}>Time</div>
                 <div className={styles.infoVal}>
                   {event.start_time} – {event.end_time}
-                  {event.duration && <> &nbsp;·&nbsp; {event.duration} min</>}
+                
                 </div>
               </div>
             </div>

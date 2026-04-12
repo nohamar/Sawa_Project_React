@@ -12,7 +12,7 @@ export interface Event {
   end_time: string;
   capacity: number;
   status: EventStatus;
-  duration: number;
+  
   type: EventTypes;
   image:string;
   created_at?: string;
@@ -28,7 +28,7 @@ export type CreateEvent = {
   end_time: string;
   capacity: number;
   status: EventStatus;
-  duration: number;
+ 
   type: EventTypes;
   image:string;
 };
@@ -39,7 +39,7 @@ export type EventFormData = {
   event_date: string;
   start_time: string;
   end_time: string;
-  duration: string;
+  
   capacity: string;
   type: string;
   image: string;

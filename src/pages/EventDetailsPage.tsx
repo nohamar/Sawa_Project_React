@@ -18,7 +18,9 @@ export default function EventDetailsPage({ profile }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { events, loading: eventsLoading, error: eventsError, removeEvent } = useEvents();
+
+
+  const { events, loading: eventsLoading, error: eventsError, removeEvent, loadEvents } = useEvents();
   const { registeredEventIds, toggleRegistration } = useRegister(profile?.id ?? null);
 
   const [registrations, setRegistrations] = useState<Registration[]>([]);
@@ -28,15 +30,16 @@ export default function EventDetailsPage({ profile }: Props) {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState("");
 
- 
-
+  useEffect(() => {
+    loadEvents();
+  }, []);
   const event = events.find(e => Number(e.id) === Number(id));
   const isOwner = profile?.id === event?.organizer_id;
   const isVolunteer = profile?.role === "volunteer";
   const isLoggedIn = !!profile;
   const isRegistered = event ? registeredEventIds.includes(event.id) : false;
 
- const handleDelete = async (event: any) => {
+  const handleDelete = async (event: any) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (!confirmDelete) return;
 
@@ -120,36 +123,41 @@ export default function EventDetailsPage({ profile }: Props) {
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>Join the {event.title}</h1>
           <p className={styles.heroSubtitle}>
-            Don’t miss out! Check out all the details and secure your spot today.
+             Check out and secure your spot today.
           </p>
+          <button onClick={() =>
+            document
+              .getElementById("details")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }>Explore Event</button>
         </div>
       </div>
+      <div id="details">
+        <EventDetails
+          event={event}
+          registrations={registrations}
+          registeredCount={registeredCount}
+          status={status}
+          actions={actions}
+        />
 
-      <EventDetails
-        event={event}
-        registrations={registrations}
-        registeredCount={registeredCount}
-        status={status}
-        actions={actions}
-      />
+        {showFeedback && (
+          <div className={styles.card} style={{ marginTop: "1rem" }}>
+            <h3>Leave Feedback</h3>
 
-      {showFeedback && (
-        <div className={styles.card} style={{ marginTop: "1rem" }}>
-          <h3>Leave Feedback</h3>
+            <textarea
+              className={styles.textarea}
+              placeholder="Write your feedback..."
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            />
 
-          <textarea
-            className={styles.textarea}
-            placeholder="Write your feedback..."
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-          />
-
-          <button className={styles.btn} onClick={handleSubmitFeedback}>
-            Submit
-          </button>
-        </div>
-      )}
+            <button className={styles.btn} onClick={handleSubmitFeedback}>
+              Submit
+            </button>
+          </div>
+        )}
+      </div>
     </div>
-
   );
 }

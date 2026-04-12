@@ -10,23 +10,14 @@
   background-position: center;
 }
 
-.hero::after {
-  content: "";
+.heroOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.3); /* dark overlay */
-  z-index: 1;
-}
-
-.herocontent {
-  position: relative;
-  z-index: 2;
-  max-width: 700px;
-  padding: 0 20px;
+  background-color: rgba(0, 0, 0, 0.3); /* dark overlay */
 }
 
 .hero h1 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 10px;
   color: var(--accent-primary);
 }
@@ -37,7 +28,39 @@
   color: var(--accent-green);
   font-weight: 600;
 }
-/* ── Wrapper ── */
+
+
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  
+}
+
+.heroSubtitle {
+    color: var(--accent-green);
+  margin-top: 0.1rem;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.hero button {
+  background-color: var(--accent-secondary);
+  color: var(--card-bg);
+  border: none;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  
+}
+
+.hero button:hover {
+  background-color: var(--hover-button);
+}
+
 .wrap {
   max-width: 1000px;
   margin: 0 auto;
@@ -45,7 +68,7 @@
   font-family: var(--font-sans, system-ui, sans-serif);
 }
 
-/* ── Top bar ── */
+
 .topBar {
   display: flex;
   align-items: center;
@@ -143,7 +166,7 @@
   border-radius: 4px;
 }
 
-/* ── Title & description ── */
+
 .title {
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 500;
@@ -161,7 +184,6 @@
   
 }
 
-/* ── Info list ── */
 .infoList {
   display: flex;
   flex-direction: column;
@@ -207,10 +229,8 @@
   color: var(--text-main);
 }
 
-/* ── Right sidebar cards ── */
-.card {
-  
-  
+
+.card {  
   padding: 1.25rem;
   margin-bottom: 1rem;
 }
@@ -224,7 +244,6 @@
   margin-bottom: 1rem;
 }
 
-/* ── Capacity bar ── */
 .capTrack {
   height: 6px;
   background: var(--border-soft);
@@ -274,7 +293,7 @@
 .actions button:hover {
   background-color: var(--accent-secondary);
 }
-/* ── Lock notice ── */
+
 .lockNotice {
   display: flex;
   align-items: center;

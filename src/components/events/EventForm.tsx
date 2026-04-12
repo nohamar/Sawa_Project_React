@@ -26,7 +26,6 @@ const initialForm: EventFormData = {
   event_date: "",
   start_time: "",
   end_time: "",
-  duration: "",
   capacity: "",
   type: "",
   image: "",
@@ -43,8 +42,11 @@ export default function EventForm({
   const [form, setForm] = useState<EventFormData>(initialForm);
   const [localError, setLocalError] = useState("");
   const initialized = useRef(false);
+  const navigate = useNavigate();
 
-  // 🔹 Load edit data
+  // =========================
+  // LOAD EDIT DATA
+  // =========================
   useEffect(() => {
     if (initialData && !initialized.current) {
       setForm({
@@ -54,7 +56,6 @@ export default function EventForm({
         event_date: initialData.event_date || "",
         start_time: initialData.start_time || "",
         end_time: initialData.end_time || "",
-        duration: initialData.duration?.toString() || "",
         capacity: initialData.capacity?.toString() || "",
         type: initialData.type || "",
         image: initialData.image || "",
@@ -69,6 +70,9 @@ export default function EventForm({
     }
   }, [initialData]);
 
+  // =========================
+  // UPDATE FIELD
+  // =========================
   function updateField<K extends keyof EventFormData>(
     key: K,
     value: EventFormData[K]
@@ -76,7 +80,9 @@ export default function EventForm({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  // 🔹 Upload image
+  // =========================
+  // IMAGE UPLOAD
+  // =========================
   async function handleImageUpload(
     e: React.ChangeEvent<HTMLInputElement>
   ) {
@@ -86,14 +92,14 @@ export default function EventForm({
     const result = await uploadImage(userId, file);
 
     if (result.success && result.publicUrl) {
-      updateField("image", result.publicUrl); 
+      updateField("image", result.publicUrl);
       setLocalError("");
     } else {
       setLocalError("Failed to upload image");
     }
   }
 
-  // 🔹 Validation
+
   function validate() {
     if (
       !form.title.trim() ||
@@ -106,14 +112,15 @@ export default function EventForm({
       !form.type ||
       !form.image
     ) {
-      setLocalError("Please fill all required fields including image.");
+      setLocalError("Please complete all fields before submitting.");
       return false;
     }
 
+    setLocalError("");
     return true;
   }
 
-  // 🔹 Submit
+ 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -134,9 +141,8 @@ export default function EventForm({
       end_time: form.end_time,
       capacity: Number(form.capacity),
       status,
-      duration: Number(form.duration),
       type: form.type as any,
-      image: form.image, 
+      image: form.image,
     };
 
     const payload = isEdit
@@ -147,11 +153,18 @@ export default function EventForm({
 
     if (!success) {
       setLocalError("Failed to submit event.");
-    } else {
-      setForm(initialForm);
+      return;
     }
+
+
+    setForm(initialForm);
+    setLocalError("");
+
+    navigate("/organizer-dashboard/events");
   }
-  const navigate = useNavigate();
+
+
+  const displayedError = localError || error;
 
   return (
     <div className={styles.formCard}>
@@ -160,7 +173,7 @@ export default function EventForm({
       </h2>
 
       <form onSubmit={handleSubmit}>
-        
+        {/* TITLE */}
         <div className={styles.formGroup}>
           <label>Event Title</label>
           <input
@@ -170,32 +183,32 @@ export default function EventForm({
           />
         </div>
 
-        
+        {/* IMAGE */}
         <div className={styles.formGroup}>
           <label>Upload Image *</label>
           <div
-    className={styles.uploadBox}
-    onClick={() => document.getElementById("fileInput")?.click()}
-  >
-    {form.image ? (
-      <img
-        src={form.image}
-        alt="preview"
-        className={styles.previewImage}
-      />
-    ) : (
-      <p>Click to upload image</p>
-    )}
-  </div>
+            className={styles.uploadBox}
+            onClick={() => document.getElementById("fileInput")?.click()}
+          >
+            {form.image ? (
+              <img
+                src={form.image}
+                alt="preview"
+                className={styles.previewImage}
+              />
+            ) : (
+              <p>Click to upload image</p>
+            )}
+          </div>
 
-  <input
-    id="fileInput"
-    type="file"
-    accept="image/*"
-    style={{ display: "none" }}
-    onChange={handleImageUpload}
-  />
-</div>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={handleImageUpload}
+          />
+        </div>
 
         {/* DESCRIPTION */}
         <div className={styles.formGroup}>
@@ -265,19 +278,6 @@ export default function EventForm({
           />
         </div>
 
-        {/* DURATION */}
-        <div className={styles.formGroup}>
-          <label>Duration</label>
-          <input
-            type="number"
-            className={styles.input}
-            value={form.duration}
-            onChange={(e) =>
-              updateField("duration", e.target.value)
-            }
-          />
-        </div>
-
         {/* TYPE */}
         <div className={styles.formGroup}>
           <label>Type</label>
@@ -308,14 +308,16 @@ export default function EventForm({
         </div>
 
         {/* ERRORS */}
-        {localError && <p className={styles.errorMsg}>{localError}</p>}
-        {error && <p className={styles.errorMsg}>{error}</p>}
+        {displayedError && (
+          <p className={styles.errorMsg}>{displayedError}</p>
+        )}
+
         {successMessage && (
           <p className={styles.successMsg}>{successMessage}</p>
         )}
 
         {/* SUBMIT */}
-        <button type="submit" className={styles.submitBtn} onClick={()=>navigate("/organizer-dashboard/events")}>
+        <button type="submit" className={styles.submitBtn}>
           {isEdit ? "Save Changes" : "Create Event"}
         </button>
       </form>

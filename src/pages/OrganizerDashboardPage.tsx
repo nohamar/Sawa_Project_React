@@ -8,7 +8,7 @@ type Props = {
   currentUserId?: number;
 };
 
-// The usable bar area height in px — must match `.barChart` height minus label space
+
 const BAR_AREA_PX = 130;
 
 export default function OrganizerDashboard({ currentUserId }: Props) {
@@ -25,23 +25,15 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
 
   const organizerEvents = events ?? [];
 
-  const today = useMemo(() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
-  }, []);
 
-  const upcomingEvents = organizerEvents.filter((e) => {
-    const d = new Date(e.event_date);
-    d.setHours(0, 0, 0, 0);
-    return d >= today;
-  });
 
-  const completedEvents = organizerEvents.filter((e) => {
-    const d = new Date(e.event_date);
-    d.setHours(0, 0, 0, 0);
-    return d < today;
-  });
+  const upcomingEvents = organizerEvents.filter(
+  (e) => e.status === "upcoming"
+);
+
+ const completedEvents = organizerEvents.filter(
+  (e) => e.status === "completed"
+);
 
   const organizerEventIds = useMemo(
     () => organizerEvents.map((e) => String(e.id)),
@@ -58,7 +50,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
 
   const recentUpcoming = upcomingEvents.slice(0, 3);
 
-  // ── Bar chart: last 6 months ──
+  // Bar chart: last 6 months
   const now = new Date();
 
   const monthRefs = Array.from({ length: 6 }, (_, i) => {
@@ -79,12 +71,12 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
 
   const maxEvents = Math.max(...eventsPerMonth, 1);
 
-  // ✅ Pixel heights — percentage-based heights don't work in flex containers
+  //heigt for bars: 0 if no events, otherwise scaled to fit BAR_AREA_PX with a min of 6px for visibility
   const barPxHeights = eventsPerMonth.map((count) =>
     count === 0 ? 0 : Math.max((count / maxEvents) * BAR_AREA_PX, 6)
   );
 
-  // ── Donut chart: event types ──
+  
   const TYPE_COLORS: Record<string, string> = {
     Workshop: "var(--accent-primary)",
     Seminar:  "var(--accent-secondary)",
@@ -116,7 +108,6 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
       <div className={styles.content}>
         <h2 className={styles.title}>Organizer Dashboard</h2>
 
-        {/* STATS */}
         <div className={styles.stats}>
           <div className={styles.card}>
             <h3>{organizerEvents.length}</h3>
@@ -136,10 +127,10 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
           </div>
         </div>
 
-        {/* GRAPHS */}
+       
         <div className={styles.gridRow}>
 
-          {/* BAR CHART */}
+         
           <div className={styles.panel}>
             <div className={styles.panelHeader}>
               <h3 className={styles.panelTitle}>Events per Month</h3>
@@ -148,7 +139,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
             <div className={styles.barChart}>
               {barPxHeights.map((px, i) => (
                 <div key={i} className={styles.barGroup}>
-                  {/* ✅ height in px — renders correctly inside flex */}
+             
                   <div
                     className={styles.bar}
                     style={{ height: `${px}px` }}
@@ -161,7 +152,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
             </div>
           </div>
 
-          {/* DONUT CHART */}
+          
           <div className={styles.panel}>
             <div className={styles.panelHeader}>
               <h3 className={styles.panelTitle}>Event Types</h3>
@@ -174,7 +165,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
                 viewBox="0 0 36 36"
                 className={styles.donutSvg}
               >
-                {/* background track */}
+                
                 <circle
                   cx="18" cy="18" r="15.915"
                   fill="transparent"
@@ -222,7 +213,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
           </div>
         </div>
 
-        {/* RECENT EVENTS */}
+       
         <div className={styles.recentSection}>
           <div className={styles.recentHeader}>
             <h3>Upcoming Events</h3>
@@ -252,7 +243,7 @@ export default function OrganizerDashboard({ currentUserId }: Props) {
           </div>
         </div>
 
-        {/* CTA */}
+       
         <div className={styles.addSection}>
           <h3>Create a New Event</h3>
           <p>
