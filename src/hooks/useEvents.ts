@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Event, CreateEvent, UpdateEvent } from "../types/events";
 import {
   getAllEvents,
@@ -19,86 +19,95 @@ export function useEvents() {
     setSuccessMessage("");
   };
 
+ 
   const loadEvents = async () => {
     setLoading(true);
     clearMessages();
 
     const { data, error } = await getAllEvents();
+
     if (error) {
-      setError(error.message );
+      setError(error.message);
       setLoading(false);
       return;
     }
 
-    setEvents(data as Event[]  ?? []);
+    setEvents((data as Event[]) ?? []);
     setLoading(false);
   };
 
+ 
   const loadEventsByOrganizer = async (userId: number | string) => {
+    if (!userId) return;
+
     setLoading(true);
     clearMessages();
 
     const { data, error } = await getEventsByOrganizer(userId.toString());
+
     if (error) {
       setError(error?.message || "Failed to load organizer events");
       setLoading(false);
       return;
     }
 
-    setEvents(data ?? []);
+    setEvents((data as Event[]) ?? []);
     setLoading(false);
   };
 
   const addEvent = async (event: CreateEvent) => {
     clearMessages();
+
     const { error } = await createEvent(event);
+
     if (error) {
-      setError(error.message );
+      setError(error.message);
       return false;
     }
+
     setSuccessMessage("Event created successfully.");
-    await loadEvents();
     return true;
   };
 
   const editEvent = async (id: string, updatedData: UpdateEvent) => {
     clearMessages();
+
     const { error } = await updateEvent(id, updatedData);
+
     if (error) {
       setError(error?.message || "Failed to update event");
       return false;
     }
+
     setSuccessMessage("Event updated successfully.");
-    await loadEvents();
     return true;
   };
 
-  const removeEvent = async (id: string) => {
+  const removeEvent = async (event: Event) => {
     clearMessages();
-    const { error } = await deleteEvent(id);
+
+    const { error } = await deleteEvent(String(event.id), event.image);
+
     if (error) {
       setError(error?.message || "Failed to delete event");
       return false;
     }
+
+    setEvents((prev) => prev.filter((e) => e.id !== event.id));
     setSuccessMessage("Event deleted successfully.");
-    await loadEvents();
     return true;
   };
-
-  useEffect(() => {
-    loadEvents();
-  }, []);
 
   return {
     events,
     loading,
     error,
     successMessage,
+    loadEvents,
+    loadEventsByOrganizer,
     addEvent,
     editEvent,
     removeEvent,
-    loadEventsByOrganizer,
-    refreshEvents: loadEvents,
     clearMessages,
   };
 }

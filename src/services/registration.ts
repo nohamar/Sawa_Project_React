@@ -18,7 +18,6 @@ export async function getRegistration_User(volunteer_id:string){
 export async function deleteRegistration (registration_id:string){
     return await supabase.from("Registration").delete().eq("id", registration_id)
 }
-
 export async function getAllRegistrations() {
   return await supabase
     .from("Registration")

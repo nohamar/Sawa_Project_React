@@ -12,8 +12,9 @@ export default function AboutUsPage() {
         className={styles.hero}
         style={{ backgroundImage: `url("/images/aboutus-hero.jpg")` }}
       >
-        <div className={styles.herocontent}>
-          <h1>Connecting People, Creating Memories</h1>
+        <div className={styles.heroOverlay}></div>
+        <div className={styles.heroContent}>
+          <h1>Connecting People and Creating Memories</h1>
           <p>Creating moments that inspire and connections that last.</p>
           <button onClick={() => navigate("/events")}>Explore Events</button>
         </div>

@@ -10,23 +10,14 @@
   background-position: center;
 }
 
-.hero::after {
-  content: "";
+.heroOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.3); /* dark overlay */
-  z-index: 1;
-}
-
-.herocontent {
-  position: relative;
-  z-index: 2;
-  max-width: 700px;
-  padding: 0 20px;
+  background-color: rgba(0, 0, 0, 0.3); /* dark overlay */
 }
 
 .hero h1 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   margin-bottom: 10px;
   color: var(--accent-primary);
 }
@@ -37,7 +28,39 @@
   color: var(--accent-green);
   font-weight: 600;
 }
-/* ── Wrapper ── */
+
+
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  
+}
+
+.heroSubtitle {
+    color: var(--accent-green);
+  margin-top: 0.1rem;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.hero button {
+  background-color: var(--accent-secondary);
+  color: var(--card-bg);
+  border: none;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  
+}
+
+.hero button:hover {
+  background-color: var(--hover-button);
+}
+
 .wrap {
   max-width: 1000px;
   margin: 0 auto;
@@ -45,7 +68,7 @@
   font-family: var(--font-sans, system-ui, sans-serif);
 }
 
-/* ── Top bar ── */
+
 .topBar {
   display: flex;
   align-items: center;
@@ -68,31 +91,32 @@
   font-size: 11px;
   font-weight: 500;
   padding: 4px 14px;
-  border-radius: 999px;
+  border-radius: 50px;
+  color: var(--bg-soft);
 }
 
 .upcoming {
   background: var(--accent-green);
-  color: white;
+
 
 }
 
 .completed {
   background:  #E24B4A;
-  color: white;
+  
   
 }
 
 .closed {
   background: #555;
-  color: white;
+  
   
 }
 
 /* ── Two-column layout ── */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 350px;
   gap: 2rem;
   align-items: start;
 }
@@ -142,7 +166,7 @@
   border-radius: 4px;
 }
 
-/* ── Title & description ── */
+
 .title {
   font-size: clamp(1.4rem, 3vw, 1.9rem);
   font-weight: 500;
@@ -157,9 +181,9 @@
   color: var(--text-main);
   line-height: 1.7;
   margin-bottom: 1.5rem;
+  
 }
 
-/* ── Info list ── */
 .infoList {
   display: flex;
   flex-direction: column;
@@ -205,10 +229,8 @@
   color: var(--text-main);
 }
 
-/* ── Right sidebar cards ── */
-.card {
-  
-  
+
+.card {  
   padding: 1.25rem;
   margin-bottom: 1rem;
 }
@@ -222,7 +244,6 @@
   margin-bottom: 1rem;
 }
 
-/* ── Capacity bar ── */
 .capTrack {
   height: 6px;
   background: var(--border-soft);
@@ -252,89 +273,27 @@
 }
 
 
-
-/* ── Buttons ── */
-.btnReg {
-  width: 100%;
-  padding: 0.8rem;
-  background: var(--accent-primary);
-  color: #fff;
+.actions {
+  display: flex;
+  gap: 0.4rem;
+ justify-content: center;
+ margin-top: 30px;
+ flex-direction: column;
+}
+.actions button {
+  padding: 0.7rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+   border-radius: 50px;
   border: none;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
+  background-color: var(--accent-primary);
+  color: var(--bg-soft);
+}
+.actions button:hover {
+  background-color: var(--accent-secondary);
 }
 
-.btnReg:hover {
-  background: var(--accent-secondary);
-}
-
-.btnDone {
-  width: 100%;
-  padding: 0.8rem;
-  background: #E1F5EE;
-  color: #085041;
-  border: 0.5px solid #1D9E75;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-
-.btnDone:hover {
-  background: #9FE1CB;
-}
-
-.btnOut {
-  width: 100%;
-  padding: 0.8rem;
-  background: transparent;
-  color: var(--accent-primary);
-  border: 0.5px solid var(--border-soft);
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-
-.btnOut:hover {
-  background: var(--accent-secondary);
-}
-
-.btnDel {
-  width: 100%;
-  padding: 0.8rem;
-  background: transparent;
-  color: #A32D2D;
-  border: 0.5px solid #E24B4A;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background 0.15s, color 0.15s;
-}
-
-.btnDel:hover {
-  background: #FCEBEB;
-}
-
-/* ── Lock notice ── */
 .lockNotice {
   display: flex;
   align-items: center;

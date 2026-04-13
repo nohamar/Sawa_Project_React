@@ -1,0 +1,283 @@
+/* ============================================================
+   EventForm.module.css
+   Warm earthy palette — clean editorial form aesthetic
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+
+/* ── Wrapper ── */
+.formCard {
+  font-family: 'DM Sans', sans-serif;
+ 
+  border-radius: 24px;
+  padding: 2.5rem 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+ 
+  
+  animation: fadeUp 0.45s ease both;
+  color: var(--text-main);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Heading ── */
+.formTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.4px;
+}
+
+.formSubtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2.25rem;
+}
+
+/* ── Divider accent ── */
+.divider {
+  height: 3px;
+  width: 52px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 4px;
+  margin-bottom: 2.25rem;
+}
+
+/* ── Section label (group of fields) ── */
+.sectionLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  margin: 2rem 0 1rem;
+}
+
+/* ── Form Group ── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.4rem;
+}
+
+.formRow {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.formRow .formGroup {
+  flex: 1;
+}
+
+/* ── Label ── */
+.label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Inputs / Textarea / Select ── */
+.input,
+.textarea,
+.select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  background: var(--bg-main);
+  border: 1.5px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 0.72rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--accent-primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(249, 173, 63, 0.18);
+}
+
+.input:hover:not(:focus),
+.textarea:hover:not(:focus),
+.select:hover:not(:focus) {
+  border-color: #d9cec5;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+/* ── Select arrow ── */
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+  content: '▾';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: 0.85rem;
+}
+
+.select {
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* ── File upload ── */
+.fileInput {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--bg-soft);
+  border: 1.5px dashed var(--border-soft);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.fileInput:hover {
+  border-color: var(--accent-primary);
+  background: #fff;
+}
+
+/* ── Image preview ── */
+.uploadBox {
+  width: 100%;
+  height: 180px;
+  border: 2px solid var(--border-soft);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--bg-main);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.uploadBox:hover {
+  border-color: var(--accent-primary);
+  background: white;
+}
+
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Status badge ── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  background: var(--bg-section);
+  color: var(--accent-secondary);
+  margin-top: 0.25rem;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  display: inline-block;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 0.5rem;
+  font-size: 0.87rem;
+  color: var(--text-muted);
+}
+
+.statusRow span {
+  font-weight: 600;
+}
+
+/* ── Messages ── */
+.errorMsg {
+  background: #fff1ef;
+  border: 1.5px solid #f9c9c0;
+  color: var(--accent-secondary);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  margin: 1rem 0 0.5rem;
+  font-weight: 500;
+}
+
+.successMsg {
+  background: #f0faf4;
+  border: 1.5px solid #b5d9c0;
+  color: #3a8a5a;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  margin: 1rem 0 0.5rem;
+  font-weight: 500;
+}
+
+/* ── Submit Button ── */
+.submitBtn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0.85rem 2.5rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 18px rgba(244, 116, 87, 0.3);
+  margin-top: 1.5rem;
+  width: 100%;
+  letter-spacing: 0.02em;
+}
+
+.submitBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(244, 116, 87, 0.38);
+}
+
+.submitBtn:active {
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .formCard { padding: 1.75rem 1.25rem; border-radius: 18px; }
+  .formRow { flex-direction: column; gap: 0; }
+}

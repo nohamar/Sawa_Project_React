@@ -1,6 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 import type { NewRegistration } from "../types/registration";
 import { getEventStatus } from "../utils/eventStatus";
+import { deleteImage } from "./storageService";
 
 // CREATE
 export const createEvent = async (eventData: any) => {
@@ -70,13 +71,20 @@ export const updateEventStatus = async (id: number, status: string) => {
 };
 
 // DELETE
-export const deleteEvent = async (id: string) => {
+export const deleteEvent = async (id: string, imageUrl: string) => {
   const { error } = await supabase
     .from("Events")
     .delete()
     .eq("id", id);
 
-  return { error };
+  if (error) return { error };
+
+  
+  if (imageUrl) {
+    await deleteImage(imageUrl);
+  }
+
+  return { error: null };
 };
 
 

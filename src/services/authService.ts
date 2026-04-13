@@ -7,7 +7,6 @@ import type {
   User,
   Session,
 } from "../types/auth";
-import { profileService } from "./profileService";
 
 export const signUp = async (
   credentials: SignUpCredentials
@@ -22,24 +21,6 @@ export const signUp = async (
 
   if (error) {
     return { user: null, session: null, error: error.message };
-  }
-
-  if (data.user) {
-    const { error: profileError } = await profileService.createProfile({
-      user_id: data.user.id,
-      first_name: options.data.first_name,
-      second_name: options.data.second_name,
-      email,
-      role: options.data.role,
-      bio: null,
-      age: null,
-      avatar: null,
-    });
-
-    if (profileError) {
-      console.error("Profile creation failed:", profileError);
-      return { user: null, session: null, error: profileError };
-    }
   }
 
   return {
@@ -93,6 +74,48 @@ export const onAuthStateChange = (
   });
 };
 
+export const sendPasswordResetEmail = async (
+  email: string
+): Promise<{ error: string | null }> => {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "http://localhost:5173/reset-password",
+  });
+
+  return { error: error ? error.message : null };
+};
+
+export const updatePassword = async (
+  newPassword: string
+): Promise<{ error: string | null }> => {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  return { error: error ? error.message : null };
+};
+
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string,
+  email: string
+): Promise<{ error: string | null }> => {
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password: currentPassword,
+  });
+
+  if (signInError) {
+    return { error: "Current password is incorrect." };
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    current_password: currentPassword,
+    password: newPassword,
+  });
+
+  return { error: error ? error.message : null };
+};
+
 export const authService = {
   signUp,
   signIn,
@@ -100,4 +123,7 @@ export const authService = {
   getCurrentUser,
   getSession,
   onAuthStateChange,
+  sendPasswordResetEmail,
+  updatePassword,
+  changePassword
 };

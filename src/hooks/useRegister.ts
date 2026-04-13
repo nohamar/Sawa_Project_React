@@ -52,7 +52,7 @@ export function useRegister(volunteerId: number | null) {
     }
   }
 
-  // 🔹 Register / Unregister (VOLUNTEER)
+  
   async function toggleRegistration(eventId: number, isRegistered: boolean) {
     if (volunteerId === null) return;
 
@@ -91,7 +91,7 @@ export function useRegister(volunteerId: number | null) {
     }
   }
 
-  // 🔹 Auto-load volunteer data
+  
   useEffect(() => {
     loadRegisteredEvents();
   }, [volunteerId]);

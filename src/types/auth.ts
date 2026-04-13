@@ -12,6 +12,8 @@ export type SignUpCredentials = {
       first_name: string;
       second_name: string;
       role: UserRole;
+      age: string;
+      bio?: string | null;
     };
   };
 };

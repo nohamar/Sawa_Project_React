@@ -21,7 +21,7 @@
 .imageWrapper {
   width: 220px;
   min-width: 220px;
-  height: 170px;
+max-height:200px;
   overflow: hidden;
 }
 
@@ -38,6 +38,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+   max-width: 600px;
+  width: 90%;
+  line-height: 20px;
 }
 
 /* Title */
@@ -55,6 +58,7 @@
   color: var(--text-muted);
   display: flex;
   flex-wrap: wrap;
+ 
   gap: 0.5rem;
 }
 
@@ -76,37 +80,20 @@
 .actions {
   display: flex;
   gap: 0.4rem;
+ 
 }
-
-/* keep your buttons (slightly refined) */
-.btn {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  border-radius: 8px;
+.actions button {
+  padding: 0.3rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50px;
   border: none;
   cursor: pointer;
+  background-color: var(--accent-primary);
+  color: var(--bg-soft);
 }
-
-.btnEdit {
-  background: var(--bg-section);
-  color: var(--accent-secondary);
-  border: 1px solid var(--accent-primary);
-}
-
-.btnDelete {
-  background: #fff1f0;
-  color: #c0392b;
-}
-
-.btnRegister {
-  background: var(--accent-primary);
-  color: white;
-}
-
-.btnRegistered {
-  background: var(--accent-green);
-  color: white;
+.actions button:hover {
+  background-color: var(--accent-secondary);
 }
 /* Top row layout */
 .topRow {
@@ -121,7 +108,7 @@
   font-size: 0.7rem;
   font-weight: 700;
   padding: 0.3rem 0.6rem;
-  border-radius: 6px;
+  border-radius: 50px;
   white-space: nowrap;
   text-transform: capitalize;
 }

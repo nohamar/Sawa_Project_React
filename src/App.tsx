@@ -1,8 +1,15 @@
 import AppRouter from "./router";
-import "./App.css";
+import { useAuth } from "./hooks/useAuth";
+import Loader from "./components/shared/Loader";
 
 function App() {
-  return <AppRouter authUser={null} profile={null} />;
+  const { user, profile, loading } = useAuth();
+
+  if (loading) {
+    return <Loader text="Getting everything ready..." />;
+  }
+
+  return <AppRouter authUser={user} profile={profile} />;
 }
 
 export default App;

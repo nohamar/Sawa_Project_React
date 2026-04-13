@@ -12,6 +12,7 @@ export async function saveSavedEvent(userId: number, eventId: number) {
     .select()
     .single();
 }
+}
 
 export async function removeSavedEvent(userId: number, eventId: number) {
   return await supabase
@@ -19,6 +20,7 @@ export async function removeSavedEvent(userId: number, eventId: number) {
     .delete()
     .eq("volunteer_id", userId)
     .eq("event_id", eventId);
+}
 }
 
 export async function getSavedEvents(userId: number) {
@@ -32,6 +34,7 @@ export async function getSavedEvents(userId: number) {
     `)
     .eq("volunteer_id", userId);
 }
+}
 
 export async function isEventSaved(userId: number, eventId: number) {
   return await supabase
@@ -40,6 +43,18 @@ export async function isEventSaved(userId: number, eventId: number) {
     .eq("volunteer_id", userId)
     .eq("event_id", eventId)
     .maybeSingle();
+}
+
+export async function getAllSavedEvents() {
+  return await supabase
+    .from("Saved_event")
+    .select(`
+      id,
+      volunteer_id,
+      event_id,
+      Events (*)
+    `);
+}
 }
 
 export async function getAllSavedEvents() {
