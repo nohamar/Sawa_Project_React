@@ -11,6 +11,20 @@ export async function getFeedback (event_id:string){
 
 }
 
-export async function deleteFeedback (feedback_id:string){
-    return await supabase.from("Event_feedback").delete().eq("id", feedback_id)
+export async function getFeedbackUser(volunteer_id:string){
+    return await supabase.from("Event_feedback").select("*").eq("volunteer_id", volunteer_id); 
 }
+
+export async function deleteFeedback (userId: string, eventId: string){
+    return await supabase.from("Event_feedback").delete().eq("event_id", eventId).eq("volunteer_id", userId ); 
+}
+
+export const updateFeedback = async (feedback_id: string, comment:string, rating:number) => {
+  return await supabase
+    .from("Event_feedback")
+    .update({ comment, rating })
+    .eq("id", feedback_id)
+    .select()
+    .single();
+
+};

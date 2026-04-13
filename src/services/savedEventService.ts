@@ -1,7 +1,7 @@
 import { supabase } from "../lib/supabaseClient";
 
-export const saveEvent = async (userId: string, eventId: string) => {
-  const { data, error } = await supabase
+export async function saveSavedEvent(userId: number, eventId: number) {
+  return await supabase
     .from("Saved_event")
     .insert([
       {
@@ -11,44 +11,44 @@ export const saveEvent = async (userId: string, eventId: string) => {
     ])
     .select()
     .single();
+}
 
-  if (error) throw error;
-  return data;
-};
-
-export const removeSavedEvent = async (userId: string, eventId: string) => {
-  const { error } = await supabase
+export async function removeSavedEvent(userId: number, eventId: number) {
+  return await supabase
     .from("Saved_event")
     .delete()
     .eq("volunteer_id", userId)
     .eq("event_id", eventId);
+}
 
-  if (error) throw error;
-  return true;
-};
-
-export const getSavedEvents = async (userId: string) => {
-  const { data, error } = await supabase
+export async function getSavedEvents(userId: number) {
+  return await supabase
     .from("Saved_event")
     .select(`
       id,
+      volunteer_id,
       event_id,
       Events (*)
     `)
     .eq("volunteer_id", userId);
+}
 
-  if (error) throw error;
-  return data;
-};
-
-export const isEventSaved = async (userId: string, eventId: string) => {
-  const { data, error } = await supabase
+export async function isEventSaved(userId: number, eventId: number) {
+  return await supabase
     .from("Saved_event")
     .select("id")
     .eq("volunteer_id", userId)
     .eq("event_id", eventId)
     .maybeSingle();
+}
 
-  if (error) throw error;
-  return !!data;
-};
+export async function getAllSavedEvents() {
+  return await supabase
+    .from("Saved_event")
+    .select(`
+      id,
+      volunteer_id,
+      event_id,
+      Events (*)
+    `);
+}

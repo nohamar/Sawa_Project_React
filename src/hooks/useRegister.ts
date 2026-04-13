@@ -3,25 +3,31 @@ import {
   createRegistration,
   deleteRegistration,
   getRegistration_User,
+  getAllRegistrations,
 } from "../services/registration";
 
 export function useRegister(volunteerId: number | null) {
   const [registeredEventIds, setRegisteredEventIds] = useState<number[]>([]);
+
+  
+  const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Load events this volunteer is registered for
+  
   async function loadRegisteredEvents() {
     if (volunteerId === null) return;
+
     setLoading(true);
     setError("");
 
     try {
-      const { data, error } = await getRegistration_User(volunteerId);
+      const { data, error } = await getRegistration_User(String(volunteerId));
       if (error) throw error;
 
-      // Extract event IDs
-      setRegisteredEventIds(data?.map((r) => r.event_id) ?? []);
+      const eventIds = data?.map((r) => Number(r.event_id)) ?? [];
+      setRegisteredEventIds(eventIds);
     } catch (err: any) {
       setError(err.message || "Failed to load registrations");
     } finally {
@@ -29,35 +35,54 @@ export function useRegister(volunteerId: number | null) {
     }
   }
 
-  // Register or unregister for an event
+
+  async function loadAllRegistrations() {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data, error } = await getAllRegistrations();
+      if (error) throw error;
+
+      setAllRegistrations(data || []);
+    } catch (err: any) {
+      setError(err.message || "Failed to load all registrations");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // 🔹 Register / Unregister (VOLUNTEER)
   async function toggleRegistration(eventId: number, isRegistered: boolean) {
     if (volunteerId === null) return;
+
     setLoading(true);
     setError("");
 
     try {
       if (!isRegistered) {
-        // Register
         const { error } = await createRegistration({
-          event_id: eventId,
+          event_id: String(eventId),
           volunteer_id: volunteerId,
           registration_status: "confirmed",
           attendance_status: "pending",
         });
+
         if (error) throw error;
       } else {
-        // Unregister
-        const { data, error } = await getRegistration_User(volunteerId);
+        const { data, error } = await getRegistration_User(String(volunteerId));
         if (error) throw error;
 
-        const reg = data?.find((r) => r.event_id === eventId);
+        const reg = data?.find(
+          (r) => Number(r.event_id) === eventId
+        );
+
         if (reg) {
           const { error: delError } = await deleteRegistration(reg.id);
           if (delError) throw delError;
         }
       }
 
-      // Refresh
       await loadRegisteredEvents();
     } catch (err: any) {
       setError(err.message || "Failed to update registration");
@@ -66,9 +91,23 @@ export function useRegister(volunteerId: number | null) {
     }
   }
 
+  // 🔹 Auto-load volunteer data
   useEffect(() => {
     loadRegisteredEvents();
   }, [volunteerId]);
 
-  return { registeredEventIds, loading, error, loadRegisteredEvents, toggleRegistration };
+  return {
+    
+    registeredEventIds,
+    toggleRegistration,
+    loadRegisteredEvents,
+
+    
+    allRegistrations,
+    loadAllRegistrations,
+
+    // COMMON
+    loading,
+    error,
+  };
 }

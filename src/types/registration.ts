@@ -2,11 +2,11 @@ export type RegistrationStatus = "confirmed" | "waitlisted" | "cancelled";
 export type AttendanceStatus = "pending" | "attended" | "absent";
 
 export type Registration = {
-  id: string;
+  id: number;
   registration_status: RegistrationStatus;
   attendance_status: AttendanceStatus;
   registered_at?: string;
-  event_id: string;
+  event_id: number;
   volunteer_id: number;
   waitlist_position?: number | null;
 };
