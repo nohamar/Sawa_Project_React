@@ -5,7 +5,9 @@ import styles from "../css/EventList.module.css";
 import type { Event } from "../types/events";
 import type { CardAction } from "../components/events/EventCard";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import SearchBar from "../components/shared/SearchBar";
+import FilterBar from "../components/shared/FilterBar";
 
 type Props = {
   profile: Profile | null;
@@ -20,6 +22,9 @@ export default function OrganizerEventsPage({ profile }: Props) {
     loadEventsByOrganizer,
   } = useEvents();
 
+   const [keyword, setKeyword] = useState("");
+    const [status, setStatus] = useState("");
+    const [type, setType] = useState("");
   const navigate = useNavigate();
 
   
@@ -50,6 +55,16 @@ export default function OrganizerEventsPage({ profile }: Props) {
       className: `${styles.btn} ${styles.btnDelete}`,
     },
   ];
+   const filteredEvents = events.filter((event) => {
+    const matchesStatus = !status || event.status === status;
+    const matchesType = !type || event.type === type;
+    const matchesKeyword =
+      !keyword || event.title.toLowerCase().includes(keyword.toLowerCase());
+
+    return matchesStatus && matchesType && matchesKeyword;
+  });
+
+   const eventTypes = ["Workshop", "Seminar", "Volunteer", "Social", "Charity"];
 
   if (loading) return <p className={styles.noEvents}>Loading...</p>;
   if (error) return <p className={styles.noEvents}>{error}</p>;
@@ -58,8 +73,17 @@ export default function OrganizerEventsPage({ profile }: Props) {
     <div className={styles.eventsPage}>
       <div className={styles.eventsContainer}>
         <h2 className={styles.eventsHeading}>My Events</h2>
-
-        <EventList events={events} getActions={getActions} />
+<div className={styles.filter}>
+            <SearchBar keyword={keyword} onKeywordChange={setKeyword} />
+            <FilterBar
+              status={status}
+              type={type}
+              onStatusChange={setStatus}
+              onTypeChange={setType}
+              eventTypes={eventTypes}
+            />
+          </div>
+        <EventList events={filteredEvents} getActions={getActions} />
       </div>
     </div>
   );

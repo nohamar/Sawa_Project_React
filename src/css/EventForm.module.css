@@ -254,7 +254,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  background: var(--accent-primary);
   color: #fff;
   border: none;
   border-radius: 50px;
