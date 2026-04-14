@@ -1,17 +1,21 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import "../MainLayout.css";
+import styles from "../css/MainLayout.module.css";
 
 function MainLayout() {
   const location = useLocation();
   const hideLayoutChrome = location.pathname === "/profile";
 
   return (
-    <div className="layout-container">
+    <div className={styles["layout-container"]}>
       {!hideLayoutChrome && <Navbar />}
 
-      <main className={`layout-content ${hideLayoutChrome ? "layout-content-profile" : ""}`}>
+      <main
+        className={`${styles["layout-content"]} ${
+          hideLayoutChrome ? styles["layout-content-profile"] : ""
+        }`}
+      >
         <Outlet />
       </main>
 

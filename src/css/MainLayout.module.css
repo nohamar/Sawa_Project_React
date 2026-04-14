@@ -6,8 +6,9 @@
 
 .layout-content {
   flex: 1;
-   padding-top: 110px;
+  padding-top: 110px;
 }
-.layout-content-profile{
+
+.layout-content-profile {
   padding-top: 0;
 }

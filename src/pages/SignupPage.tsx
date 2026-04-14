@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../AuthPages.css";
+import styles from "../css/AuthPages.module.css";
 import signupImage from "../assets/Volunteer T-Shirt_ Back Print, Charity Event Staff Uniform.jfif";
 import { useAuth } from "../hooks/useAuth";
 
@@ -100,61 +100,61 @@ function SignupPage() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-shell">
+    <div className={styles["auth-page"]}>
+      <div className={styles["auth-shell"]}>
         <div
-          className="auth-visual auth-visual-left"
+          className={`${styles["auth-visual"]} ${styles["auth-visual-left"]}`}
           style={{ backgroundImage: `url(${signupImage})` }}
         >
-          <div className="auth-visual-overlay" />
+          <div className={styles["auth-visual-overlay"]} />
 
-          <div className="auth-visual-content">
-            <div className="auth-badge">Join the movement</div>
+          <div className={styles["auth-visual-content"]}>
+            <div className={styles["auth-badge"]}>Join the movement</div>
 
-            <h1 className="auth-visual-title">
+            <h1 className={styles["auth-visual-title"]}>
               Start your journey
               <br />
               as a volunteer
             </h1>
 
-            <p className="auth-visual-text">
+            <p className={styles["auth-visual-text"]}>
               Join a community committed to helping people in need through organized
               volunteer efforts and impactful events.
             </p>
 
-            <div className="auth-steps">
-              <div className="auth-step auth-step-active">
-                <span className="auth-step-number">1</span>
+            <div className={styles["auth-steps"]}>
+              <div className={`${styles["auth-step"]} ${styles["auth-step-active"]}`}>
+                <span className={styles["auth-step-number"]}>1</span>
                 <p>Create your account</p>
               </div>
 
-              <div className="auth-step">
-                <span className="auth-step-number">2</span>
+              <div className={styles["auth-step"]}>
+                <span className={styles["auth-step-number"]}>2</span>
                 <p>Choose your role</p>
               </div>
 
-              <div className="auth-step">
-                <span className="auth-step-number">3</span>
+              <div className={styles["auth-step"]}>
+                <span className={styles["auth-step-number"]}>3</span>
                 <p>Join impactful events</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="auth-form-side">
-          <Link to="/" className="auth-back-home">
+        <div className={styles["auth-form-side"]}>
+          <Link to="/" className={styles["auth-back-home"]}>
             ← Back to Home
           </Link>
 
-          <div className="auth-form-box">
-            <h2 className="auth-form-title">Sign Up Account</h2>
-            <p className="auth-form-subtitle">
+          <div className={styles["auth-form-box"]}>
+            <h2 className={styles["auth-form-title"]}>Sign Up Account</h2>
+            <p className={styles["auth-form-subtitle"]}>
               Enter your personal details to create your account.
             </p>
 
-            <form className="auth-form" onSubmit={handleSubmit}>
-              <div className="auth-row">
-                <div className="auth-field">
+            <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+              <div className={styles["auth-row"]}>
+                <div className={styles["auth-field"]}>
                   <label>First Name</label>
                   <input
                     type="text"
@@ -164,7 +164,7 @@ function SignupPage() {
                   />
                 </div>
 
-                <div className="auth-field">
+                <div className={styles["auth-field"]}>
                   <label>Last Name</label>
                   <input
                     type="text"
@@ -175,7 +175,7 @@ function SignupPage() {
                 </div>
               </div>
 
-              <div className="auth-field">
+              <div className={styles["auth-field"]}>
                 <label>Email</label>
                 <input
                   type="email"
@@ -185,8 +185,8 @@ function SignupPage() {
                 />
               </div>
 
-              <div className="auth-row">
-                <div className="auth-field">
+              <div className={styles["auth-row"]}>
+                <div className={styles["auth-field"]}>
                   <label>Role</label>
                   <select
                     value={role}
@@ -200,7 +200,7 @@ function SignupPage() {
                   </select>
                 </div>
 
-                <div className="auth-field">
+                <div className={styles["auth-field"]}>
                   <label>Age</label>
                   <input
                     type="number"
@@ -212,7 +212,7 @@ function SignupPage() {
                 </div>
               </div>
 
-              <div className="auth-field">
+              <div className={styles["auth-field"]}>
                 <label>Bio (Optional)</label>
                 <textarea
                   rows={4}
@@ -222,9 +222,9 @@ function SignupPage() {
                 />
               </div>
 
-              <div className="auth-field">
+              <div className={styles["auth-field"]}>
                 <label>Password</label>
-                <div className="auth-password-wrap">
+                <div className={styles["auth-password-wrap"]}>
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
@@ -233,7 +233,7 @@ function SignupPage() {
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className={styles["password-toggle"]}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? "Hide" : "Show"}
@@ -242,7 +242,7 @@ function SignupPage() {
                 <small>Must be at least 8 characters.</small>
               </div>
 
-              <div className="auth-field">
+              <div className={styles["auth-field"]}>
                 <label>Confirm Password</label>
                 <input
                   type="password"
@@ -253,23 +253,23 @@ function SignupPage() {
               </div>
 
               {errorMessage && (
-                <p className="auth-error-message">{errorMessage}</p>
+                <p className={styles["auth-error-message"]}>{errorMessage}</p>
               )}
 
               {successMessage && (
-                <p className="auth-success-message">{successMessage}</p>
+                <p className={styles["auth-success-message"]}>{successMessage}</p>
               )}
 
               <button
                 type="submit"
-                className="auth-submit-btn"
+                className={styles["auth-submit-btn"]}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Creating account..." : "Sign Up"}
               </button>
             </form>
 
-            <p className="auth-switch-text">
+            <p className={styles["auth-switch-text"]}>
               Already have an account? <Link to="/login">Log in</Link>
             </p>
           </div>

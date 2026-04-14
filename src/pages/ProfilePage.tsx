@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../ProfilePage.css";
+import styles from "../css/ProfilePage.module.css";
 import { useAuth } from "../hooks/useAuth";
 import { profileService } from "../services/profileService";
+import { supabase } from "../lib/supabaseClient";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -101,32 +102,41 @@ function ProfilePage() {
 
     setErrorMessage("");
     setSaveMessage("");
+    setIsSaving(true);
 
-    const reader = new FileReader();
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${profile.id}-${Date.now()}.${fileExt}`;
+    const filePath = fileName;
 
-    reader.onloadend = async () => {
-      const result = reader.result;
-      if (typeof result !== "string") return;
-
-      setIsSaving(true);
-
-      const updateResult = await profileService.updateProfile(profile.id, {
-        avatar: result,
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, {
+        upsert: true,
       });
 
+    if (uploadError) {
       setIsSaving(false);
+      setErrorMessage(uploadError.message);
+      return;
+    }
 
-      if (updateResult.error) {
-        setErrorMessage(updateResult.error);
-        return;
-      }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
 
-      setAvatarPreview(result);
-      setSaveMessage("Profile picture updated successfully.");
-      await refreshProfile();
-    };
+    const updateResult = await profileService.updateProfile(profile.id, {
+      avatar: publicUrl,
+    });
 
-    reader.readAsDataURL(file);
+    setIsSaving(false);
+
+    if (updateResult.error) {
+      setErrorMessage(updateResult.error);
+      return;
+    }
+
+    setAvatarPreview(publicUrl);
+    setSaveMessage("Profile picture updated successfully.");
+    await refreshProfile();
   };
 
   const handleRemoveAvatar = async () => {
@@ -198,17 +208,17 @@ function ProfilePage() {
   };
 
   return (
-    <div className="profile-page">
-      <div className="profile-topbar">
-        <Link to={websiteLink} className="profile-back-link">
+    <div className={styles["profile-page"]}>
+      <div className={styles["profile-topbar"]}>
+        <Link to={websiteLink} className={styles["profile-back-link"]}>
           ← Go Back to Website
         </Link>
       </div>
 
-      <div className="profile-layout">
-        <aside className="profile-sidebar">
-          <div className="profile-sidebar-user">
-            <div className="profile-sidebar-avatar">
+      <div className={styles["profile-layout"]}>
+        <aside className={styles["profile-sidebar"]}>
+          <div className={styles["profile-sidebar-user"]}>
+            <div className={styles["profile-sidebar-avatar"]}>
               {avatarPreview ? (
                 <img src={avatarPreview} alt="Profile avatar" />
               ) : (
@@ -216,44 +226,44 @@ function ProfilePage() {
               )}
             </div>
 
-            <div className="profile-sidebar-user-info">
+            <div className={styles["profile-sidebar-user-info"]}>
               <h3>{fullName || "User Profile"}</h3>
               <p>{user?.email || "No email available"}</p>
             </div>
           </div>
 
-          <div className="profile-progress-card">
-            <div className="profile-progress-head">
+          <div className={styles["profile-progress-card"]}>
+            <div className={styles["profile-progress-head"]}>
               <span>Profile Completion</span>
               <strong>{completionPercent}%</strong>
             </div>
 
-            <div className="profile-progress-bar">
+            <div className={styles["profile-progress-bar"]}>
               <div
-                className="profile-progress-fill"
+                className={styles["profile-progress-fill"]}
                 style={{ width: `${completionPercent}%` }}
               />
             </div>
 
             {missingItems.length > 0 ? (
-              <div className="profile-progress-tips">
+              <div className={styles["profile-progress-tips"]}>
                 {missingItems.map((item) => (
                   <p key={item}>{item}</p>
                 ))}
               </div>
             ) : (
-              <div className="profile-progress-tips">
+              <div className={styles["profile-progress-tips"]}>
                 <p>Your profile looks complete.</p>
               </div>
             )}
           </div>
 
-          <div className="profile-sidebar-section">
-            <p className="profile-sidebar-label">Your account</p>
+          <div className={styles["profile-sidebar-section"]}>
+            <p className={styles["profile-sidebar-label"]}>Your account</p>
 
             <button
-              className={`profile-sidebar-link ${
-                activeSection === "profile" ? "active" : ""
+              className={`${styles["profile-sidebar-link"]} ${
+                activeSection === "profile" ? styles.active : ""
               }`}
               type="button"
               onClick={() => scrollToSection("profile")}
@@ -262,8 +272,8 @@ function ProfilePage() {
             </button>
 
             <button
-              className={`profile-sidebar-link ${
-                activeSection === "account" ? "active" : ""
+              className={`${styles["profile-sidebar-link"]} ${
+                activeSection === "account" ? styles.active : ""
               }`}
               type="button"
               onClick={() => scrollToSection("account")}
@@ -272,8 +282,8 @@ function ProfilePage() {
             </button>
 
             <button
-              className={`profile-sidebar-link ${
-                activeSection === "security" ? "active" : ""
+              className={`${styles["profile-sidebar-link"]} ${
+                activeSection === "security" ? styles.active : ""
               }`}
               type="button"
               onClick={() => scrollToSection("security")}
@@ -283,17 +293,17 @@ function ProfilePage() {
           </div>
         </aside>
 
-        <main className="profile-content">
-          <section className="profile-card" ref={profileRef}>
-            <div className="profile-card-header">
+        <main className={styles["profile-content"]}>
+          <section className={styles["profile-card"]} ref={profileRef}>
+            <div className={styles["profile-card-header"]}>
               <div>
                 <h2>Profile Settings</h2>
                 <p>Manage your personal information and profile picture.</p>
               </div>
             </div>
 
-            <div className="profile-avatar-row">
-              <div className="profile-avatar-preview">
+            <div className={styles["profile-avatar-row"]}>
+              <div className={styles["profile-avatar-preview"]}>
                 {avatarPreview ? (
                   <img src={avatarPreview} alt="Profile avatar" />
                 ) : (
@@ -301,11 +311,13 @@ function ProfilePage() {
                 )}
               </div>
 
-              <div className="profile-avatar-actions">
+              <div className={styles["profile-avatar-actions"]}>
                 <h3>Profile Picture</h3>
 
-                <div className="profile-avatar-buttons">
-                  <label className="profile-primary-btn profile-upload-label">
+                <div className={styles["profile-avatar-buttons"]}>
+                  <label
+                    className={`${styles["profile-primary-btn"]} ${styles["profile-upload-label"]}`}
+                  >
                     Upload Image
                     <input
                       type="file"
@@ -317,7 +329,7 @@ function ProfilePage() {
 
                   <button
                     type="button"
-                    className="profile-secondary-btn"
+                    className={styles["profile-secondary-btn"]}
                     onClick={handleRemoveAvatar}
                   >
                     Remove
@@ -328,8 +340,11 @@ function ProfilePage() {
               </div>
             </div>
 
-            <form className="profile-form-grid" onSubmit={handleSaveProfile}>
-              <div className="profile-field">
+            <form
+              className={styles["profile-form-grid"]}
+              onSubmit={handleSaveProfile}
+            >
+              <div className={styles["profile-field"]}>
                 <label>First Name</label>
                 <input
                   type="text"
@@ -338,7 +353,7 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field">
+              <div className={styles["profile-field"]}>
                 <label>Last Name</label>
                 <input
                   type="text"
@@ -347,7 +362,9 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field profile-field-full">
+              <div
+                className={`${styles["profile-field"]} ${styles["profile-field-full"]}`}
+              >
                 <label>Bio (Optional)</label>
                 <textarea
                   rows={4}
@@ -357,7 +374,7 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field">
+              <div className={styles["profile-field"]}>
                 <label>Age</label>
                 <input
                   type="number"
@@ -368,19 +385,23 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field profile-field-full">
+              <div
+                className={`${styles["profile-field"]} ${styles["profile-field-full"]}`}
+              >
                 {errorMessage && (
-                  <p className="profile-error-message">{errorMessage}</p>
+                  <p className={styles["profile-error-message"]}>{errorMessage}</p>
                 )}
                 {saveMessage && (
-                  <p className="profile-success-message">{saveMessage}</p>
+                  <p className={styles["profile-success-message"]}>{saveMessage}</p>
                 )}
               </div>
 
-              <div className="profile-field profile-field-full">
+              <div
+                className={`${styles["profile-field"]} ${styles["profile-field-full"]}`}
+              >
                 <button
                   type="submit"
-                  className="profile-primary-btn profile-save-btn"
+                  className={`${styles["profile-primary-btn"]} ${styles["profile-save-btn"]}`}
                   disabled={isSaving}
                 >
                   {isSaving ? "Saving..." : "Save Changes"}
@@ -389,16 +410,18 @@ function ProfilePage() {
             </form>
           </section>
 
-          <section className="profile-card" ref={accountInfoRef}>
-            <div className="profile-card-header">
+          <section className={styles["profile-card"]} ref={accountInfoRef}>
+            <div className={styles["profile-card-header"]}>
               <div>
                 <h2>Account Info</h2>
                 <p>Your account details linked to the platform.</p>
               </div>
             </div>
 
-            <div className="profile-form-grid">
-              <div className="profile-field profile-field-full">
+            <div className={styles["profile-form-grid"]}>
+              <div
+                className={`${styles["profile-field"]} ${styles["profile-field-full"]}`}
+              >
                 <label>Email</label>
                 <input
                   type="email"
@@ -407,7 +430,7 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field">
+              <div className={styles["profile-field"]}>
                 <label>Role</label>
                 <input
                   type="text"
@@ -416,7 +439,7 @@ function ProfilePage() {
                 />
               </div>
 
-              <div className="profile-field">
+              <div className={styles["profile-field"]}>
                 <label>Joined</label>
                 <input
                   type="text"
@@ -431,8 +454,10 @@ function ProfilePage() {
             </div>
           </section>
 
-          <section className="profile-card" ref={securityRef}>
-            <div className="profile-card-header profile-security-header">
+          <section className={styles["profile-card"]} ref={securityRef}>
+            <div
+              className={`${styles["profile-card-header"]} ${styles["profile-security-header"]}`}
+            >
               <div>
                 <h2>Security</h2>
                 <p>Update your password to keep your account secure.</p>
@@ -440,7 +465,7 @@ function ProfilePage() {
 
               <button
                 type="button"
-                className="profile-primary-btn"
+                className={styles["profile-primary-btn"]}
                 onClick={() => navigate("/change-password")}
               >
                 Change Password

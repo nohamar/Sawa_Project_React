@@ -1,3 +1,11 @@
+:global(:root) {
+  --loader-accent: #f47457;
+  --loader-teal: #79bfbf;
+  --loader-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-dim: #666666;
+}
+
 .profile-page {
   min-height: 100vh;
   background:
@@ -416,6 +424,7 @@
   align-items: center;
 }
 
+/* responsive stays SAME */
 @media (max-width: 980px) {
   .profile-layout {
     grid-template-columns: 1fr;

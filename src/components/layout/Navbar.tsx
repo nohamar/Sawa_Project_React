@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { FiUser, FiMenu, FiX, FiLogOut } from "react-icons/fi";
-import "../../Navbar.css";
+import styles from "../../css/Navbar.module.css";
 import logo from "../../assets/Sawa_logo.png";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -48,20 +48,36 @@ function Navbar() {
 
   return (
     <>
-      <header className="navbar-wrapper">
-        <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>
-          <div className="navbar-left">
-            <Link to="/" className="navbar-logo-link" onClick={closeMenu}>
-              <img src={logo} alt="website logo" className="navbar-logo" />
+      <header className={styles.navbarWrapper}>
+        <nav
+          className={`${styles.navbar} ${
+            isScrolled ? styles.scrolled : ""
+          }`}
+        >
+          <div className={styles.navbarLeft}>
+            <Link
+              to="/"
+              className={styles.navbarLogoLink}
+              onClick={closeMenu}
+            >
+              <img
+                src={logo}
+                alt="website logo"
+                className={styles.navbarLogo}
+              />
             </Link>
           </div>
 
-          <div className="navbar-center desktop-only">
+          <div
+            className={`${styles.navbarCenter} ${styles.desktopOnly}`}
+          >
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
-                isActive ? "navbar-link active-link" : "navbar-link"
+                isActive
+                  ? `${styles.navbarLink} ${styles.activeLink}`
+                  : styles.navbarLink
               }
             >
               Home
@@ -70,7 +86,9 @@ function Navbar() {
             <NavLink
               to="/events"
               className={({ isActive }) =>
-                isActive ? "navbar-link active-link" : "navbar-link"
+                isActive
+                  ? `${styles.navbarLink} ${styles.activeLink}`
+                  : styles.navbarLink
               }
             >
               Events
@@ -79,7 +97,9 @@ function Navbar() {
             <NavLink
               to="/aboutus"
               className={({ isActive }) =>
-                isActive ? "navbar-link active-link" : "navbar-link"
+                isActive
+                  ? `${styles.navbarLink} ${styles.activeLink}`
+                  : styles.navbarLink
               }
             >
               About Us
@@ -90,7 +110,9 @@ function Navbar() {
                 <NavLink
                   to="/saved-events"
                   className={({ isActive }) =>
-                    isActive ? "navbar-link active-link" : "navbar-link"
+                    isActive
+                      ? `${styles.navbarLink} ${styles.activeLink}`
+                      : styles.navbarLink
                   }
                 >
                   Saved Events
@@ -99,7 +121,9 @@ function Navbar() {
                 <NavLink
                   to="/user-registrations"
                   className={({ isActive }) =>
-                    isActive ? "navbar-link active-link" : "navbar-link"
+                    isActive
+                      ? `${styles.navbarLink} ${styles.activeLink}`
+                      : styles.navbarLink
                   }
                 >
                   My Registrations
@@ -112,7 +136,9 @@ function Navbar() {
                 <NavLink
                   to="/organizer-dashboard"
                   className={({ isActive }) =>
-                    isActive ? "navbar-link active-link" : "navbar-link"
+                    isActive
+                      ? `${styles.navbarLink} ${styles.activeLink}`
+                      : styles.navbarLink
                   }
                 >
                   Dashboard
@@ -121,7 +147,9 @@ function Navbar() {
                 <NavLink
                   to="/organizer-dashboard/create-event"
                   className={({ isActive }) =>
-                    isActive ? "navbar-link active-link" : "navbar-link"
+                    isActive
+                      ? `${styles.navbarLink} ${styles.activeLink}`
+                      : styles.navbarLink
                   }
                 >
                   Create Event
@@ -130,17 +158,20 @@ function Navbar() {
             )}
           </div>
 
-          <div className="navbar-right">
+          <div className={styles.navbarRight}>
             {!user || !profile ? (
               <>
-                <Link to="/login" className="navbar-auth-btn desktop-btn">
-                  <FiUser className="auth-icon" />
+                <Link
+                  to="/login"
+                  className={`${styles.navbarAuthBtn} ${styles.desktopBtn}`}
+                >
+                  <FiUser className={styles.authIcon} />
                   Register/Login
                 </Link>
 
                 <Link
                   to="/login"
-                  className="icon-btn tablet-only"
+                  className={`${styles.iconBtn} ${styles.tabletOnly}`}
                   aria-label="Register/Login"
                 >
                   <FiUser />
@@ -150,29 +181,32 @@ function Navbar() {
               <>
                 <Link
                   to={profileLink}
-                  className="navbar-profile-circle desktop-btn"
+                  className={`${styles.navbarProfileCircle} ${styles.desktopBtn}`}
                   aria-label="Profile"
-                > {profile.avatar ? (
-                  <img
-                  src={profile.avatar}
-                  alt="Profile avatar"
-                  className="navbar-profile-image" />
-                ) : ( getInitial()
-               ) }
+                >
+                  {profile.avatar ? (
+                    <img
+                      src={profile.avatar}
+                      alt="Profile avatar"
+                      className={styles.navbarProfileImage}
+                    />
+                  ) : (
+                    getInitial()
+                  )}
                 </Link>
 
                 <button
-                  className="navbar-logout-btn desktop-btn"
+                  className={`${styles.navbarLogoutBtn} ${styles.desktopBtn}`}
                   onClick={handleLogout}
                   type="button"
                 >
-                  <FiLogOut className="auth-icon" />
+                  <FiLogOut className={styles.authIcon} />
                   Logout
                 </button>
 
                 <Link
                   to={profileLink}
-                  className="icon-btn tablet-only navbar-profile-icon-btn"
+                  className={`${styles.iconBtn} ${styles.tabletOnly}`}
                   aria-label="Profile"
                 >
                   {getInitial()}
@@ -181,7 +215,7 @@ function Navbar() {
             )}
 
             <button
-              className="menu-toggle"
+              className={styles.menuToggle}
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
             >
@@ -192,20 +226,32 @@ function Navbar() {
       </header>
 
       <div
-        className={`mobile-menu-overlay ${menuOpen ? "open" : ""}`}
+        className={`${styles.mobileMenuOverlay} ${
+          menuOpen ? styles.open : ""
+        }`}
         onClick={closeMenu}
       >
         <div
-          className={`mobile-menu-panel ${menuOpen ? "open" : ""}`}
+          className={`${styles.mobileMenuPanel} ${
+            menuOpen ? styles.open : ""
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="mobile-menu-top">
-            <Link to="/" className="mobile-logo-link" onClick={closeMenu}>
-              <img src={logo} alt="website logo" className="mobile-logo" />
+          <div className={styles.mobileMenuTop}>
+            <Link
+              to="/"
+              className={styles.mobileLogoLink}
+              onClick={closeMenu}
+            >
+              <img
+                src={logo}
+                alt="website logo"
+                className={styles.mobileLogo}
+              />
             </Link>
 
             <button
-              className="mobile-close-btn"
+              className={styles.mobileCloseBtn}
               onClick={closeMenu}
               aria-label="Close menu"
             >
@@ -213,12 +259,12 @@ function Navbar() {
             </button>
           </div>
 
-          <div className="mobile-menu-links">
+          <div className={styles.mobileMenuLinks}>
             <NavLink
               to="/"
               end
               onClick={closeMenu}
-              className="mobile-menu-link"
+              className={styles.mobileMenuLink}
             >
               Home
             </NavLink>
@@ -226,7 +272,7 @@ function Navbar() {
             <NavLink
               to="/events"
               onClick={closeMenu}
-              className="mobile-menu-link"
+              className={styles.mobileMenuLink}
             >
               Events
             </NavLink>
@@ -234,7 +280,7 @@ function Navbar() {
             <NavLink
               to="/aboutus"
               onClick={closeMenu}
-              className="mobile-menu-link"
+              className={styles.mobileMenuLink}
             >
               About Us
             </NavLink>
@@ -243,7 +289,7 @@ function Navbar() {
               <NavLink
                 to="/login"
                 onClick={closeMenu}
-                className="mobile-menu-link"
+                className={styles.mobileMenuLink}
               >
                 Register / Login
               </NavLink>
@@ -254,7 +300,7 @@ function Navbar() {
                     <NavLink
                       to="/saved-events"
                       onClick={closeMenu}
-                      className="mobile-menu-link"
+                      className={styles.mobileMenuLink}
                     >
                       Saved Events
                     </NavLink>
@@ -262,7 +308,7 @@ function Navbar() {
                     <NavLink
                       to="/user-registrations"
                       onClick={closeMenu}
-                      className="mobile-menu-link"
+                      className={styles.mobileMenuLink}
                     >
                       My Registrations
                     </NavLink>
@@ -274,7 +320,7 @@ function Navbar() {
                     <NavLink
                       to="/organizer-dashboard"
                       onClick={closeMenu}
-                      className="mobile-menu-link"
+                      className={styles.mobileMenuLink}
                     >
                       Dashboard
                     </NavLink>
@@ -282,7 +328,7 @@ function Navbar() {
                     <NavLink
                       to="/organizer-dashboard/create-event"
                       onClick={closeMenu}
-                      className="mobile-menu-link"
+                      className={styles.mobileMenuLink}
                     >
                       Create Event
                     </NavLink>
@@ -292,14 +338,14 @@ function Navbar() {
                 <NavLink
                   to={profileLink}
                   onClick={closeMenu}
-                  className="mobile-menu-link"
+                  className={styles.mobileMenuLink}
                 >
                   Profile
                 </NavLink>
 
                 <button
                   type="button"
-                  className="mobile-menu-link mobile-logout-btn"
+                  className={`${styles.mobileMenuLink} ${styles.mobileLogoutBtn}`}
                   onClick={handleLogout}
                 >
                   Logout

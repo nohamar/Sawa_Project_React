@@ -7,22 +7,22 @@ import {
   FaMapMarkerAlt,
   FaEnvelope,
 } from "react-icons/fa";
-import "../../Footer.css";
+import styles from "../../css/Footer.module.css";
 import logo from "../../assets/Sawa_logo.png";
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className={styles.footer}>
       {/* ── Hero Statement Strip ── */}
-      <div className="footer-banner">
-        <div className="footer-banner-inner">
-          <h2 className="footer-headline">
+      <div className={styles.footerBanner}>
+        <div className={styles.footerBannerInner}>
+          <h2 className={styles.footerHeadline}>
             When Lebanon needs you most,
             <br />
             <em>show up.</em>
           </h2>
-          <div className="footer-cta-group">
-            <Link to="/events" className="footer-cta-btn">
+          <div className={styles.footerCtaGroup}>
+            <Link to="/events" className={styles.footerCtaBtn}>
               Volunteer Now
               <svg
                 viewBox="0 0 16 16"
@@ -42,72 +42,72 @@ function Footer() {
       </div>
 
       {/* ── Main Grid ── */}
-      <div className="footer-container">
+      <div className={styles.footerContainer}>
         {/* Brand */}
-        <div className="footer-left">
-          <Link to="/" className="footer-logo-link">
-            <img src={logo} alt="Sawa logo" className="footer-logo" />
+        <div className={styles.footerLeft}>
+          <Link to="/" className={styles.footerLogoLink}>
+            <img src={logo} alt="Sawa logo" className={styles.footerLogo} />
           </Link>
-          <p className="footer-tagline">Together for Lebanon</p>
-          <p className="footer-text">
+          <p className={styles.footerTagline}>Together for Lebanon</p>
+          <p className={styles.footerText}>
             Bridging volunteers with frontline communities across Lebanon —
             because real change starts with one person choosing to act.
           </p>
-          <div className="footer-socials">
-            <a href="#" className="social-icon" aria-label="Instagram">
+          <div className={styles.footerSocials}>
+            <a href="#" className={styles.socialIcon} aria-label="Instagram">
               <FaInstagram />
             </a>
-            <a href="#" className="social-icon" aria-label="LinkedIn">
+            <a href="#" className={styles.socialIcon} aria-label="LinkedIn">
               <FaLinkedinIn />
             </a>
-            <a href="#" className="social-icon" aria-label="WhatsApp">
+            <a href="#" className={styles.socialIcon} aria-label="WhatsApp">
               <FaWhatsapp />
             </a>
           </div>
         </div>
 
         {/* Nav */}
-        <div className="footer-column">
-          <h3 className="footer-heading">Navigate</h3>
-          <Link to="/" className="footer-link">
+        <div className={styles.footerColumn}>
+          <h3 className={styles.footerHeading}>Navigate</h3>
+          <Link to="/" className={styles.footerLink}>
             Home
           </Link>
-          <Link to="/events" className="footer-link">
+          <Link to="/events" className={styles.footerLink}>
             Events
           </Link>
-          <Link to="/aboutus" className="footer-link">
+          <Link to="/aboutus" className={styles.footerLink}>
             About Us
           </Link>
         </div>
 
         {/* Contact */}
-        <div className="footer-column">
-          <h3 className="footer-heading">Reach Us</h3>
+        <div className={styles.footerColumn}>
+          <h3 className={styles.footerHeading}>Reach Us</h3>
 
-          <div className="footer-contact-item">
-            <FaPhone className="footer-contact-icon" />
+          <div className={styles.footerContactItem}>
+            <FaPhone className={styles.footerContactIcon} />
             <span>+961 81 912 496</span>
           </div>
 
-          <div className="footer-contact-item">
-            <FaMapMarkerAlt className="footer-contact-icon" />
+          <div className={styles.footerContactItem}>
+            <FaMapMarkerAlt className={styles.footerContactIcon} />
             <span>Chamaa Road, Saida, Lebanon</span>
           </div>
 
-          <div className="footer-contact-item">
-            <FaEnvelope className="footer-contact-icon" />
+          <div className={styles.footerContactItem}>
+            <FaEnvelope className={styles.footerContactIcon} />
             <span>sawa@info.com</span>
           </div>
         </div>
       </div>
 
       {/* ── Bottom Bar ── */}
-      <div className="footer-bottom">
-        <div className="footer-bottom-inner">
-          <p className="footer-copyright">
+      <div className={styles.footerBottom}>
+        <div className={styles.footerBottomInner}>
+          <p className={styles.footerCopyright}>
             © {new Date().getFullYear()} Sawa. All rights reserved.
           </p>
-          <nav className="footer-legal">
+          <nav className={styles.footerLegal}>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms of Use</a>
           </nav>

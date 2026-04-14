@@ -1,4 +1,4 @@
-import "../../ProfileCard.css";
+import styles from "../css/ProfileCard.module.css";
 
 type ProfileCardProps = {
   fullName: string;
@@ -17,9 +17,16 @@ function ProfileCard({
 }: ProfileCardProps) {
   const initial = fullName?.trim()?.charAt(0)?.toUpperCase() || "U";
 
+  const sizeClass =
+    size === "sm"
+      ? styles.profileCardSm
+      : size === "lg"
+      ? styles.profileCardLg
+      : styles.profileCardMd;
+
   return (
-    <div className={`profile-card-mini profile-card-${size}`}>
-      <div className="profile-card-avatar">
+    <div className={`${styles.profileCardMini} ${sizeClass}`}>
+      <div className={styles.profileCardAvatar}>
         {avatar ? (
           <img src={avatar} alt={fullName} />
         ) : (
@@ -27,10 +34,10 @@ function ProfileCard({
         )}
       </div>
 
-      <div className="profile-card-info">
+      <div className={styles.profileCardInfo}>
         <h4>{fullName}</h4>
         {email && <p>{email}</p>}
-        {role && <span className="profile-card-role">{role}</span>}
+        {role && <span className={styles.profileCardRole}>{role}</span>}
       </div>
     </div>
   );
