@@ -302,3 +302,134 @@
   font-size: 12px;
   color: var(--text-main);
 }
+
+.page {
+  width: 100%;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.heroBtn {
+  border: none;
+  background: #f2b705;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.feedbackSection {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  margin-top: 32px;
+  align-items: start;
+}
+
+.feedbackColumn,
+.reviewFormColumn {
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+   color: var(--accent-secondary);
+  font-weight: 700;
+}
+
+.reviewForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+   color: var(--accent-primary);
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.formTextarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.formButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.submitBtn {
+  border: none;
+  background: var(--accent-primary);
+  color: white;
+  padding: 10px 17px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.deleteReviewBtn {
+  border: none;
+  background: #2c2c2c;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.organizerSection {
+  margin-top: 36px;
+  display: grid;
+  gap: 24px;
+}
+
+.successText {
+  color: #1a8c4c;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 950px) {
+  .feedbackSection {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feedbackActionBtn {
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.feedbackActionBtn:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-1px);
+}

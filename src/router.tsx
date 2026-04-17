@@ -25,7 +25,6 @@ import CreateEventPage from "./pages/CreateEventPage";
 import EditEventPage from "./pages/EditEventPage";
 import ManageFeedbackPage from "./pages/ManageFeedbackPage";
 import MyFeedbacksPage from "./pages/MyFeedbacksPage";
-import EditFeedbackPage from "./pages/EditFeedbackPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import MyRegistrationsPage from "./pages/MyRegistrationsPage";
@@ -82,22 +81,22 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
         { path: "events/:id", element: <EventDetailsPage profile={profile} /> },
 
         // volunteer routes
-        {
-          path: "saved-events",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <SavedEventsPage />
-            </RoleProtectedRoute>
-          ),
-        },
-        {
-          path: "user-registrations",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <MyRegistrationsPage />
-            </RoleProtectedRoute>
-          ),
-        },
+       {
+  path: "saved-events",
+  element: (
+    <RoleProtectedRoute user={profile} allowedRole="volunteer">
+      <SavedEventsPage id={profile?.id ?? null} />
+    </RoleProtectedRoute>
+  ),
+},
+{
+  path: "user-registrations",
+  element: (
+    <RoleProtectedRoute user={profile} allowedRole="volunteer">
+      <MyRegistrationsPage id={profile?.id ?? null} />
+    </RoleProtectedRoute>
+  ),
+},
         {
           path: "user-registrations/:id",
           element: (
@@ -106,32 +105,27 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
             </RoleProtectedRoute>
           ),
         },
-        {
-          path: "volunteer-dashboard",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <VolunteerDashboardPage />
-            </RoleProtectedRoute>
-          ),
-        },
+     {
+  path: "volunteer-dashboard",
+  element: (
+    <RoleProtectedRoute user={profile} allowedRole="volunteer">
+      <VolunteerDashboardPage currentUserId={profile?.id ?? null} />
+    </RoleProtectedRoute>
+  ),
+},
 
         // volunteer feedback routes
-        {
-          path: "my-feedbacks",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <MyFeedbacksPage />
-            </RoleProtectedRoute>
-          ),
-        },
-        {
-          path: "my-feedbacks/:id/edit",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <EditFeedbackPage />
-            </RoleProtectedRoute>
-          ),
-        },
+{
+  path: "my-feedbacks",
+  element: (
+    <RoleProtectedRoute user={profile} allowedRole="volunteer">
+      <MyFeedbacksPage
+        id={profile?.id ?? null}
+        profile={profile}
+      />
+    </RoleProtectedRoute>
+  ),
+},
 
         // organizer routes
         {

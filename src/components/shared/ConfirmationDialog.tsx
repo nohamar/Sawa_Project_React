@@ -1,11 +1,14 @@
+import styles from "../../css/ConfirmationPage.module.css";
+
 type ConfirmationDialogProps = {
   isOpen: boolean;
   title?: string;
   message: string;
   confirmText?: string;
   cancelText?: string;
+  showCancelButton?: boolean;
   onConfirm: () => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 };
 
 export default function ConfirmationDialog({
@@ -14,48 +17,29 @@ export default function ConfirmationDialog({
   message,
   confirmText = "Confirm",
   cancelText = "Cancel",
+  showCancelButton = true,
   onConfirm,
   onCancel,
 }: ConfirmationDialogProps) {
   if (!isOpen) return null;
 
   return (
-    <div style={overlayStyle}>
-      <div style={dialogStyle}>
+    <div className={styles.overlayStyle}>
+      <div className={styles.dialog}>
         <h3>{title}</h3>
         <p>{message}</p>
 
-        <div style={actionsStyle}>
-          <button onClick={onCancel}>{cancelText}</button>
-          <button onClick={onConfirm}>{confirmText}</button>
+        <div className={styles.actionsStyle}>
+          {showCancelButton && (
+            <button onClick={onCancel} className={styles.button}>
+              {cancelText}
+            </button>
+          )}
+          <button onClick={onConfirm} className={styles.button}>
+            {confirmText}
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
-const overlayStyle: React.CSSProperties = {
-  position: "fixed",
-  inset: 0,
-  backgroundColor: "rgba(0,0,0,0.4)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 1000,
-};
-
-const dialogStyle: React.CSSProperties = {
-  background: "#fff",
-  padding: "20px",
-  borderRadius: "12px",
-  minWidth: "320px",
-  maxWidth: "420px",
-  boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-};
-
-const actionsStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "flex-end",
-  gap: "10px",
-  marginTop: "16px",
-};

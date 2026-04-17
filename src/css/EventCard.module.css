@@ -90,11 +90,12 @@ max-height:200px;
   border: none;
   cursor: pointer;
   background-color: var(--accent-primary);
-  color: var(--bg-soft);
+  color: white;
 }
 .actions button:hover {
   background-color: var(--accent-secondary);
 }
+
 /* Top row layout */
 .topRow {
   display: flex;

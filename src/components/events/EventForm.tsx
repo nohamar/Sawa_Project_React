@@ -44,9 +44,6 @@ export default function EventForm({
   const initialized = useRef(false);
   const navigate = useNavigate();
 
-  // =========================
-  // LOAD EDIT DATA
-  // =========================
   useEffect(() => {
     if (initialData && !initialized.current) {
       setForm({
@@ -70,9 +67,6 @@ export default function EventForm({
     }
   }, [initialData]);
 
-  // =========================
-  // UPDATE FIELD
-  // =========================
   function updateField<K extends keyof EventFormData>(
     key: K,
     value: EventFormData[K]
@@ -80,12 +74,7 @@ export default function EventForm({
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  // =========================
-  // IMAGE UPLOAD
-  // =========================
-  async function handleImageUpload(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -98,7 +87,6 @@ export default function EventForm({
       setLocalError("Failed to upload image");
     }
   }
-
 
   function validate() {
     if (
@@ -116,11 +104,15 @@ export default function EventForm({
       return false;
     }
 
+    if (Number(form.capacity) <= 0) {
+      setLocalError("Capacity must be greater than 0.");
+      return false;
+    }
+
     setLocalError("");
     return true;
   }
 
- 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -143,6 +135,10 @@ export default function EventForm({
       status,
       type: form.type as any,
       image: form.image,
+
+      // If your CreateEvent / UpdateEvent types still require duration,
+      // add it here, for example:
+      // duration: calculateDuration(form.start_time, form.end_time),
     };
 
     const payload = isEdit
@@ -156,13 +152,11 @@ export default function EventForm({
       return;
     }
 
-
     setForm(initialForm);
     setLocalError("");
 
     navigate("/organizer-dashboard/events");
   }
-
 
   const displayedError = localError || error;
 
@@ -173,7 +167,6 @@ export default function EventForm({
       </h2>
 
       <form onSubmit={handleSubmit}>
-        {/* TITLE */}
         <div className={styles.formGroup}>
           <label>Event Title</label>
           <input
@@ -183,7 +176,6 @@ export default function EventForm({
           />
         </div>
 
-        {/* IMAGE */}
         <div className={styles.formGroup}>
           <label>Upload Image *</label>
           <div
@@ -210,19 +202,15 @@ export default function EventForm({
           />
         </div>
 
-        {/* DESCRIPTION */}
         <div className={styles.formGroup}>
           <label>Description</label>
           <textarea
             className={styles.textarea}
             value={form.description}
-            onChange={(e) =>
-              updateField("description", e.target.value)
-            }
+            onChange={(e) => updateField("description", e.target.value)}
           />
         </div>
 
-        {/* LOCATION */}
         <div className={styles.formGroup}>
           <label>Location</label>
           <input
@@ -232,53 +220,41 @@ export default function EventForm({
           />
         </div>
 
-        {/* DATE */}
         <div className={styles.formGroup}>
           <label>Date</label>
           <input
             type="date"
             className={styles.input}
             value={form.event_date}
-            onChange={(e) =>
-              updateField("event_date", e.target.value)
-            }
+            onChange={(e) => updateField("event_date", e.target.value)}
           />
         </div>
 
-        {/* TIME */}
         <div className={styles.formRow}>
           <input
             type="time"
             className={styles.input}
             value={form.start_time}
-            onChange={(e) =>
-              updateField("start_time", e.target.value)
-            }
+            onChange={(e) => updateField("start_time", e.target.value)}
           />
           <input
             type="time"
             className={styles.input}
             value={form.end_time}
-            onChange={(e) =>
-              updateField("end_time", e.target.value)
-            }
+            onChange={(e) => updateField("end_time", e.target.value)}
           />
         </div>
 
-        {/* CAPACITY */}
         <div className={styles.formGroup}>
           <label>Capacity</label>
           <input
             type="number"
             className={styles.input}
             value={form.capacity}
-            onChange={(e) =>
-              updateField("capacity", e.target.value)
-            }
+            onChange={(e) => updateField("capacity", e.target.value)}
           />
         </div>
 
-        {/* TYPE */}
         <div className={styles.formGroup}>
           <label>Type</label>
           <select
@@ -295,7 +271,6 @@ export default function EventForm({
           </select>
         </div>
 
-        {/* STATUS */}
         <div className={styles.statusRow}>
           Status:{" "}
           <span className={styles.statusBadge}>
@@ -307,7 +282,6 @@ export default function EventForm({
           </span>
         </div>
 
-        {/* ERRORS */}
         {displayedError && (
           <p className={styles.errorMsg}>{displayedError}</p>
         )}
@@ -316,7 +290,6 @@ export default function EventForm({
           <p className={styles.successMsg}>{successMessage}</p>
         )}
 
-        {/* SUBMIT */}
         <button type="submit" className={styles.submitBtn}>
           {isEdit ? "Save Changes" : "Create Event"}
         </button>

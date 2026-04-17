@@ -14,7 +14,14 @@ const EditEventPage = () => {
   useEffect(() => {
     async function fetchEvent() {
       if (!id) return;
-      const { data } = await getEventById(id);
+
+      const { data, error } = await getEventById(id);
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
       setEvent(data);
     }
 
@@ -27,6 +34,7 @@ const EditEventPage = () => {
     <EventForm
       initialData={event}
       isEdit
+      userId={event.organizer_id}
       onSubmit={(data) => editEvent(id!, data)}
       error={error}
       successMessage={successMessage}

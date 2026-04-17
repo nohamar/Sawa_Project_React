@@ -1,25 +1,58 @@
 import { supabase } from "../lib/supabaseClient";
+import type { NewRegistration, AttendanceStatus } from "../types/registration";
 
-import type { NewRegistration } from "../types/registration";
-
-export async function createRegistration (registration:NewRegistration){
-return await supabase.from("Registration").insert([registration])
+export async function createRegistration(registration: NewRegistration) {
+  return await supabase.from("Registration").insert([registration]);
 }
 
-export async function getRegistration_Event (event_id:string){
-    return await supabase.from("Registration").select("*").eq("event_id", event_id)
-
-}
-
-export async function getRegistration_User(volunteer_id:string){
-    return await supabase.from("Registration").select("*").eq("volunteer_id", volunteer_id)
-}
-
-export async function deleteRegistration (registration_id:string){
-    return await supabase.from("Registration").delete().eq("id", registration_id)
-}
-export async function getAllRegistrations() {
+export async function getRegistration_Event(event_id: string) {
   return await supabase
     .from("Registration")
-    .select("*");
+    .select(`
+      id,
+      registration_status,
+      attendance_status,
+      registered_at,
+      event_id,
+      volunteer_id,
+      waitlist_position
+    `)
+    .eq("event_id", event_id);
+}
+
+export async function getRegistration_User(volunteer_id: string) {
+  return await supabase
+    .from("Registration")
+    .select(`
+      id,
+      registration_status,
+      attendance_status,
+      registered_at,
+      event_id,
+      volunteer_id,
+      waitlist_position,
+      Events (*)
+    `)
+    .eq("volunteer_id", volunteer_id);
+}
+
+export async function getAllRegistrations() {
+  return await supabase.from("Registration").select("*");
+}
+
+export async function deleteRegistration(registration_id: string) {
+  return await supabase
+    .from("Registration")
+    .delete()
+    .eq("id", registration_id);
+}
+
+export async function updateAttendanceStatus(
+  registrationId: number,
+  attendance_status: AttendanceStatus
+) {
+  return await supabase
+    .from("Registration")
+    .update({ attendance_status })
+    .eq("id", registrationId);
 }

@@ -15,7 +15,7 @@ import FilterBar from "../components/shared/FilterBar";
 import styles from "../css/EventList.module.css";
 
 type SavedEventProps = {
-  id: number; // better if this is the auth user id / profile.user_id
+  id: number | null; // better if this is the auth user id / profile.user_id
 };
 
 export default function SavedEventsPage({ id }: SavedEventProps) {
@@ -42,6 +42,11 @@ export default function SavedEventsPage({ id }: SavedEventProps) {
   const [keyword, setKeyword] = useState("");
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
+  const [infoDialog, setInfoDialog] = useState({
+  isOpen: false,
+  title: "",
+  message: "",
+});
 
   const eventTypes = ["Workshop", "Seminar", "Volunteer", "Social", "Charity"];
 
@@ -52,22 +57,42 @@ export default function SavedEventsPage({ id }: SavedEventProps) {
     await removeSaved(eventId);
   }
 
-  async function handleRegister(eventId: number) {
-    await toggleRegistration(eventId, false);
-  }
+async function handleRegister(event: Event) {
+  const result = await toggleRegistration(event.id, false, event.capacity);
+
+  if (!result.ok) return;
+
+  setInfoDialog({
+    isOpen: true,
+    title: result.status === "waitlisted" ? "Added to Waiting List" : "Registration Successful",
+    message: result.message,
+  });
+}
 
   function handleAskUnregister(eventId: number) {
     setPendingUnregisterEventId(eventId);
     setIsDialogOpen(true);
   }
 
-  async function handleConfirmUnregister() {
-    if (pendingUnregisterEventId === null) return;
+async function handleConfirmUnregister() {
+  if (pendingUnregisterEventId === null) return;
 
-    await toggleRegistration(pendingUnregisterEventId, true);
-    setIsDialogOpen(false);
-    setPendingUnregisterEventId(null);
-  }
+  const currentEvent = saved.find((e) => e.id === pendingUnregisterEventId);
+  if (!currentEvent) return;
+
+  const result = await toggleRegistration(currentEvent.id, true, currentEvent.capacity);
+
+  setIsDialogOpen(false);
+  setPendingUnregisterEventId(null);
+
+  if (!result.ok) return;
+
+  setInfoDialog({
+    isOpen: true,
+    title: "Unregistered",
+    message: result.message,
+  });
+}
 
   function handleCancelUnregister() {
     setIsDialogOpen(false);
@@ -79,23 +104,18 @@ export default function SavedEventsPage({ id }: SavedEventProps) {
 
     return [
       {
-        label: "View Details",
-        onClick: () => navigate(`/events/${event.id}`),
-        className: `${styles.btn}`,
-      },
-      {
         label: "Unsave",
         onClick: () => handleUnsave(event.id),
         className: `${styles.btn} ${styles.btnDelete}`,
       },
-      {
-        label: isRegistered ? "Unregister" : "Register",
-        onClick: () =>
-          isRegistered
-            ? handleAskUnregister(event.id)
-            : handleRegister(event.id),
-        className: `${styles.btn} ${styles.btnEdit}`,
-      },
+    {
+  label: isRegistered ? "Unregister" : "Register",
+  onClick: () =>
+    isRegistered
+      ? handleAskUnregister(event.id)
+      : handleRegister(event),
+  className: `${styles.btn} ${styles.btnEdit}`,
+},
     ];
   };
 
@@ -147,6 +167,17 @@ export default function SavedEventsPage({ id }: SavedEventProps) {
         onConfirm={handleConfirmUnregister}
         onCancel={handleCancelUnregister}
       />
+
+      <ConfirmationDialog
+  isOpen={infoDialog.isOpen}
+  title={infoDialog.title}
+  message={infoDialog.message}
+  confirmText="OK"
+  showCancelButton={false}
+  onConfirm={() =>
+    setInfoDialog({ isOpen: false, title: "", message: "" })
+  }
+/>
     </div>
   );
 }

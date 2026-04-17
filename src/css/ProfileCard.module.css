@@ -1,0 +1,110 @@
+.profileCardMini {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.profileCardAvatar {
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    var(--accent-primary),
+    var(--accent-secondary)
+  );
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(244, 116, 87, 0.16);
+}
+
+.profileCardAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileCardSm .profileCardAvatar {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.profileCardMd .profileCardAvatar {
+  width: 52px;
+  height: 52px;
+  font-size: 20px;
+}
+
+.profileCardLg .profileCardAvatar {
+  width: 66px;
+  height: 66px;
+  font-size: 24px;
+}
+
+.profileCardInfo {
+  min-width: 0;
+}
+
+.profileCardInfo h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.profileCardInfo p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.profileCardRole {
+  display: inline-flex;
+  margin-top: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border-soft);
+  text-transform: capitalize;
+}
+
+.defaultVariant {
+}
+
+.feedbackVariant {
+  gap: 10px;
+}
+
+.feedbackVariant .profileCardAvatar {
+  box-shadow: none;
+  border: 2px solid var(--border-soft);
+}
+
+.feedbackVariant .profileCardInfo h4 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.feedbackVariant .profileCardInfo p {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.feedbackVariant .profileCardRole {
+  margin-top: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  background: #fff7f2;
+  border-color: #f0d4c6;
+}

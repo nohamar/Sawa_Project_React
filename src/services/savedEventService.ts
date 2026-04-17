@@ -13,7 +13,6 @@ export async function saveSavedEvent(userId: number, eventId: number) {
     .single();
 }
 
-
 export async function removeSavedEvent(userId: number, eventId: number) {
   return await supabase
     .from("Saved_event")
@@ -27,13 +26,13 @@ export async function getSavedEvents(userId: number) {
     .from("Saved_event")
     .select(`
       id,
+      created_at,
       volunteer_id,
       event_id,
       Events (*)
     `)
     .eq("volunteer_id", userId);
 }
-
 
 export async function isEventSaved(userId: number, eventId: number) {
   return await supabase
@@ -49,9 +48,9 @@ export async function getAllSavedEvents() {
     .from("Saved_event")
     .select(`
       id,
+      created_at,
       volunteer_id,
       event_id,
       Events (*)
     `);
 }
-
