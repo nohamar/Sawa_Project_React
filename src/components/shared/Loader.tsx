@@ -1,4 +1,3 @@
-import "../../Loader.css";
 import styles from "../../css/Loader.module.css";
 
 type LoaderProps = {
