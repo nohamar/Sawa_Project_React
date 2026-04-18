@@ -115,7 +115,7 @@ function Navbar() {
                       : styles.navbarLink
                   }
                 >
-                  Saved Events
+                  Saved 
                 </NavLink>
 
                 <NavLink
@@ -126,8 +126,18 @@ function Navbar() {
                       : styles.navbarLink
                   }
                 >
-                  My Registrations
+                        Registrations
                 </NavLink>
+                   <NavLink
+                  to="/volunteer-dashboard"
+                  className={({ isActive }) =>
+                    isActive ? "navbar-link active-link" : "navbar-link"
+                  }
+                >
+                  Dahsboard
+                </NavLink>
+
+             
               </>
             )}
 

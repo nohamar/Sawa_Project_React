@@ -1,11 +1,11 @@
-.profileCardMini {
+.profile-card-mini {
   display: inline-flex;
   align-items: center;
   gap: 12px;
   min-width: 0;
 }
 
-.profileCardAvatar {
+.profile-card-avatar {
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
@@ -18,35 +18,35 @@
   box-shadow: 0 10px 20px rgba(244, 116, 87, 0.16);
 }
 
-.profileCardAvatar img {
+.profile-card-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.profileCardSm .profileCardAvatar {
+.profile-card-sm .profile-card-avatar {
   width: 40px;
   height: 40px;
   font-size: 16px;
 }
 
-.profileCardMd .profileCardAvatar {
+.profile-card-md .profile-card-avatar {
   width: 52px;
   height: 52px;
   font-size: 20px;
 }
 
-.profileCardLg .profileCardAvatar {
+.profile-card-lg .profile-card-avatar {
   width: 66px;
   height: 66px;
   font-size: 24px;
 }
 
-.profileCardInfo {
+.profile-card-info {
   min-width: 0;
 }
 
-.profileCardInfo h4 {
+.profile-card-info h4 {
   margin: 0;
   font-size: 15px;
   font-weight: 800;
@@ -54,7 +54,7 @@
   line-height: 1.2;
 }
 
-.profileCardInfo p {
+.profile-card-info p {
   margin: 4px 0 0;
   font-size: 13px;
   color: var(--text-muted);
@@ -62,7 +62,7 @@
   word-break: break-word;
 }
 
-.profileCardRole {
+.profile-card-role {
   display: inline-flex;
   margin-top: 6px;
   padding: 5px 10px;

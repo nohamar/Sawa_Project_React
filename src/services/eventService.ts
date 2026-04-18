@@ -1,26 +1,31 @@
 import { supabase } from "../lib/supabaseClient";
+import type { NewRegistration } from "../types/registration";
+import { getEventStatus } from "../utils/eventStatus";
+import { deleteImage } from "./storageService";
 
+// CREATE
 export const createEvent = async (eventData: any) => {
+   console.log("creating event", eventData);
   const { data, error } = await supabase
     .from("Events")
     .insert([eventData])
     .select()
     .single();
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
 
+// GET ALL
 export const getAllEvents = async () => {
   const { data, error } = await supabase
     .from("Events")
     .select("*")
     .order("event_date", { ascending: true });
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
 
+// GET BY ID
 export const getEventById = async (id: string) => {
   const { data, error } = await supabase
     .from("Events")
@@ -28,10 +33,10 @@ export const getEventById = async (id: string) => {
     .eq("id", id)
     .single();
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
 
+// GET BY ORGANIZER
 export const getEventsByOrganizer = async (organizerId: string) => {
   const { data, error } = await supabase
     .from("Events")
@@ -39,10 +44,10 @@ export const getEventsByOrganizer = async (organizerId: string) => {
     .eq("organizer_id", organizerId)
     .order("event_date", { ascending: false });
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
 
+// UPDATE
 export const updateEvent = async (id: string, updatedData: any) => {
   const { data, error } = await supabase
     .from("Events")
@@ -51,21 +56,10 @@ export const updateEvent = async (id: string, updatedData: any) => {
     .select()
     .single();
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
 
-export const deleteEvent = async (id: string) => {
-  const { error } = await supabase
-    .from("Events")
-    .delete()
-    .eq("id", id);
-
-  if (error) throw error;
-  return true;
-};
-
-export const updateEventStatus = async (id: string, status: string) => {
+export const updateEventStatus = async (id: number, status: string) => {
   const { data, error } = await supabase
     .from("Events")
     .update({ status })
@@ -73,6 +67,27 @@ export const updateEventStatus = async (id: string, status: string) => {
     .select()
     .single();
 
-  if (error) throw error;
-  return data;
+  return { data, error };
 };
+
+// DELETE
+export const deleteEvent = async (id: string, imageUrl: string) => {
+  const { error } = await supabase
+    .from("Events")
+    .delete()
+    .eq("id", id);
+
+  if (error) return { error };
+
+  
+  if (imageUrl) {
+    await deleteImage(imageUrl);
+  }
+
+  return { error: null };
+};
+
+
+export async function createRegistration(registration: NewRegistration) {
+  return await supabase.from("Registration").insert([registration]);
+}

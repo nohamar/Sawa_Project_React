@@ -1,0 +1,140 @@
+.card {
+  background: #f6f6f6;
+  border: 1px solid #e9e9e9;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.profileWrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.fallbackProfile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatarPlaceholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #dddddd;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.subText {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #7a7a7a;
+}
+
+.ratingBox {
+  min-width: 88px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #ececec;
+}
+
+.ratingLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.ratingValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ff5a2c;
+}
+
+.body {
+  min-height: 82px;
+}
+
+.comment {
+  margin: 0;
+  color: #5f5f5f;
+  line-height: 1.65;
+  font-size: 0.95rem;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.date {
+  font-size: 0.82rem;
+  color: #8c8c8c;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ff5a2c;
+  color: white;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btnEdit {
+  background: #ff7a3d;
+  color: white;
+}
+
+.btnDelete {
+  background: #2f2f2f;
+  color: white;
+}

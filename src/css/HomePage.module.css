@@ -1,0 +1,243 @@
+.homePage {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-main);
+}
+
+/* Hero Section */
+.hero {
+    margin-top: 0px;
+  position: relative;
+  width: 100%;
+  min-height: 650px; 
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3); /* dark overlay */
+}
+
+.heroTitle {
+  position: relative;
+  color: var(--accent-primary);
+  font-size: 60px;
+  font-weight: bold;
+  z-index: 10;
+}
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  
+}
+
+.heroSubtitle {
+    color: var(--accent-green);
+  margin-top: 0.1rem;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  color: var(--accent-primary);
+}
+
+.hero p {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: var(--accent-green);
+  font-weight: 600;
+}
+.hero button {
+  background-color: var(--accent-secondary);
+  color: var(--card-bg);
+  border: none;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  
+}
+
+.hero button:hover {
+  background-color: var(--hover-button);
+}
+
+/* Intro Section */
+.intro {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--bg-main);
+}
+
+.intro h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--accent-primary);
+}
+
+.intro p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.userdo {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 250px;
+  max-width: 300px;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background: var(--accent-green);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+.icon {
+  font-size: 2rem;
+  color: var(--accent-secondary);
+  margin-bottom: 1rem;
+}
+
+.card p {
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Featured Events */
+.featuredEvents {
+  padding: 60px 20px;
+  background-color: var(--bg-soft);
+  text-align: center;
+}
+
+.featuredEvents h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: var(--accent-primary);
+}
+
+.eventList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+}
+
+.eventCard {
+  width: 300px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: var(--card-bg);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.eventCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.eventContent img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.eventContent {
+  padding: 15px;
+  text-align: left;
+}
+
+.eventContent h3 {
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+  color: var(--accent-secondary);
+}
+
+.eventContent .eventDate {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+
+/* CTA Section */
+.cta {
+  padding: 80px 20px;
+  background: var(--accent-secondary);
+  color: var(--card-bg);
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  
+}
+
+.cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.cta button {
+  background-color: var(--card-bg);
+  color: var(--accent-primary);
+  border: none;
+  padding: 14px 35px;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cta button:hover {
+  background-color: var(--hover-button);
+  color: var(--card-bg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .userdo {
+    gap: 15px;
+  }
+  .eventList {
+    gap: 15px;
+  }
+  .eventCard {
+    width: 90%;
+  }
+}

@@ -1,4 +1,4 @@
-import styles from "../css/ProfileCard.module.css";
+import styles from "../../css/ProfileCard.module.css";
 
 type ProfileCardProps = {
   fullName: string;
@@ -6,6 +6,7 @@ type ProfileCardProps = {
   email?: string;
   role?: string;
   size?: "sm" | "md" | "lg";
+  variant?: "default" | "feedback";
 };
 
 function ProfileCard({
@@ -14,6 +15,7 @@ function ProfileCard({
   email,
   role,
   size = "md",
+  variant = "default",
 }: ProfileCardProps) {
   const initial = fullName?.trim()?.charAt(0)?.toUpperCase() || "U";
 
@@ -24,8 +26,11 @@ function ProfileCard({
       ? styles.profileCardLg
       : styles.profileCardMd;
 
+  const variantClass =
+    variant === "feedback" ? styles.feedbackVariant : styles.defaultVariant;
+
   return (
-    <div className={`${styles.profileCardMini} ${sizeClass}`}>
+    <div className={`${styles.profileCardMini} ${sizeClass} ${variantClass}`}>
       <div className={styles.profileCardAvatar}>
         {avatar ? (
           <img src={avatar} alt={fullName} />

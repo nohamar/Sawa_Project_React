@@ -1,0 +1,28 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.emptyText {
+  text-align: center;
+  color: #7d7d7d;
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.select {
+  min-width: 160px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d8d8d8;
+  outline: none;
+  background: white;
+  font-size: 0.95rem;
+}

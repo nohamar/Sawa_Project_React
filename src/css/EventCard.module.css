@@ -1,0 +1,132 @@
+/* ───────── CARD LAYOUT (HORIZONTAL) ───────── */
+.card {
+  display: flex;
+  gap: 1rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  border: 1.5px solid var(--border-soft);
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: var(--shadow-soft);
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(60, 37, 23, 0.12);
+}
+
+/* ───────── IMAGE ───────── */
+.imageWrapper {
+  width: 220px;
+  min-width: 220px;
+max-height:200px;
+  overflow: hidden;
+}
+
+.imageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ───────── CONTENT ───────── */
+.content {
+  flex: 1;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+   max-width: 600px;
+  width: 90%;
+  line-height: 20px;
+}
+
+/* Title */
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  margin: 0;
+}
+
+/* ───────── META (TEXT ONLY) ───────── */
+.meta {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+ 
+  gap: 0.5rem;
+}
+
+/* dot separators like Booking */
+.meta span:not(:last-child)::after {
+  content: "•";
+  margin-left: 0.5rem;
+  color: var(--border-soft);
+}
+
+/* ───────── BOTTOM ───────── */
+.bottomRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.6rem;
+}
+
+/* ───────── ACTIONS ───────── */
+.actions {
+  display: flex;
+  gap: 0.4rem;
+ 
+}
+.actions button {
+  padding: 0.3rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  background-color: var(--accent-primary);
+  color: white;
+}
+.actions button:hover {
+  background-color: var(--accent-secondary);
+}
+
+/* Top row layout */
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Status badge (Booking-style) */
+.statusBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.upcoming {
+  background: var(--accent-green);
+  color: white;
+  
+}
+
+.completed {
+  background:  #E24B4A;
+  color: white;
+  
+}
+
+.closed {
+  background: #555;
+  color: white
+}
