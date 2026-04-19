@@ -1,8 +1,8 @@
 import type { EventStatus } from "../types/events";
 
 export function getEventStatus(
-  event_date: string,   // "2026-04-09"
-  end_time: string,     // "18:30"
+  event_date: string,   
+  end_time: string,     
   capacity?: number,
   registeredCount?: number
 ): EventStatus {
