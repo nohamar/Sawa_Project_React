@@ -1,6 +1,6 @@
 import type { Event } from "../../types/events"; 
 import styles from "../../css/EventCard.module.css";
-import { getImageUrl } from "../../services/storageService";
+
 import { useState } from "react";
 
 export type CardAction = { 
