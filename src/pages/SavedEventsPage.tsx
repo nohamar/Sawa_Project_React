@@ -11,11 +11,12 @@ import EventList from "../components/events/EventList";
 import ConfirmationDialog from "../components/shared/ConfirmationDialog";
 import SearchBar from "../components/shared/SearchBar";
 import FilterBar from "../components/shared/FilterBar";
+import Loader from "../components/shared/Loader";
 
 import styles from "../css/EventList.module.css";
 
 type SavedEventProps = {
-  id: number | null; // better if this is the auth user id / profile.user_id
+  id: number | null;
 };
 
 export default function SavedEventsPage({ id }: SavedEventProps) {
@@ -43,56 +44,70 @@ export default function SavedEventsPage({ id }: SavedEventProps) {
   const [status, setStatus] = useState("");
   const [type, setType] = useState("");
   const [infoDialog, setInfoDialog] = useState({
-  isOpen: false,
-  title: "",
-  message: "",
-});
+    isOpen: false,
+    title: "",
+    message: "",
+  });
 
   const eventTypes = ["Workshop", "Seminar", "Volunteer", "Social", "Charity"];
 
   const pageLoading = savedLoading || registerLoading;
   const pageError = savedError || registerError;
 
+  function isCompletedEvent(event: Event) {
+    return event.status.toLowerCase() === "completed";
+  }
+
   async function handleUnsave(eventId: number) {
     await removeSaved(eventId);
   }
 
-async function handleRegister(event: Event) {
-  const result = await toggleRegistration(event.id, false, event.capacity);
+  async function handleRegister(event: Event) {
+    if (isCompletedEvent(event)) {
+      setInfoDialog({
+        isOpen: true,
+        title: "Event Completed",
+        message:
+          "This event has already been completed. Please check other available events to participate in.",
+      });
+      return;
+    }
 
-  if (!result.ok) return;
+    const result = await toggleRegistration(event.id, false, event.capacity);
 
-  setInfoDialog({
-    isOpen: true,
-    title: result.status === "waitlisted" ? "Added to Waiting List" : "Registration Successful",
-    message: result.message,
-  });
-}
+    if (!result.ok) return;
+
+    setInfoDialog({
+      isOpen: true,
+      title: result.status === "waitlisted" ? "Added to Waiting List" : "Registration Successful",
+      message: result.message,
+    });
+  }
 
   function handleAskUnregister(eventId: number) {
     setPendingUnregisterEventId(eventId);
     setIsDialogOpen(true);
   }
 
-async function handleConfirmUnregister() {
-  if (pendingUnregisterEventId === null) return;
+  async function handleConfirmUnregister() {
+    if (pendingUnregisterEventId === null) return;
 
-  const currentEvent = saved.find((e) => e.id === pendingUnregisterEventId);
-  if (!currentEvent) return;
+    const currentEvent = saved.find((e) => e.id === pendingUnregisterEventId);
+    if (!currentEvent) return;
 
-  const result = await toggleRegistration(currentEvent.id, true, currentEvent.capacity);
+    const result = await toggleRegistration(currentEvent.id, true, currentEvent.capacity);
 
-  setIsDialogOpen(false);
-  setPendingUnregisterEventId(null);
+    setIsDialogOpen(false);
+    setPendingUnregisterEventId(null);
 
-  if (!result.ok) return;
+    if (!result.ok) return;
 
-  setInfoDialog({
-    isOpen: true,
-    title: "Unregistered",
-    message: result.message,
-  });
-}
+    setInfoDialog({
+      isOpen: true,
+      title: "Unregistered",
+      message: result.message,
+    });
+  }
 
   function handleCancelUnregister() {
     setIsDialogOpen(false);
@@ -108,14 +123,14 @@ async function handleConfirmUnregister() {
         onClick: () => handleUnsave(event.id),
         className: `${styles.btn} ${styles.btnDelete}`,
       },
-    {
-  label: isRegistered ? "Unregister" : "Register",
-  onClick: () =>
-    isRegistered
-      ? handleAskUnregister(event.id)
-      : handleRegister(event),
-  className: `${styles.btn} ${styles.btnEdit}`,
-},
+      {
+        label: isRegistered ? "Unregister" : "Register",
+        onClick: () =>
+          isRegistered
+            ? handleAskUnregister(event.id)
+            : handleRegister(event),
+        className: `${styles.btn} ${styles.btnEdit}`,
+      },
     ];
   };
 
@@ -130,7 +145,10 @@ async function handleConfirmUnregister() {
     return matchesStatus && matchesType && matchesKeyword;
   });
 
-  if (pageLoading) return <p className={styles.noEvents}>Loading saved events...</p>;
+  if (pageLoading) {
+    return <Loader text="Loading your saved events..." fullScreen={false} />;
+  }
+
   if (pageError) {
     return (
       <p className={styles.noEvents} style={{ color: "red" }}>
@@ -169,15 +187,15 @@ async function handleConfirmUnregister() {
       />
 
       <ConfirmationDialog
-  isOpen={infoDialog.isOpen}
-  title={infoDialog.title}
-  message={infoDialog.message}
-  confirmText="OK"
-  showCancelButton={false}
-  onConfirm={() =>
-    setInfoDialog({ isOpen: false, title: "", message: "" })
-  }
-/>
+        isOpen={infoDialog.isOpen}
+        title={infoDialog.title}
+        message={infoDialog.message}
+        confirmText="OK"
+        showCancelButton={false}
+        onConfirm={() =>
+          setInfoDialog({ isOpen: false, title: "", message: "" })
+        }
+      />
     </div>
   );
 }

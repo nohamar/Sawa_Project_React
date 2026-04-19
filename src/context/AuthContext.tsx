@@ -35,48 +35,53 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadProfile = async (authUser: User | null) => {
-    if (!authUser) {
-      setProfile(null);
-      return;
-    }
+const loadProfile = async (authUser: User | null) => {
+  if (!authUser) {
+    setProfile(null);
+    return;
+  }
 
-    const result = await profileService.getProfileByUserId(authUser.id);
+  const result = await profileService.getProfileByUserId(authUser.id);
 
-    if (result.profile) {
-      setProfile(result.profile);
-      return;
-    }
+  if (result.error) {
+    setProfile(null);
+    return;
+  }
 
-    const firstName =
-      (authUser.user_metadata?.first_name as string | undefined) ?? "";
-    const secondName =
-      (authUser.user_metadata?.second_name as string | undefined) ?? "";
-    const role =
-      (authUser.user_metadata?.role as UserRole | undefined) ?? "volunteer";
-    const age =
-      (authUser.user_metadata?.age as string | undefined) ?? "";
-    const bio =
-      (authUser.user_metadata?.bio as string | undefined) ?? null;
+  if (result.profile) {
+    setProfile(result.profile);
+    return;
+  }
 
-    const createResult = await profileService.createProfile({
-      user_id: authUser.id,
-      first_name: firstName,
-      second_name: secondName,
-      email: authUser.email ?? "",
-      role,
-      bio,
-      age,
-      avatar: null,
-    });
+  const firstName =
+    (authUser.user_metadata?.first_name as string | undefined) ?? "";
+  const secondName =
+    (authUser.user_metadata?.second_name as string | undefined) ?? "";
+  const role =
+    (authUser.user_metadata?.role as UserRole | undefined) ?? "volunteer";
+  const age =
+    (authUser.user_metadata?.age as string | undefined) ?? "";
+  const bio =
+    (authUser.user_metadata?.bio as string | undefined) ?? null;
 
-    if (createResult.error) {
-      setProfile(null);
-      return;
-    }
+  const createResult = await profileService.createProfile({
+    user_id: authUser.id,
+    first_name: firstName,
+    second_name: secondName,
+    email: authUser.email ?? "",
+    role,
+    bio,
+    age,
+    avatar: null,
+  });
 
-    setProfile(createResult.profile);
-  };
+  if (createResult.error) {
+    setProfile(null);
+    return;
+  }
+
+  setProfile(createResult.profile);
+};
 
   const refreshProfile = async () => {
     if (!user) return;

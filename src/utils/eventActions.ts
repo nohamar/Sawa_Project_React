@@ -1,4 +1,4 @@
-
+//utils/eventActions
 import type { Event } from "../types/events";
 
 export function getEventPermissions(

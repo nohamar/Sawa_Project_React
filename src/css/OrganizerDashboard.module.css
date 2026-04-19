@@ -16,7 +16,7 @@
 }
 .content{
  max-width: 1200px;
- padding: 3rem;
+ padding: 6rem;
   margin: 0 auto;
     animation: fadeUp 0.5s ease both;
     color: var(--text-main);

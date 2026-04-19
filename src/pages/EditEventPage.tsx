@@ -15,7 +15,11 @@ const EditEventPage = () => {
     async function fetchEvent() {
       if (!id) return;
 
-      const { data, error } = await getEventById(id);
+      const numericId = Number(id);
+
+      if (Number.isNaN(numericId)) return;
+
+      const { data, error } = await getEventById(numericId);
 
       if (error) {
         console.error(error);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { FiUser, FiMenu, FiX, FiLogOut } from "react-icons/fi";
 import styles from "../../css/Navbar.module.css";
@@ -9,20 +9,7 @@ function Navbar() {
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -49,11 +36,7 @@ function Navbar() {
   return (
     <>
       <header className={styles.navbarWrapper}>
-        <nav
-          className={`${styles.navbar} ${
-            isScrolled ? styles.scrolled : ""
-          }`}
-        >
+        <nav className={styles.navbar}>
           <div className={styles.navbarLeft}>
             <Link
               to="/"
@@ -68,9 +51,7 @@ function Navbar() {
             </Link>
           </div>
 
-          <div
-            className={`${styles.navbarCenter} ${styles.desktopOnly}`}
-          >
+          <div className={`${styles.navbarCenter} ${styles.desktopOnly}`}>
             <NavLink
               to="/"
               end
@@ -115,7 +96,7 @@ function Navbar() {
                       : styles.navbarLink
                   }
                 >
-                  Saved 
+                  Saved
                 </NavLink>
 
                 <NavLink
@@ -126,18 +107,19 @@ function Navbar() {
                       : styles.navbarLink
                   }
                 >
-                        Registrations
-                </NavLink>
-                   <NavLink
-                  to="/volunteer-dashboard"
-                  className={({ isActive }) =>
-                    isActive ? "navbar-link active-link" : "navbar-link"
-                  }
-                >
-                  Dahsboard
+                  Registrations
                 </NavLink>
 
-             
+                <NavLink
+                  to="/volunteer-dashboard"
+                  className={({ isActive }) =>
+                    isActive
+                      ? `${styles.navbarLink} ${styles.activeLink}`
+                      : styles.navbarLink
+                  }
+                >
+                  Dashboard
+                </NavLink>
               </>
             )}
 
@@ -236,15 +218,11 @@ function Navbar() {
       </header>
 
       <div
-        className={`${styles.mobileMenuOverlay} ${
-          menuOpen ? styles.open : ""
-        }`}
+        className={`${styles.mobileMenuOverlay} ${menuOpen ? styles.open : ""}`}
         onClick={closeMenu}
       >
         <div
-          className={`${styles.mobileMenuPanel} ${
-            menuOpen ? styles.open : ""
-          }`}
+          className={`${styles.mobileMenuPanel} ${menuOpen ? styles.open : ""}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.mobileMenuTop}>

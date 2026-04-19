@@ -4,6 +4,7 @@ import {
   removeSavedEvent,
   saveSavedEvent,
 } from "../services/savedEventService";
+import { getEventById } from "../services/eventService";
 
 import type { Event } from "../types/events";
 import type { SavedEventWithEvent } from "../types/saved";
@@ -50,37 +51,55 @@ export function useSaved(volunteerId: number | null) {
 
     clearMessages();
 
-    const { error } = await saveSavedEvent(volunteerId, eventId);
+    setLoading(true);
+
+    try {
+      const { data: eventData, error: eventError } = await getEventById(eventId);
+
+      if (eventError) {
+        setError(eventError.message);
+        return false;
+      }
+
+      if (eventData?.status?.toLowerCase() === "completed") {
+        setError("This event has already been completed and cannot be saved.");
+        return false;
+      }
+
+      const { error } = await saveSavedEvent(volunteerId, eventId);
+
+      if (error) {
+        setError(error.message);
+        return false;
+      }
+
+      setSuccessMessage("Event saved successfully.");
+      await loadSaved(volunteerId);
+      return true;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function removeSaved(eventId: number) {
+    if (!volunteerId) {
+      setError("User is not logged in.");
+      return false;
+    }
+
+    clearMessages();
+
+    const { error } = await removeSavedEvent(volunteerId, eventId);
 
     if (error) {
       setError(error.message);
       return false;
     }
 
-    setSuccessMessage("Event saved successfully.");
-    await loadSaved(volunteerId);
+    setSaved((prev) => prev.filter((event) => event.id !== eventId));
+    setSuccessMessage("Event removed from saved.");
     return true;
   }
-
-async function removeSaved(eventId: number) {
-  if (!volunteerId) {
-    setError("User is not logged in.");
-    return false;
-  }
-
-  clearMessages();
-
-  const { error } = await removeSavedEvent(volunteerId, eventId);
-
-  if (error) {
-    setError(error.message);
-    return false;
-  }
-
-  setSaved((prev) => prev.filter((event) => event.id !== eventId));
-  setSuccessMessage("Event removed from saved.");
-  return true;
-}
 
   function clearMessages() {
     setError("");

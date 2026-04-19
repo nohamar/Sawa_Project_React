@@ -6,6 +6,7 @@ import {
   getRegistration_Event,
   getAllRegistrations,
 } from "../services/registration";
+import { getEventById } from "../services/eventService";
 
 import type { Event } from "../types/events";
 import type {
@@ -93,6 +94,18 @@ export function useRegister(volunteerId: number | null) {
 
     try {
       if (!isRegistered) {
+        const { data: eventData, error: eventDataError } = await getEventById(eventId);
+
+        if (eventDataError) throw eventDataError;
+
+        if (eventData?.status?.toLowerCase() === "completed") {
+          return {
+            ok: false,
+            status: null as RegistrationStatus | null,
+            message: "This event has already been completed and cannot be registered.",
+          };
+        }
+
         const { data: eventRegistrations, error: eventError } =
           await getRegistration_Event(String(eventId));
 

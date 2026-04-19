@@ -52,10 +52,10 @@ export default function EventsPage({ profile }: EventsPageProps) {
   const [pendingUnregisterEvent, setPendingUnregisterEvent] = useState<Event | null>(null);
 
   const [infoDialog, setInfoDialog] = useState({
-  isOpen: false,
-  title: "",
-  message: "",
-});
+    isOpen: false,
+    title: "",
+    message: "",
+  });
 
   const navigate = useNavigate();
 
@@ -70,6 +70,10 @@ export default function EventsPage({ profile }: EventsPageProps) {
 
   const savedEventIds = useMemo(() => saved.map((event) => event.id), [saved]);
 
+  function isCompletedEvent(event: Event) {
+    return event.status.toLowerCase() === "completed";
+  }
+
   async function handleDelete(event: Event) {
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (!confirmDelete) return;
@@ -77,53 +81,74 @@ export default function EventsPage({ profile }: EventsPageProps) {
     await removeEvent(event);
   }
 
-  async function handleToggleSave(eventId: number) {
-    const isSaved = savedEventIds.includes(eventId);
+  async function handleToggleSave(event: Event) {
+    if (isCompletedEvent(event)) {
+      setInfoDialog({
+        isOpen: true,
+        title: "Event Completed",
+        message:
+          "This event has already been completed. Please check other available events to participate in.",
+      });
+      return;
+    }
+
+    const isSaved = savedEventIds.includes(event.id);
 
     if (isSaved) {
-      await removeSaved(eventId);
+      await removeSaved(event.id);
     } else {
-      await addSaved(eventId);
+      await addSaved(event.id);
     }
   }
 
-async function handleRegister(event: Event) {
-  const result = await toggleRegistration(event.id, false, event.capacity);
+  async function handleRegister(event: Event) {
+    if (isCompletedEvent(event)) {
+      setInfoDialog({
+        isOpen: true,
+        title: "Event Completed",
+        message:
+          "This event has already been completed. Please check other available events to participate in.",
+      });
+      return;
+    }
 
-  if (!result.ok) return;
+    const result = await toggleRegistration(event.id, false, event.capacity);
 
-  setInfoDialog({
-    isOpen: true,
-    title: result.status === "waitlisted" ? "Added to Waiting List" : "Registration Successful",
-    message: result.message,
-  });
-}
+    if (!result.ok) return;
+
+    setInfoDialog({
+      isOpen: true,
+      title: result.status === "waitlisted" ? "Added to Waiting List" : "Registration Successful",
+      message: result.message,
+    });
+  }
 
   function handleAskUnregister(event: Event) {
     setPendingUnregisterEvent(event);
     setIsDialogOpen(true);
   }
 
-async function handleConfirmUnregister() {
-  if (!pendingUnregisterEvent) return;
+  async function handleConfirmUnregister() {
+    if (!pendingUnregisterEvent) return;
 
-  const result = await toggleRegistration(
-    pendingUnregisterEvent.id,
-    true,
-    pendingUnregisterEvent.capacity
-  );
+    const result = await toggleRegistration(
+      pendingUnregisterEvent.id,
+      true,
+      pendingUnregisterEvent.capacity
+    );
 
-  setIsDialogOpen(false);
-  setPendingUnregisterEvent(null);
+    setIsDialogOpen(false);
+    setPendingUnregisterEvent(null);
 
-  if (!result.ok) return;
+    if (!result.ok) return;
 
-  setInfoDialog({
-    isOpen: true,
-    title: "Unregistered",
-    message: result.message,
-  });
-}
+    setInfoDialog({
+      isOpen: true,
+      title: "Unregistered",
+      message: result.message,
+    });
+  }
+
   function handleCancelUnregister() {
     setIsDialogOpen(false);
     setPendingUnregisterEvent(null);
@@ -165,7 +190,7 @@ async function handleConfirmUnregister() {
 
       actions.push({
         label: isSaved ? "Unsave" : "Save",
-        onClick: () => handleToggleSave(event.id),
+        onClick: () => handleToggleSave(event),
         className: `${styles.btn} ${styles.btnSaved}`,
       });
     }
@@ -196,31 +221,80 @@ async function handleConfirmUnregister() {
 
   return (
     <div className={styles.eventsPage}>
-      <div
-        className={styles.hero}
-        style={{ backgroundImage: `url("/images/events-hero.jpg")` }}
-      >
-        <div className={styles.heroOverlay}></div>
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>Discover Our Events</h1>
-          <p className={styles.heroSubtitle}>
-            Join us in exciting activities and volunteer opportunities that make
-            a difference.
-          </p>
-          <button
-            onClick={() =>
-              document
-                .getElementById("eventsContainer")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            Explore Events
-          </button>
+      <section className={styles.hero}>
+        <div className={styles.heroBackground}>
+          <div className={styles.heroGlowLeft}></div>
+          <div className={styles.heroGlowRight}></div>
+          <div className={styles.heroBlurCenter}></div>
         </div>
-      </div>
+
+        <div className={styles.heroShell}>
+          <div className={styles.heroLeft}>
+            <div className={styles.heroTag}>
+              <span className={styles.heroTagDot}></span>
+              DISCOVER · JOIN · MAKE IMPACT
+            </div>
+
+            <div className={styles.heroContent}>
+              <h1 className={styles.heroTitle}>
+                Find events that
+                <span className={styles.heroAccentWrap}>
+                  <span className={styles.heroAccentText}> bring people together</span>
+                  <svg
+                    className={styles.heroUnderline}
+                    viewBox="0 0 520 40"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6 26C89 11 157 8 255 15C347 22 414 24 514 11"
+                      stroke="currentColor"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </h1>
+
+              <p className={styles.heroSubtitle}>
+                Explore volunteer opportunities, community activities, and meaningful
+                gatherings designed to create real impact across Lebanon.
+              </p>
+
+              <button
+                className={styles.heroButton}
+                onClick={() =>
+                  document
+                    .getElementById("eventsContainer")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Explore Events
+              </button>
+            </div>
+          </div>
+
+          <div className={styles.heroRight}>
+            <div className={styles.heroImageLayerBack}></div>
+
+            <div className={styles.heroImageWrap}>
+              <img
+                src="/images/events-hero.jpg"
+                alt="People joining a community event"
+                className={styles.heroImg}
+              />
+            </div>
+
+            <div className={styles.heroBadge}>
+              <span>events with purpose ✿</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className={styles.eventsContainer} id="eventsContainer">
-        <div className="upper-part">
+        <div className={styles.upperPart}>
           <h2 className={styles.eventsHeading}>Explore Events</h2>
 
           {infoMessage && (
@@ -255,15 +329,15 @@ async function handleConfirmUnregister() {
       />
 
       <ConfirmationDialog
-  isOpen={infoDialog.isOpen}
-  title={infoDialog.title}
-  message={infoDialog.message}
-  confirmText="OK"
-  showCancelButton={false}
-  onConfirm={() =>
-    setInfoDialog({ isOpen: false, title: "", message: "" })
-  }
-/>
+        isOpen={infoDialog.isOpen}
+        title={infoDialog.title}
+        message={infoDialog.message}
+        confirmText="OK"
+        showCancelButton={false}
+        onConfirm={() =>
+          setInfoDialog({ isOpen: false, title: "", message: "" })
+        }
+      />
     </div>
   );
 }
