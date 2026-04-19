@@ -76,18 +76,16 @@ export const deleteEvent = async (id: string, imageUrl: string) => {
   const { error } = await supabase
     .from("Events")
     .delete()
-    .eq("id", id);
+    .eq("id", Number(id));
 
   if (error) return { error };
 
-  
   if (imageUrl) {
     await deleteImage(imageUrl);
   }
 
   return { error: null };
 };
-
 
 export async function createRegistration(registration: NewRegistration) {
   return await supabase.from("Registration").insert([registration]);

@@ -39,7 +39,10 @@ export default function OrganizerEventsPage({ profile }: Props) {
     );
     if (!confirmDelete) return;
 
-    await removeEvent(event);
+    const result = await removeEvent(event);
+if (!result) {
+  alert("Delete failed");
+}
   };
 
   const getActions = (event: Event): CardAction[] => [

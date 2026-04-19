@@ -135,10 +135,6 @@ export default function EventForm({
       status,
       type: form.type as any,
       image: form.image,
-
-      // If your CreateEvent / UpdateEvent types still require duration,
-      // add it here, for example:
-      // duration: calculateDuration(form.start_time, form.end_time),
     };
 
     const payload = isEdit
@@ -231,18 +227,24 @@ export default function EventForm({
         </div>
 
         <div className={styles.formRow}>
+          <div className={styles.formGroup}>
+          <label htmlFor="start_time">Start Time</label>
           <input
             type="time"
             className={styles.input}
             value={form.start_time}
             onChange={(e) => updateField("start_time", e.target.value)}
           />
+          </div>
+          <div className={styles.formGroup}>
+          <label htmlFor="end_time">End Time</label>
           <input
             type="time"
             className={styles.input}
             value={form.end_time}
             onChange={(e) => updateField("end_time", e.target.value)}
           />
+          </div>
         </div>
 
         <div className={styles.formGroup}>

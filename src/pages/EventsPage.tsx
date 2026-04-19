@@ -78,7 +78,10 @@ export default function EventsPage({ profile }: EventsPageProps) {
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (!confirmDelete) return;
 
-    await removeEvent(event);
+    const result = await removeEvent(event);
+if (!result) {
+  alert("Delete failed");
+}
   }
 
   async function handleToggleSave(event: Event) {

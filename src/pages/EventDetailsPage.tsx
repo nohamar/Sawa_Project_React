@@ -145,7 +145,10 @@ useEffect(() => {
     );
     if (!confirmDelete) return;
 
-    await removeEvent(currentEvent);
+    const result = await removeEvent(currentEvent);
+if (!result) {
+  alert("Delete failed");
+}
     navigate("/events");
   }
 
