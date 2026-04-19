@@ -1,0 +1,211 @@
+.navbarWrapper {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  padding: 0;
+}
+
+.navbar {
+  width: 100%;
+  max-width: 1550px;
+  margin: 0 auto;
+  padding: 0 40px;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(253, 252, 248, 0.97);
+  border-bottom: 1px solid #efe4d8;
+  box-shadow: 0 2px 12px rgba(60, 37, 23, 0.06);
+}
+
+.navbarLeft,
+.navbarCenter,
+.navbarRight {
+  display: flex;
+  align-items: center;
+}
+
+.navbarLeft {
+  flex: 1;
+}
+
+.navbarCenter {
+  flex: 1;
+  justify-content: center;
+  gap: 50px;
+}
+
+.navbarRight {
+  flex: 1;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.navbarLogoLink,
+.mobileLogoLink {
+  display: inline-flex;
+  align-items: center;
+}
+
+.navbarLogo {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbarProfileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mobileLogo {
+  height: 95px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbarLink {
+  position: relative;
+  text-decoration: none;
+  color: #3c2517;
+  font-size: 15px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+
+.navbarLink:hover {
+  color: #f47457;
+}
+
+.activeLink {
+  color: #3c2517;
+}
+
+.activeLink::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  border-radius: 999px;
+  background: #f9ad3f;
+}
+
+.navbarAuthBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  text-decoration: none;
+  background: #a3bf8f;
+  color: #3c2517;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 24px;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.navbarAuthBtn:hover {
+  background: #f9ad3f;
+}
+
+.authIcon {
+  font-size: 18px;
+}
+
+.desktopOnly {
+  display: flex;
+}
+
+.desktopBtn {
+  display: inline-flex;
+}
+
+.tabletOnly {
+  display: none;
+}
+
+.iconBtn {
+  display: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: #a3bf8f;
+  color: #3c2517;
+  font-size: 22px;
+}
+
+.iconBtn:hover {
+  background: #f9ad3f;
+}
+
+.navbarProfileCircle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #a3bf8f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.navbarLogoutBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: #a3bf8f;
+  border: none;
+  cursor: pointer;
+}
+
+.menuToggle {
+  display: none;
+}
+
+.mobileMenuOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 28, 24, 0.35);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobileMenuPanel {
+  position: absolute;
+  right: 0;
+  width: 82%;
+  height: 100%;
+  background: #f2f0ef;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+}
+
+.mobileMenuPanel.open {
+  transform: translateX(0);
+}
+
+.mobileMenuLink {
+  font-size: 22px;
+  font-weight: 700;
+}

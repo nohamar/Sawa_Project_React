@@ -1,4 +1,4 @@
-import "../../Loader.css";
+import styles from "../../css/Loader.module.css";
 
 type LoaderProps = {
   text?: string;
@@ -10,17 +10,21 @@ const Loader = ({
   fullScreen = true,
 }: LoaderProps) => {
   return (
-    <div className={`loader-container ${fullScreen ? "full-screen" : ""}`}>
-      <div className="loader-content">
-        <div className="morph-visual">
-          <div className="abstract-shape"></div>
-          <div className="glass-core"></div>
+    <div
+      className={`${styles.loaderContainer} ${
+        fullScreen ? styles.fullScreen : ""
+      }`}
+    >
+      <div className={styles.loaderContent}>
+        <div className={styles.morphVisual}>
+          <div className={styles.abstractShape}></div>
+          <div className={styles.glassCore}></div>
         </div>
-        <div className="text-section">
-          <h3 className="brand-name">Sawa</h3>
-          <div className="status-container">
-            <p className="status-text">{text}</p>
-            <span className="shimmer-bar"></span>
+        <div className={styles.textSection}>
+          <h3 className={styles.brandName}>Sawa</h3>
+          <div className={styles.statusContainer}>
+            <p className={styles.statusText}>{text}</p>
+            <span className={styles.shimmerBar}></span>
           </div>
         </div>
       </div>

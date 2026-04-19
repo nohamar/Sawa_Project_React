@@ -2,7 +2,7 @@ import React from 'react'
 
 function ManageFeedbackPage() {
   return (
-    <div>ManageFeedbackPage</div>
+    <div>Manage feedbacks</div>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../AuthPages.css";
+import styles from "../css/AuthPages.module.css";
 import { authService } from "../services/authService";
 import { useAuth } from "../hooks/useAuth";
 
@@ -72,19 +72,22 @@ function ChangePasswordPage() {
   };
 
   return (
-    <div className="auth-page auth-simple-page">
-      <div className="auth-simple-card">
-        <Link to="/profile" className="auth-back-home auth-back-inline">
+    <div className={`${styles["auth-page"]} ${styles["auth-simple-page"]}`}>
+      <div className={styles["auth-simple-card"]}>
+        <Link
+          to="/profile"
+          className={`${styles["auth-back-home"]} ${styles["auth-back-inline"]}`}
+        >
           ← Back to Profile
         </Link>
 
-        <h2 className="auth-form-title">Change Password</h2>
-        <p className="auth-form-subtitle">
+        <h2 className={styles["auth-form-title"]}>Change Password</h2>
+        <p className={styles["auth-form-subtitle"]}>
           Enter your current password, then choose a new one.
         </p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-field">
+        <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+          <div className={styles["auth-field"]}>
             <label>Current Password</label>
             <input
               type="password"
@@ -94,7 +97,7 @@ function ChangePasswordPage() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className={styles["auth-field"]}>
             <label>New Password</label>
             <input
               type="password"
@@ -104,7 +107,7 @@ function ChangePasswordPage() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className={styles["auth-field"]}>
             <label>Confirm New Password</label>
             <input
               type="password"
@@ -114,12 +117,16 @@ function ChangePasswordPage() {
             />
           </div>
 
-          {errorMessage && <p className="auth-error-message">{errorMessage}</p>}
-          {successMessage && <p className="auth-success-message">{successMessage}</p>}
+          {errorMessage && (
+            <p className={styles["auth-error-message"]}>{errorMessage}</p>
+          )}
+          {successMessage && (
+            <p className={styles["auth-success-message"]}>{successMessage}</p>
+          )}
 
           <button
             type="submit"
-            className="auth-submit-btn"
+            className={styles["auth-submit-btn"]}
             disabled={isSubmitting}
           >
             {isSubmitting ? "Updating..." : "Change Password"}

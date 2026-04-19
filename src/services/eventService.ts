@@ -1,3 +1,4 @@
+//eventService
 import { supabase } from "../lib/supabaseClient";
 import type { NewRegistration } from "../types/registration";
 import { getEventStatus } from "../utils/eventStatus";
@@ -26,7 +27,7 @@ export const getAllEvents = async () => {
 };
 
 // GET BY ID
-export const getEventById = async (id: string) => {
+export const getEventById = async (id: number) => {
   const { data, error } = await supabase
     .from("Events")
     .select("*")

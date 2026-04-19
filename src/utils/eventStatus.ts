@@ -1,3 +1,4 @@
+//utils/eventStatus
 import type { EventStatus } from "../types/events";
 
 export function getEventStatus(

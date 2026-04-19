@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../AuthPages.css";
+import styles from "../css/AuthPages.module.css";
 import loginImage from "../assets/Volunteer with FaithPrayers _ The FaithPrayers National Prayer Line.jfif";
 import { useAuth } from "../hooks/useAuth";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { signIn, profile, user } = useAuth();
+  const { signIn, profile } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -34,10 +34,7 @@ function LoginPage() {
 
     setIsSubmitting(true);
 
-    const result = await signIn({
-      email,
-      password,
-    });
+    const result = await signIn({ email, password });
 
     setIsSubmitting(false);
 
@@ -48,22 +45,22 @@ function LoginPage() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-shell auth-shell-login">
-        <div className="auth-form-side">
-          <Link to="/" className="auth-back-home">
+    <div className={styles["auth-page"]}>
+      <div className={`${styles["auth-shell"]} ${styles["auth-shell-login"]}`}>
+        <div className={styles["auth-form-side"]}>
+          <Link to="/" className={styles["auth-back-home"]}>
             ← Back to Home
           </Link>
 
-          <div className="auth-form-box">
-            <h2 className="auth-form-title">Welcome Back</h2>
-            <p className="auth-form-subtitle">
+          <div className={styles["auth-form-box"]}>
+            <h2 className={styles["auth-form-title"]}>Welcome Back</h2>
+            <p className={styles["auth-form-subtitle"]}>
               Log in to continue your volunteering journey and support
               meaningful community action.
             </p>
 
-            <form className="auth-form" onSubmit={handleSubmit}>
-              <div className="auth-field">
+            <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+              <div className={styles["auth-field"]}>
                 <label>Email</label>
                 <input
                   type="email"
@@ -73,9 +70,9 @@ function LoginPage() {
                 />
               </div>
 
-              <div className="auth-field">
+              <div className={styles["auth-field"]}>
                 <label>Password</label>
-                <div className="auth-password-wrap">
+                <div className={styles["auth-password-wrap"]}>
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
@@ -84,7 +81,7 @@ function LoginPage() {
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className={styles["password-toggle"]}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? "Hide" : "Show"}
@@ -92,69 +89,69 @@ function LoginPage() {
                 </div>
               </div>
 
-              <div className="auth-form-options">
-                <label className="remember-me">
+              <div className={styles["auth-form-options"]}>
+                <label className={styles["remember-me"]}>
                   <input type="checkbox" />
                   <span>Remember me</span>
                 </label>
 
-                <Link to="/forgot-password" className="forgot-link">
+                <Link to="/forgot-password" className={styles["forgot-link"]}>
                   Forgot Password?
                 </Link>
               </div>
 
               {errorMessage && (
-                <p className="auth-error-message">{errorMessage}</p>
+                <p className={styles["auth-error-message"]}>{errorMessage}</p>
               )}
 
               <button
                 type="submit"
-                className="auth-submit-btn"
+                className={styles["auth-submit-btn"]}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Logging in..." : "Log In"}
               </button>
             </form>
 
-            <p className="auth-switch-text">
+            <p className={styles["auth-switch-text"]}>
               Don’t have an account? <Link to="/signup">Sign up</Link>
             </p>
           </div>
         </div>
 
         <div
-          className="auth-visual auth-visual-right"
+          className={`${styles["auth-visual"]} ${styles["auth-visual-right"]}`}
           style={{ backgroundImage: `url(${loginImage})` }}
         >
-          <div className="auth-visual-overlay" />
+          <div className={styles["auth-visual-overlay"]} />
 
-          <div className="auth-visual-content">
-            <div className="auth-badge">Make every effort count</div>
+          <div className={styles["auth-visual-content"]}>
+            <div className={styles["auth-badge"]}>Make every effort count</div>
 
-            <h1 className="auth-visual-title">
+            <h1 className={styles["auth-visual-title"]}>
               Show up.
               <br />
               Support others.
             </h1>
 
-            <p className="auth-visual-text">
+            <p className={styles["auth-visual-text"]}>
               Access volunteer opportunities, follow your registrations, and be
               part of the response that helps communities across Lebanon.
             </p>
 
-            <div className="auth-steps">
-              <div className="auth-step auth-step-active">
-                <span className="auth-step-number">1</span>
+            <div className={styles["auth-steps"]}>
+              <div className={`${styles["auth-step"]} ${styles["auth-step-active"]}`}>
+                <span className={styles["auth-step-number"]}>1</span>
                 <p>Explore opportunities</p>
               </div>
 
-              <div className="auth-step">
-                <span className="auth-step-number">2</span>
+              <div className={styles["auth-step"]}>
+                <span className={styles["auth-step-number"]}>2</span>
                 <p>Register for events</p>
               </div>
 
-              <div className="auth-step">
-                <span className="auth-step-number">3</span>
+              <div className={styles["auth-step"]}>
+                <span className={styles["auth-step-number"]}>3</span>
                 <p>Create real impact</p>
               </div>
             </div>

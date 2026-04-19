@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../AuthPages.css";
+import styles from "../css/AuthPages.module.css";
 import { authService } from "../services/authService";
 
 function ForgotPasswordPage() {
@@ -37,19 +37,22 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="auth-page auth-simple-page">
-      <div className="auth-simple-card">
-        <Link to="/login" className="auth-back-home auth-back-inline">
+    <div className={`${styles["auth-page"]} ${styles["auth-simple-page"]}`}>
+      <div className={styles["auth-simple-card"]}>
+        <Link
+          to="/login"
+          className={`${styles["auth-back-home"]} ${styles["auth-back-inline"]}`}
+        >
           ← Back to Login
         </Link>
 
-        <h2 className="auth-form-title">Forgot Password</h2>
-        <p className="auth-form-subtitle">
+        <h2 className={styles["auth-form-title"]}>Forgot Password</h2>
+        <p className={styles["auth-form-subtitle"]}>
           Enter your email and we’ll send you a link to reset your password.
         </p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-field">
+        <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+          <div className={styles["auth-field"]}>
             <label>Email</label>
             <input
               type="email"
@@ -60,16 +63,16 @@ function ForgotPasswordPage() {
           </div>
 
           {errorMessage && (
-            <p className="auth-error-message">{errorMessage}</p>
+            <p className={styles["auth-error-message"]}>{errorMessage}</p>
           )}
 
           {successMessage && (
-            <p className="auth-success-message">{successMessage}</p>
+            <p className={styles["auth-success-message"]}>{successMessage}</p>
           )}
 
           <button
             type="submit"
-            className="auth-submit-btn"
+            className={styles["auth-submit-btn"]}
             disabled={isSubmitting}
           >
             {isSubmitting ? "Sending..." : "Send Reset Link"}

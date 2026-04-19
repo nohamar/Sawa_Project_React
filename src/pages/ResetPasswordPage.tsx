@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../AuthPages.css";
+import styles from "../css/AuthPages.module.css";
 import { authService } from "../services/authService";
 
 function ResetPasswordPage() {
@@ -51,19 +51,22 @@ function ResetPasswordPage() {
   };
 
   return (
-    <div className="auth-page auth-simple-page">
-      <div className="auth-simple-card">
-        <Link to="/login" className="auth-back-home auth-back-inline">
+    <div className={`${styles["auth-page"]} ${styles["auth-simple-page"]}`}>
+      <div className={styles["auth-simple-card"]}>
+        <Link
+          to="/login"
+          className={`${styles["auth-back-home"]} ${styles["auth-back-inline"]}`}
+        >
           ← Back to Login
         </Link>
 
-        <h2 className="auth-form-title">Reset Password</h2>
-        <p className="auth-form-subtitle">
+        <h2 className={styles["auth-form-title"]}>Reset Password</h2>
+        <p className={styles["auth-form-subtitle"]}>
           Enter your new password below.
         </p>
 
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="auth-field">
+        <form className={styles["auth-form"]} onSubmit={handleSubmit}>
+          <div className={styles["auth-field"]}>
             <label>New Password</label>
             <input
               type="password"
@@ -73,7 +76,7 @@ function ResetPasswordPage() {
             />
           </div>
 
-          <div className="auth-field">
+          <div className={styles["auth-field"]}>
             <label>Confirm Password</label>
             <input
               type="password"
@@ -84,16 +87,16 @@ function ResetPasswordPage() {
           </div>
 
           {errorMessage && (
-            <p className="auth-error-message">{errorMessage}</p>
+            <p className={styles["auth-error-message"]}>{errorMessage}</p>
           )}
 
           {successMessage && (
-            <p className="auth-success-message">{successMessage}</p>
+            <p className={styles["auth-success-message"]}>{successMessage}</p>
           )}
 
           <button
             type="submit"
-            className="auth-submit-btn"
+            className={styles["auth-submit-btn"]}
             disabled={isSubmitting}
           >
             {isSubmitting ? "Updating..." : "Update Password"}

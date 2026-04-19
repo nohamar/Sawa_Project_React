@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabaseClient";
 
-export async function saveEvent(userId: string, eventId: string) {
+export async function saveSavedEvent(userId: number, eventId: number) {
   return await supabase
     .from("Saved_event")
     .insert([
@@ -13,7 +13,7 @@ export async function saveEvent(userId: string, eventId: string) {
     .single();
 }
 
-export async function removeSavedEvent(userId: string, eventId: string) {
+export async function removeSavedEvent(userId: number, eventId: number) {
   return await supabase
     .from("Saved_event")
     .delete()
@@ -21,18 +21,20 @@ export async function removeSavedEvent(userId: string, eventId: string) {
     .eq("event_id", eventId);
 }
 
-export async function getSavedEvents(userId: string) {
+export async function getSavedEvents(userId: number) {
   return await supabase
     .from("Saved_event")
     .select(`
       id,
+      created_at,
+      volunteer_id,
       event_id,
       Events (*)
     `)
     .eq("volunteer_id", userId);
 }
 
-export async function isEventSaved(userId: string, eventId: string) {
+export async function isEventSaved(userId: number, eventId: number) {
   return await supabase
     .from("Saved_event")
     .select("id")
@@ -46,6 +48,7 @@ export async function getAllSavedEvents() {
     .from("Saved_event")
     .select(`
       id,
+      created_at,
       volunteer_id,
       event_id,
       Events (*)
