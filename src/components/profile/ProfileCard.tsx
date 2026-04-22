@@ -21,17 +21,17 @@ function ProfileCard({
 
   const sizeClass =
     size === "sm"
-      ? styles.profileCardSm
+      ? styles["profile-card-sm"]
       : size === "lg"
-      ? styles.profileCardLg
-      : styles.profileCardMd;
+      ? styles["profile-card-lg"]
+      : styles["profile-card-md"];
 
   const variantClass =
-    variant === "feedback" ? styles.feedbackVariant : styles.defaultVariant;
+    variant === "feedback" ? styles["feedback-variant"] : styles["default-variant"];
 
   return (
-    <div className={`${styles.profileCardMini} ${sizeClass} ${variantClass}`}>
-      <div className={styles.profileCardAvatar}>
+    <div className={`${styles["profile-card-mini"]} ${sizeClass} ${variantClass}`}>
+      <div className={styles["profile-card-avatar"]}>
         {avatar ? (
           <img src={avatar} alt={fullName} />
         ) : (
@@ -39,10 +39,10 @@ function ProfileCard({
         )}
       </div>
 
-      <div className={styles.profileCardInfo}>
+      <div className={styles["profile-card-info"]}>
         <h4>{fullName}</h4>
         {email && <p>{email}</p>}
-        {role && <span className={styles.profileCardRole}>{role}</span>}
+        {role && <span className={styles["profile-card-role"]}>{role}</span>}
       </div>
     </div>
   );

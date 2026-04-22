@@ -26,10 +26,10 @@ export type RegistrationWithEvent = Registration & {
 };
 
 export type RegistrationWithVolunteer = Registration & {
-  profiles: {
+  profile: {
     id: number;
     first_name: string;
     second_name: string;
     avatar: string | null;
-  }[];
+  } | null;
 };

@@ -3,6 +3,7 @@ import type {
   RegistrationWithVolunteer,
 } from "../../types/registration";
 import styles from "../../css/ParticipantsTable.module.css";
+import ProfileCard from "../profile/ProfileCard";
 
 type Props = {
   registration: RegistrationWithVolunteer;
@@ -18,7 +19,7 @@ export default function ParticipantRow({
   onAttendanceChange,
   showAttendanceControls = false,
 }: Props) {
-  const volunteer = registration.profiles?.[0];
+  const volunteer = registration.profile;
 
   const fullName = volunteer
     ? `${volunteer.first_name} ${volunteer.second_name}`
@@ -28,12 +29,11 @@ export default function ParticipantRow({
     <tr className={styles.row}>
       <td>
         <div className={styles.personCell}>
-          <img
-            src={volunteer?.avatar || "/images/default-avatar.png"}
-            alt={fullName}
-            className={styles.avatar}
+          <ProfileCard
+            fullName={fullName}
+            avatar={volunteer?.avatar ?? null}
+            size="sm"
           />
-          <span>{fullName}</span>
         </div>
       </td>
 

@@ -15,7 +15,13 @@ export async function getRegistration_Event(event_id: string) {
       registered_at,
       event_id,
       volunteer_id,
-      waitlist_position
+      waitlist_position,
+      profile:Profile!volunteer_id (
+        id,
+        first_name,
+        second_name,
+        avatar
+      )
     `)
     .eq("event_id", event_id);
 }

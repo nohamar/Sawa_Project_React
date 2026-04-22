@@ -90,10 +90,42 @@ export const getAllVolunteers = async (): Promise<{
   return { profiles: data as Profile[], error: null };
 };
 
+export const getProfilesByIds = async (
+  ids: number[]
+): Promise<{
+  profiles: Pick<Profile, "id" | "first_name" | "second_name" | "avatar">[];
+  error: string | null;
+}> => {
+  const uniqueIds = [...new Set(ids)].filter(Boolean);
+
+  if (!uniqueIds.length) {
+    return { profiles: [], error: null };
+  }
+
+  const { data, error } = await supabase
+    .from("Profile")
+    .select("id, first_name, second_name, avatar")
+    .in("id", uniqueIds);
+
+  if (error) {
+    return { profiles: [], error: error.message };
+  }
+
+  return {
+    profiles:
+      (data as Pick<
+        Profile,
+        "id" | "first_name" | "second_name" | "avatar"
+      >[]) ?? [],
+    error: null,
+  };
+};
+
 export const profileService = {
   createProfile,
   getProfileByUserId,
   getProfileById,
   updateProfile,
   getAllVolunteers,
+  getProfilesByIds,
 };

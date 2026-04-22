@@ -22,15 +22,13 @@ import type {
   AttendanceStatus,
   RegistrationWithVolunteer,
 } from "../types/registration";
-import type {
-  Feedback,
-  FeedbackWithEventAndProfile,
-} from "../types/feedback";
+import type { Feedback, FeedbackWithEventAndProfile } from "../types/feedback";
 
 import {
   getRegistration_Event,
   updateAttendanceStatus,
 } from "../services/registration";
+import { profileService } from "../services/profileService";
 import { updateEventStatus } from "../services/eventService";
 import { getEventStatus } from "../utils/eventStatus";
 
@@ -52,7 +50,9 @@ export default function EventDetailsPage({ profile }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [pendingDeleteFeedbackId, setPendingDeleteFeedbackId] = useState<number | null>(null);
+  const [pendingDeleteFeedbackId, setPendingDeleteFeedbackId] = useState<
+    number | null
+  >(null);
   const locationState =
     (location.state as EditFeedbackLocationState | null) ?? null;
 
@@ -95,15 +95,17 @@ export default function EventDetailsPage({ profile }: Props) {
     deleteFeedbackById,
   } = useEventFeedbacks(eventIdNumber, feedbackVolunteerId);
 
-  const [registrations, setRegistrations] = useState<RegistrationWithVolunteer[]>(
-    []
-  );
+  const [registrations, setRegistrations] = useState<
+    RegistrationWithVolunteer[]
+  >([]);
   const [registeredCount, setRegisteredCount] = useState(0);
   const [status, setStatus] = useState("upcoming");
 
   const [formComment, setFormComment] = useState("");
   const [formRating, setFormRating] = useState(0);
-  const [editingFeedbackId, setEditingFeedbackId] = useState<number | null>(null);
+  const [editingFeedbackId, setEditingFeedbackId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     loadEvents();
@@ -117,28 +119,29 @@ export default function EventDetailsPage({ profile }: Props) {
   const isRegistered = event ? registeredEventIds.includes(event.id) : false;
   const isSaved = event ? saved.some((item) => item.id === event.id) : false;
 
-useEffect(() => {
-  if (openReviewFormFromState && editFeedbackIdFromState !== null) {
-    setEditingFeedbackId(editFeedbackIdFromState);
-    setFormComment(initialCommentFromState);
-    setFormRating(initialRatingFromState);
+  useEffect(() => {
+    if (openReviewFormFromState && editFeedbackIdFromState !== null) {
+      setEditingFeedbackId(editFeedbackIdFromState);
+      setFormComment(initialCommentFromState);
+      setFormRating(initialRatingFromState);
 
-    setTimeout(() => {
-      document
-        .getElementById("review-form")
-        ?.scrollIntoView({ behavior: "smooth" });
-    }, 0);
+      setTimeout(() => {
+        document
+          .getElementById("review-form")
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 0);
 
-    navigate(location.pathname, { replace: true, state: null });
-  }
-}, [
-  openReviewFormFromState,
-  editFeedbackIdFromState,
-  initialCommentFromState,
-  initialRatingFromState,
-  navigate,
-  location.pathname,
-]);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [
+    openReviewFormFromState,
+    editFeedbackIdFromState,
+    initialCommentFromState,
+    initialRatingFromState,
+    navigate,
+    location.pathname,
+  ]);
+
   async function handleDeleteEvent(currentEvent: any) {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this event?"
@@ -146,28 +149,39 @@ useEffect(() => {
     if (!confirmDelete) return;
 
     const result = await removeEvent(currentEvent);
-if (!result) {
-  alert("Delete failed");
-}
+    if (!result) {
+      alert("Delete failed");
+    }
     navigate("/events");
   }
 
-  async function fetchRegistrations() {
-    if (!event) return;
+async function fetchRegistrations() {
+  if (!event) return;
 
-    const { data, error } = await getRegistration_Event(String(event.id));
+  const { data, error } = await getRegistration_Event(String(event.id));
 
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    const rows = (data ?? []) as RegistrationWithVolunteer[];
-    setRegistrations(rows);
-    setRegisteredCount(
-      rows.filter((r) => r.registration_status === "confirmed").length
-    );
+  if (error) {
+    console.error(error);
+    return;
   }
+
+  const mergedRows: RegistrationWithVolunteer[] = (data ?? []).map((row: any) => ({
+    id: row.id,
+    registration_status: row.registration_status,
+    attendance_status: row.attendance_status,
+    registered_at: row.registered_at,
+    event_id: row.event_id,
+    volunteer_id: row.volunteer_id,
+    waitlist_position: row.waitlist_position,
+    profile: row.profile ?? null,
+  }));
+
+  setRegistrations(mergedRows);
+  setRegisteredCount(
+    mergedRows.filter((r) => r.registration_status === "confirmed").length
+  );
+}
+
 
   useEffect(() => {
     fetchRegistrations();
@@ -176,19 +190,24 @@ if (!result) {
   useEffect(() => {
     if (!event) return;
 
+    const confirmedCount = registrations.filter(
+      (r) => r.registration_status === "confirmed"
+    ).length;
+
     const calculatedStatus = getEventStatus(
       event.event_date,
       event.end_time,
       event.capacity,
-      registeredCount
+      confirmedCount
     );
 
+    setRegisteredCount(confirmedCount);
     setStatus(calculatedStatus);
 
     if (event.status !== calculatedStatus) {
       updateEventStatus(event.id, calculatedStatus);
     }
-  }, [event, registeredCount]);
+  }, [event, registrations]);
 
   async function handleAttendanceChange(
     registrationId: number,
@@ -263,27 +282,27 @@ if (!result) {
     setEditingFeedbackId(null);
   }
 
-function handleAskDeleteFeedback(feedbackId: number) {
-  setPendingDeleteFeedbackId(feedbackId);
-}
-
-async function handleConfirmDeleteFeedback() {
-  if (pendingDeleteFeedbackId === null) return;
-
-  await deleteFeedbackById(pendingDeleteFeedbackId);
-
-  if (editingFeedbackId === pendingDeleteFeedbackId) {
-    setFormComment("");
-    setFormRating(0);
-    setEditingFeedbackId(null);
+  function handleAskDeleteFeedback(feedbackId: number) {
+    setPendingDeleteFeedbackId(feedbackId);
   }
 
-  setPendingDeleteFeedbackId(null);
-}
+  async function handleConfirmDeleteFeedback() {
+    if (pendingDeleteFeedbackId === null) return;
 
-function handleCancelDeleteFeedback() {
-  setPendingDeleteFeedbackId(null);
-}
+    await deleteFeedbackById(pendingDeleteFeedbackId);
+
+    if (editingFeedbackId === pendingDeleteFeedbackId) {
+      setFormComment("");
+      setFormRating(0);
+      setEditingFeedbackId(null);
+    }
+
+    setPendingDeleteFeedbackId(null);
+  }
+
+  function handleCancelDeleteFeedback() {
+    setPendingDeleteFeedbackId(null);
+  }
 
   function handleStartNewFeedback() {
     setEditingFeedbackId(null);
@@ -341,31 +360,31 @@ function handleCancelDeleteFeedback() {
     [registrations]
   );
 
-const feedbackActions = (feedback: Feedback): FeedbackCardAction[] => {
-  if (!isVolunteer) return [];
-  if (Number(feedback.volunteer_id) !== Number(profile?.id)) return [];
+  const feedbackActions = (feedback: Feedback): FeedbackCardAction[] => {
+    if (!isVolunteer) return [];
+    if (Number(feedback.volunteer_id) !== Number(profile?.id)) return [];
 
-  return [
-    {
-      label: "Edit",
-      onClick: () => {
-        setEditingFeedbackId(feedback.id);
-        setFormComment(feedback.comment);
-        setFormRating(feedback.rating);
+    return [
+      {
+        label: "Edit",
+        onClick: () => {
+          setEditingFeedbackId(feedback.id);
+          setFormComment(feedback.comment);
+          setFormRating(feedback.rating);
 
-        document
-          .getElementById("review-form")
-          ?.scrollIntoView({ behavior: "smooth" });
+          document
+            .getElementById("review-form")
+            ?.scrollIntoView({ behavior: "smooth" });
+        },
+        className: styles.feedbackActionBtn,
       },
-      className: styles.feedbackActionBtn,
-    },
-    {
-      label: "Delete",
-      onClick: () => handleAskDeleteFeedback(feedback.id),
-      className: styles.feedbackActionBtn,
-    },
-  ];
-};
+      {
+        label: "Delete",
+        onClick: () => handleAskDeleteFeedback(feedback.id),
+        className: styles.feedbackActionBtn,
+      },
+    ];
+  };
 
   if (eventsLoading) return <Loader />;
   if (eventsError) return <p>Error loading event: {eventsError}</p>;
@@ -454,7 +473,10 @@ const feedbackActions = (feedback: Feedback): FeedbackCardAction[] => {
                 <p className={styles.successText}>{feedbackSuccess}</p>
               )}
 
-              <form className={styles.reviewForm} onSubmit={handleFeedbackSubmit}>
+              <form
+                className={styles.reviewForm}
+                onSubmit={handleFeedbackSubmit}
+              >
                 <label className={styles.formLabel}>Add Your Rating</label>
                 <select
                   className={styles.formInput}
@@ -495,21 +517,21 @@ const feedbackActions = (feedback: Feedback): FeedbackCardAction[] => {
                   onChange={(e) => setFormComment(e.target.value)}
                 />
 
-               <div className={styles.formButtons}>
-  <button className={styles.submitBtn} type="submit">
-    {editingFeedbackId !== null ? "Update" : "Submit"}
-  </button>
+                <div className={styles.formButtons}>
+                  <button className={styles.submitBtn} type="submit">
+                    {editingFeedbackId !== null ? "Update" : "Submit"}
+                  </button>
 
-  {editingFeedbackId !== null && (
-    <button
-      type="button"
-      className={styles.feedbackActionBtn}
-      onClick={handleStartNewFeedback}
-    >
-      Add New Feedback
-    </button>
-  )}
-</div>
+                  {editingFeedbackId !== null && (
+                    <button
+                      type="button"
+                      className={styles.feedbackActionBtn}
+                      onClick={handleStartNewFeedback}
+                    >
+                      Add New Feedback
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
           )}
@@ -549,14 +571,14 @@ const feedbackActions = (feedback: Feedback): FeedbackCardAction[] => {
       />
 
       <ConfirmationDialog
-  isOpen={pendingDeleteFeedbackId !== null}
-  title="Delete Feedback"
-  message="Are you sure you want to delete this feedback?"
-  confirmText="Yes, delete"
-  cancelText="Cancel"
-  onConfirm={handleConfirmDeleteFeedback}
-  onCancel={handleCancelDeleteFeedback}
-/>
+        isOpen={pendingDeleteFeedbackId !== null}
+        title="Delete Feedback"
+        message="Are you sure you want to delete this feedback?"
+        confirmText="Yes, delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDeleteFeedback}
+        onCancel={handleCancelDeleteFeedback}
+      />
     </div>
   );
 }
