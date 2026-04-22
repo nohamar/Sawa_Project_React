@@ -1,9 +1,5 @@
 import { supabase } from "../lib/supabaseClient";
 
-type UploadResult =
-  | { success: true; path: string; publicUrl: string; }
-  | { success: false; error: any };
-
 export async function uploadImage(userId: number, file: File) {
   const filePath = `${userId}/${Date.now()}-${file.name}`;
 

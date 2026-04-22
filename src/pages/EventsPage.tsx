@@ -79,9 +79,14 @@ export default function EventsPage({ profile }: EventsPageProps) {
     if (!confirmDelete) return;
 
     const result = await removeEvent(event);
-if (!result) {
-  alert("Delete failed");
-}
+
+    if (!result) {
+      alert("Delete failed");
+      setInfoMessage("");
+      return;
+    }
+
+    setInfoMessage("Event deleted successfully.");
   }
 
   async function handleToggleSave(event: Event) {
@@ -99,8 +104,10 @@ if (!result) {
 
     if (isSaved) {
       await removeSaved(event.id);
+      setInfoMessage("Event removed from saved events.");
     } else {
       await addSaved(event.id);
+      setInfoMessage("Event saved successfully.");
     }
   }
 
@@ -118,6 +125,12 @@ if (!result) {
     const result = await toggleRegistration(event.id, false, event.capacity);
 
     if (!result.ok) return;
+
+    setInfoMessage(
+      result.status === "waitlisted"
+        ? "You were added to the waiting list."
+        : "You registered successfully."
+    );
 
     setInfoDialog({
       isOpen: true,
@@ -144,6 +157,8 @@ if (!result) {
     setPendingUnregisterEvent(null);
 
     if (!result.ok) return;
+
+    setInfoMessage("You have unregistered from the event.");
 
     setInfoDialog({
       isOpen: true,

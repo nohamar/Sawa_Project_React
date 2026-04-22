@@ -17,13 +17,11 @@ import AboutUsPage from "./pages/AboutUsPage";
 import EventsPage from "./pages/EventsPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import SavedEventsPage from "./pages/SavedEventsPage";
-import SingleRegistrationPage from "./pages/SingleRegistrationPage";
 import ProfilePage from "./pages/ProfilePage";
 import OrganizerDashboardPage from "./pages/OrganizerDashboardPage";
 import VolunteerDashboardPage from "./pages/VolunteerDashboardPage";
 import CreateEventPage from "./pages/CreateEventPage";
 import EditEventPage from "./pages/EditEventPage";
-import ManageFeedbackPage from "./pages/ManageFeedbackPage";
 import MyFeedbacksPage from "./pages/MyFeedbacksPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -56,12 +54,13 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
       errorElement: <ErrorPage />,
     },
     {
-      path: "change-password",
+      path: "/change-password",
       element: (
         <ProtectedRoute user={authUser}>
           <ChangePasswordPage />
         </ProtectedRoute>
       ),
+      errorElement: <ErrorPage />,
     },
     {
       path: "/signup",
@@ -81,51 +80,38 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
         { path: "events/:id", element: <EventDetailsPage profile={profile} /> },
 
         // volunteer routes
-       {
-  path: "saved-events",
-  element: (
-    <RoleProtectedRoute user={profile} allowedRole="volunteer">
-      <SavedEventsPage id={profile?.id ?? null} />
-    </RoleProtectedRoute>
-  ),
-},
-{
-  path: "user-registrations",
-  element: (
-    <RoleProtectedRoute user={profile} allowedRole="volunteer">
-      <MyRegistrationsPage id={profile?.id ?? null} />
-    </RoleProtectedRoute>
-  ),
-},
         {
-          path: "user-registrations/:id",
+          path: "saved-events",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="volunteer">
-              <SingleRegistrationPage />
+              <SavedEventsPage id={profile?.id ?? null} />
             </RoleProtectedRoute>
           ),
         },
-     {
-  path: "volunteer-dashboard",
-  element: (
-    <RoleProtectedRoute user={profile} allowedRole="volunteer">
-      <VolunteerDashboardPage currentUserId={profile?.id ?? null} />
-    </RoleProtectedRoute>
-  ),
-},
-
-        // volunteer feedback routes
-{
-  path: "my-feedbacks",
-  element: (
-    <RoleProtectedRoute user={profile} allowedRole="volunteer">
-      <MyFeedbacksPage
-        id={profile?.id ?? null}
-        profile={profile}
-      />
-    </RoleProtectedRoute>
-  ),
-},
+        {
+          path: "user-registrations",
+          element: (
+            <RoleProtectedRoute user={profile} allowedRole="volunteer">
+              <MyRegistrationsPage id={profile?.id ?? null} />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: "volunteer-dashboard",
+          element: (
+            <RoleProtectedRoute user={profile} allowedRole="volunteer">
+              <VolunteerDashboardPage currentUserId={profile?.id ?? null} />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: "my-feedbacks",
+          element: (
+            <RoleProtectedRoute user={profile} allowedRole="volunteer">
+              <MyFeedbacksPage id={profile?.id ?? null} profile={profile} />
+            </RoleProtectedRoute>
+          ),
+        },
 
         // organizer routes
         {
@@ -148,7 +134,7 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "organizer-dashboard/create-event",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <CreateEventPage userId={profile?.id  }/>
+              <CreateEventPage userId={profile?.id} />
             </RoleProtectedRoute>
           ),
         },
@@ -156,15 +142,7 @@ export default function AppRouter({ authUser, profile }: AppRouterProps) {
           path: "organizer-dashboard/edit-event/:id",
           element: (
             <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <EditEventPage  />
-            </RoleProtectedRoute>
-          ),
-        },
-        {
-          path: "organizer-dashboard/feedback/:id",
-          element: (
-            <RoleProtectedRoute user={profile} allowedRole="organizer">
-              <ManageFeedbackPage />
+              <EditEventPage />
             </RoleProtectedRoute>
           ),
         },

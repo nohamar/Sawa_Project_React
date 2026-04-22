@@ -21,7 +21,6 @@ type EventDetailsProps = {
 
 export const EventDetails: React.FC<EventDetailsProps> = ({
   event,
-  registrations,
   status,
   actions = [],
   registeredCount,

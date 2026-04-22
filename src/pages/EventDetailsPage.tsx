@@ -28,7 +28,6 @@ import {
   getRegistration_Event,
   updateAttendanceStatus,
 } from "../services/registration";
-import { profileService } from "../services/profileService";
 import { updateEventStatus } from "../services/eventService";
 import { getEventStatus } from "../utils/eventStatus";
 

@@ -1,8 +1,6 @@
 import type { Event } from "../../types/events"; 
 import styles from "../../css/EventCard.module.css";
 
-import { useState } from "react";
-
 export type CardAction = { 
   label: string; 
   onClick: ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void); 

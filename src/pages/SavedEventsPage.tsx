@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import type { Event } from "../types/events";
 import type { CardAction } from "../components/events/EventCard";
@@ -20,7 +19,6 @@ type SavedEventProps = {
 };
 
 export default function SavedEventsPage({ id }: SavedEventProps) {
-  const navigate = useNavigate();
 
   const {
     saved,

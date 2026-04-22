@@ -1,7 +1,6 @@
 //eventService
 import { supabase } from "../lib/supabaseClient";
 import type { NewRegistration } from "../types/registration";
-import { getEventStatus } from "../utils/eventStatus";
 import { deleteImage } from "./storageService";
 
 // CREATE
