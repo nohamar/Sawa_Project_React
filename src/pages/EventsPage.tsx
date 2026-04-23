@@ -89,27 +89,21 @@ export default function EventsPage({ profile }: EventsPageProps) {
     setInfoMessage("Event deleted successfully.");
   }
 
-  async function handleToggleSave(event: Event) {
-    if (isCompletedEvent(event)) {
-      setInfoDialog({
-        isOpen: true,
-        title: "Event Completed",
-        message:
-          "This event has already been completed. Please check other available events to participate in.",
-      });
-      return;
-    }
+async function handleToggleSave(event: Event) {
+  const isSaved = savedEventIds.includes(event.id);
 
-    const isSaved = savedEventIds.includes(event.id);
-
-    if (isSaved) {
-      await removeSaved(event.id);
+  if (isSaved) {
+    const ok = await removeSaved(event.id);
+    if (ok) {
       setInfoMessage("Event removed from saved events.");
-    } else {
-      await addSaved(event.id);
+    }
+  } else {
+    const ok = await addSaved(event.id);
+    if (ok) {
       setInfoMessage("Event saved successfully.");
     }
   }
+}
 
   async function handleRegister(event: Event) {
     if (isCompletedEvent(event)) {

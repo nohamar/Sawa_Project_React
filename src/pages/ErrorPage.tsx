@@ -1,4 +1,5 @@
 import { useRouteError, isRouteErrorResponse, Link } from "react-router-dom";
+import styles from "../css/ErrorPage.module.css";
 
 export default function ErrorPage() {
   const error = useRouteError();
@@ -9,20 +10,23 @@ export default function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     title = `${error.status} ${error.statusText}`;
     message =
-      error.data?.message ||
+      (error.data as { message?: string })?.message ||
       "The page could not be loaded properly. Please try again.";
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-gray-50">
-      <h1 className="text-3xl font-bold text-red-600 mb-4">{title}</h1>
-      <p className="text-gray-700 max-w-md mb-6">{message}</p>
-      <Link
-        to="/"
-        className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-      >
-        Go Back Home
-      </Link>
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <p className={styles.code}>Oops!</p>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.message}>{message}</p>
+
+        <div className={styles.actions}>
+          <Link to="/" className={styles.primaryBtn}>
+            Go Back Home
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -8,7 +8,10 @@ import type { FeedbackWithEvent } from "../types/feedback";
 import type { SavedEventWithEvent } from "../types/saved";
 
 import { getRegistration_User } from "../services/registration";
-import { getFeedbackUser, deleteFeedbackById } from "../services/feedbackService";
+import {
+  getFeedbackUser,
+  deleteFeedbackById,
+} from "../services/feedbackService";
 import { getSavedEvents } from "../services/savedEventService";
 
 import { useRegister } from "../hooks/useRegister";
@@ -42,7 +45,9 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
   const [pendingUnregister, setPendingUnregister] =
     useState<PendingUnregisterState>(null);
 
-  const [pendingDeleteFeedbackId, setPendingDeleteFeedbackId] = useState<number | null>(null);
+  const [pendingDeleteFeedbackId, setPendingDeleteFeedbackId] = useState<
+    number | null
+  >(null);
 
   const [infoDialog, setInfoDialog] = useState({
     isOpen: false,
@@ -54,6 +59,10 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
     if (!eventField) return null;
     if (Array.isArray(eventField)) return eventField[0] ?? null;
     return eventField;
+  }
+
+  function goToEventDetails(eventId: number) {
+    navigate(`/events/${eventId}`);
   }
 
   async function loadDashboardData() {
@@ -108,11 +117,13 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
   }, [registrations]);
 
   const registeredCount = useMemo(() => {
-    return registrations.filter((r) => r.registration_status === "confirmed").length;
+    return registrations.filter((r) => r.registration_status === "confirmed")
+      .length;
   }, [registrations]);
 
   const waitlistedCount = useMemo(() => {
-    return registrations.filter((r) => r.registration_status === "waitlisted").length;
+    return registrations.filter((r) => r.registration_status === "waitlisted")
+      .length;
   }, [registrations]);
 
   const feedbackCount = feedbacks.length;
@@ -163,7 +174,14 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
   async function handleRegister(event: Event) {
     const result = await toggleRegistration(event.id, false, event.capacity);
 
-    if (!result.ok) return;
+    if (!result.ok) {
+      setInfoDialog({
+        isOpen: true,
+        title: "Registration Not Available",
+        message: result.message,
+      });
+      return;
+    }
 
     setInfoDialog({
       isOpen: true,
@@ -195,7 +213,14 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
 
     setPendingUnregister(null);
 
-    if (!result.ok) return;
+    if (!result.ok) {
+      setInfoDialog({
+        isOpen: true,
+        title: "Unable to Unregister",
+        message: result.message,
+      });
+      return;
+    }
 
     setInfoDialog({
       isOpen: true,
@@ -280,7 +305,11 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                 const event = getEventFromField(registration.Events);
 
                 return (
-                  <div key={registration.id} className={styles.eventCard}>
+                  <div
+                    key={registration.id}
+                    className={styles.eventCard}
+                    onClick={() => goToEventDetails(Number(registration.event_id))}
+                  >
                     <img
                       src={event?.image || "/default-event.jpg"}
                       alt={event?.title || "Event"}
@@ -310,7 +339,10 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                     <div className={styles.actions}>
                       <button
                         className={styles.secondaryBtn}
-                        onClick={() => handleToggleSave(Number(registration.event_id))}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleSave(Number(registration.event_id));
+                        }}
                       >
                         {savedEventIds.includes(Number(registration.event_id))
                           ? "Unsave"
@@ -320,7 +352,10 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                       {event && (
                         <button
                           className={styles.dangerBtn}
-                          onClick={() => handleAskUnregister(event)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAskUnregister(event);
+                          }}
                         >
                           Unregister
                         </button>
@@ -349,7 +384,11 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
               <p className={styles.emptyText}>No feedbacks yet.</p>
             ) : (
               recentFeedbacks.map((feedback) => (
-                <div key={feedback.id} className={styles.feedbackCard}>
+                <div
+                  key={feedback.id}
+                  className={styles.feedbackCard}
+                  onClick={() => goToEventDetails(Number(feedback.event_id))}
+                >
                   <div className={styles.feedbackTop}>
                     <div>
                       <h4>{feedback.Events?.title || "Event Feedback"}</h4>
@@ -370,7 +409,8 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                   <div className={styles.actions}>
                     <button
                       className={styles.secondaryBtn}
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         navigate(`/events/${feedback.event_id}`, {
                           state: {
                             openReviewForm: true,
@@ -378,15 +418,18 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                             initialComment: feedback.comment,
                             initialRating: feedback.rating,
                           },
-                        })
-                      }
+                        });
+                      }}
                     >
                       Edit
                     </button>
 
                     <button
                       className={styles.dangerBtn}
-                      onClick={() => handleAskDeleteFeedback(feedback.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAskDeleteFeedback(feedback.id);
+                      }}
                     >
                       Delete
                     </button>
@@ -419,7 +462,11 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                 const isRegistered = registrationEventIds.includes(event.id);
 
                 return (
-                  <div key={savedItem.id} className={styles.eventCard}>
+                  <div
+                    key={savedItem.id}
+                    className={styles.eventCard}
+                    onClick={() => goToEventDetails(event.id)}
+                  >
                     <img
                       src={event.image || "/default-event.jpg"}
                       alt={event.title}
@@ -435,7 +482,10 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                     <div className={styles.actions}>
                       <button
                         className={styles.secondaryBtn}
-                        onClick={() => handleToggleSave(event.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleSave(event.id);
+                        }}
                       >
                         Unsave
                       </button>
@@ -444,11 +494,12 @@ export default function VolunteerDashboard({ currentUserId }: Props) {
                         className={
                           isRegistered ? styles.dangerBtn : styles.primaryBtn
                         }
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           isRegistered
                             ? handleAskUnregister(event)
-                            : handleRegister(event)
-                        }
+                            : handleRegister(event);
+                        }}
                       >
                         {isRegistered ? "Unregister" : "Register"}
                       </button>

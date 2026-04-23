@@ -4,7 +4,6 @@ import {
   removeSavedEvent,
   saveSavedEvent,
 } from "../services/savedEventService";
-import { getEventById } from "../services/eventService";
 
 import type { Event } from "../types/events";
 import type { SavedEventWithEvent } from "../types/saved";
@@ -50,20 +49,13 @@ export function useSaved(volunteerId: number | null) {
     }
 
     clearMessages();
-
     setLoading(true);
 
     try {
-      const { data: eventData, error: eventError } = await getEventById(eventId);
-
-      if (eventError) {
-        setError(eventError.message);
-        return false;
-      }
-
-      if (eventData?.status?.toLowerCase() === "completed") {
-        setError("This event has already been completed and cannot be saved.");
-        return false;
+      const alreadySaved = saved.some((event) => event.id === eventId);
+      if (alreadySaved) {
+        setSuccessMessage("Event is already saved.");
+        return true;
       }
 
       const { error } = await saveSavedEvent(volunteerId, eventId);

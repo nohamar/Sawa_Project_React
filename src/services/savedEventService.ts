@@ -1,6 +1,21 @@
 import { supabase } from "../lib/supabaseClient";
 
 export async function saveSavedEvent(userId: number, eventId: number) {
+  const { data: existing, error: existingError } = await supabase
+    .from("Saved_event")
+    .select("id")
+    .eq("volunteer_id", userId)
+    .eq("event_id", eventId)
+    .maybeSingle();
+
+  if (existingError) {
+    return { data: null, error: existingError };
+  }
+
+  if (existing) {
+    return { data: existing, error: null };
+  }
+
   return await supabase
     .from("Saved_event")
     .insert([

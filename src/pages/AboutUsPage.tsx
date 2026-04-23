@@ -165,10 +165,11 @@ export default function AboutUsPage() {
             </div>
             <div className={styles.memberCard}>
               <div className={styles.memberImgWrapper}>
-                <img src="" alt="Noha Mardini" className={styles.memberImg} />
+                <img src="/images/Noha.jpeg" alt="Noha Mardini" className={styles.memberImg} />
               </div>
               <p className={styles.memberName}>Noha Mardini</p>
               <p className={styles.memberRole}>Co-founder</p>
+              
             </div>
           </div>
         </div>

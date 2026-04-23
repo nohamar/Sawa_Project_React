@@ -228,28 +228,34 @@ async function fetchRegistrations() {
     }
   }
 
-  async function handleRegisterToggle() {
-    if (!event) return;
+async function handleRegisterToggle() {
+  if (!event) return;
 
-    if (isRegistered) {
-      setIsRegisterDialogOpen(true);
-      return;
-    }
-
-    const result = await toggleRegistration(event.id, false, event.capacity);
-
-    if (!result.ok) return;
-
-    setInfoDialog({
-      isOpen: true,
-      title:
-        result.status === "waitlisted"
-          ? "Added to Waiting List"
-          : "Registration Successful",
-      message: result.message,
-    });
+  if (isRegistered) {
+    setIsRegisterDialogOpen(true);
+    return;
   }
 
+  const result = await toggleRegistration(event.id, false, event.capacity);
+
+  if (!result.ok) {
+    setInfoDialog({
+      isOpen: true,
+      title: "Registration Not Available",
+      message: result.message || "This event cannot be registered.",
+    });
+    return;
+  }
+
+  setInfoDialog({
+    isOpen: true,
+    title:
+      result.status === "waitlisted"
+        ? "Added to Waiting List"
+        : "Registration Successful",
+    message: result.message,
+  });
+}
   async function handleConfirmUnregister() {
     if (!event) return;
 

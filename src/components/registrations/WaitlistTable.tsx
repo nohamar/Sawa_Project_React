@@ -15,8 +15,9 @@ export default function WaitlistTable({ items }: Props) {
         <thead>
           <tr>
             <th>Volunteer</th>
-            <th>Position</th>
             <th>Registered At</th>
+            <th>Status</th>
+            <th>Attendance</th>
           </tr>
         </thead>
         <tbody>
