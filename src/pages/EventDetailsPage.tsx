@@ -174,21 +174,22 @@ if (!result) {
   }, [event, registeredEventIds]);
 
   useEffect(() => {
-    if (!event) return;
+  if (!event) return;
 
-    const calculatedStatus = getEventStatus(
-      event.event_date,
-      event.end_time,
-      event.capacity,
-      registeredCount
-    );
+  const confirmedCount = registrations.filter(
+    (r) => r.registration_status === "confirmed"
+  ).length;
 
-    setStatus(calculatedStatus);
+  const calculatedStatus = getEventStatus(
+    event.event_date,
+    event.end_time,
+    event.capacity,
+    confirmedCount
+  );
 
-    if (event.status !== calculatedStatus) {
-      updateEventStatus(event.id, calculatedStatus);
-    }
-  }, [event, registeredCount]);
+  setRegisteredCount(confirmedCount);
+  setStatus(calculatedStatus);
+}, [event, registrations]);
 
   async function handleAttendanceChange(
     registrationId: number,
